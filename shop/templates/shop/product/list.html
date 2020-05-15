@@ -1,0 +1,67 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %} {{ category.name }} {% else %}Productos{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-4">
+        <hr>
+        <h3>Categorías</h3>
+            <a href="{% url 'shop:product_list' %}" style="color:white;" {% if not category %}
+               class="btn btn-primary btn-block"{%else%}
+               class="btn btn-secondary btn-block"{% endif %}>Todas</a>
+
+            {%for c in categories %}
+                <a href="{{ c.get_absolute_url }}" style="color:white;" {% if category.slug == c.slug %}
+                   class="btn btn-primary btn-block"{%else%}
+                   class="btn btn-secondary btn-block"{% endif %}>{{ c.name}}</a>
+
+            {% endfor %}
+    </div>
+    <div id="main" class="col-sm-12 col-md-8">
+        <h1>{% if category %}{{ category.name}}{% else %}Productos{% endif %}</h1>
+        <div class="row">
+        {%for product in products %}
+        <div class="col-md-6 col-sm-6 px-3">
+        <div class="card" style="width: 18rem;">
+            <a href="{{ product.get_absolute_url }}">
+            <img class="card-img-top" src="{% if product.image %}{{ product.image.url }}
+                    {% else %}{% static 'img/no_image.png' %}{% endif%}" alt="Card image cap">
+            </a>
+            <div class="card-body">
+                <a href="{{ product.get_absolute_url }}">
+                <p class="card-text">{{ product.name }}</p>
+                    <strong>${{ product.price}}</strong>
+                </a>
+            </div>
+        </div>
+        </div>
+        {% endfor%}
+        </div>
+    </div>
+    <span id="cart" hidden>{{ request.session.cart }}</span>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+console.log($("#cart").val())
+if ($("#cart").text() === "{}"){
+    Swal.fire({
+  title: '<strong>Quedate en casa!</strong>',
+  icon: 'info',
+  html:
+    'Con cada compra <b>contribuyes</b> ' +
+    'a que otro/a fusagasugeño/a se protega. <b>Donaremos</b> un tapabocas por cada 10 vendidos!',
+  focusConfirm: true,
+  confirmButtonText:
+    '<i class="fa fa-thumbs-up"></i> Genial!',
+  confirmButtonAriaLabel: 'manito arriba, genial!',
+})
+}
+})
+</script>
+{% endblock %}

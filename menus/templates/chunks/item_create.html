@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Item' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block body %}
+<form  method="post" enctype=multipart/form-data>{% csrf_token %}
+    <div class="row border rounded my-3">
+        <div class="col-6">
+            <div class="my-3 px-3 bg-light border rounded">
+            <div class="row m-1">
+                <p class="lead">{% trans 'New product' %}</p>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.name.label}}</span>
+                </div>
+                {{form.name}}
+            </div>
+            <div class="row">
+                <div class="col-9 input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary text-light">{{form.menu.label}}</span>
+                  </div>
+                    {{form.menu}}
+                </div>
+                <span>
+                    <a href="{% url 'menu:create' %}" class="btn btn-block btn-secondary text-primary" title="{% trans 'add new menu' %}">
+                        <i class="fas fa-plus"></i> New Menu
+                    </a>
+                </span>
+                <div class="col-3 pl-0">
+
+                </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text bg-primary text-light">{{form.category.label}}</span>
+              </div>
+                {{form.category}}
+            </div>
+            <div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.ingredients.label}}</span>
+                </div>
+                {{form.ingredients}}
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.description.label}}</span>
+                </div>
+                {{form.description}}
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text bg-primary text-light" id="inputGroupFileAddon01">{{form.photo.label}}</span>
+              </div>
+              <div class="custom-file">
+                    {{form.photo}}
+                <label class="custom-file-label" for="id_photo">{% trans 'choose photo' %}</label>
+              </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="my-3 px-3 bg-light border rounded" id="idPrices">
+                <div class="row m-1">
+                    <p class="lead">{% trans 'Sizes' %}</p>
+                </div>
+            {{ price.management_form }}
+                {% for form in price %}
+                    <div class="row price-row border rounded bg-white p-3 m-1">
+                        <div class="col-12 input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-light">{{form.size.label}}</span>
+                            </div>
+                            {{form.size}}
+                        </div>
+                        <div class="col-12 input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text bg-primary text-light">{{form.price_str.label}}</span>
+                          </div>
+                            {{form.price}}
+                            {{form.price_str}}
+                        </div>
+                        <div class="row col-12 buttons">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-block btn-secondary text-primary add-form-row">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+        </div>
+        <div class="col-12 my-2">
+        <div class="col-4 offset-4">
+            <button class="btn btn-block btn-primary" type="submit">{% trans 'SAVE' %}</button>
+        </div>
+    </div>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script type='text/javascript'>
+$(document).ready(function() {
+    function updateFieldIndex(el, prefix, index) {
+        console.log('index')
+        console.log(index)
+        let id_regex = new RegExp('(' + prefix + '-\\d+)');
+        let replacement = prefix + '-' + index
+
+        if ($(el).attr("for")){
+            $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        }
+        if(el.id) el.id = el.id.replace(id_regex, replacement);
+        if(el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function addMore(selector, prefix) {
+        let newEl = $(selector).clone(true);
+        let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        console.log(total)
+        newEl.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each( function(){
+            let name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + (total) + '-');
+            console.log(name)
+            let id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newEl.find('label').each(function () {
+            let forVal = $(this).attr('for');
+            if (forVal) {
+                forVal = forVal.replace('-' + (total-1) + '-', '-' + total + '-');
+                $(this).attr({"for": forVal});
+            };
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newEl);
+        let lastRow = $('.price-row:last > .buttons');
+
+        // add remove button if it is the 2nd form
+        if (!lastRow.has('.remove-form-row').length)
+            lastRow.append('<div class="col-6">\
+                                <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
+                                <i class="fas fa-minus"></i></button>\
+                            </div>');
+
+        //add remove button to first
+        let firstRow = $('.price-row:first > .buttons');
+        if (!firstRow.has('.remove-form-row').length)
+            firstRow.append('<div class="col-6">\
+                                <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
+                                <i class="fas fa-minus"></i></button>\
+                            </div>');
+
+        let conditionRow = $('.price-row:not(:last)');
+         conditionRow.find('.btn.add-form-row').remove()
+
+        return false;
+    }
+
+    function deleteForm(prefix, btn) {
+        let total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (total >1) {
+            btn.closest('.price-row') .removeClass("price-row").remove()
+            let forms = $('.price-row');
+            for( var i=0, formCount=forms.length; i<formCount; i++) {
+                $(forms.get(i)).find(':input').each( function() {
+                    updateFieldIndex(this, prefix, i);
+                });
+            };
+            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            let lastRow = $('.price-row:last > .buttons');
+            if ($('#id_' + prefix + '-TOTAL_FORMS').val() === "1") {
+                $('.price-row:last > .buttons > div:last').remove()
+            }
+            if (!lastRow.has('.add-form-row').length)
+            $('.price-row:last > .buttons > div:first').append('<button type="button" \
+                                                        class="btn btn-block btn-primary add-form-row">\
+                                                        <i class="fas fa-plus"></i></button>');
+        }
+    }
+    $(document).on('click', '.add-form-row', function(e){
+        e.preventDefault();
+        addMore('.price-row:last', 'prices');
+        return false;
+    });
+    $(document).on('click', '.remove-form-row', function(e){
+        e.preventDefault();
+        deleteForm('prices', $(this));
+        return false;
+    });
+    $(document).on('change', '#id_photo', function(e) {
+        let fileName = e.target.files[0].name;
+         $('label[for="'+$('#id_photo').attr('id')+ '"]').text(fileName)
+    });
+
+    // Add events for currency conversion
+	$("#idPrices").find(':input[type=text]').each( function () {
+		$(this).on( 'blur', onBlur);
+		$(this).on( 'focus', onFocus);
+		$(this).on( 'mouseover', onMouseOver);
+		$(this).on( 'mouseout', onMouseOut);
+	});
+
+	// string to currency conversion functions
+    var currency = 'USD';
+    function localStringToNumber( s ){
+        return Number(String(s).replace(/[^0-9.-]+/g,""));
+    }
+
+    function onMouseOver(e){
+      $(this).attr("pattern", "[0-9]*");
+    }
+
+    function onMouseOut(e){
+      if(!$(this).is(":focus")) this.removeAttribute("pattern");
+    }
+
+    function onFocus(e){
+      var intFormat= e.target.value;
+      $(this).attr("pattern", "[0-9]*");
+      var value = intFormat.replace(/[.]/g,',');
+      e.target.value = value ? localStringToNumber(value) : '';
+      $(this).prev().val(value);
+    }
+
+    var timeout = null
+    function onBlur(e){
+      	this.removeAttribute("pattern");
+      	var value = e.target.value;
+        $(this).prev().val(value);
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+			this.value = value;
+            const options = {
+				maximumFractionDigits : 0,
+				minimumFractionDigits : 0,
+				currency              : currency,
+				style                 : "currency",
+				currencyDisplay       : "symbol",
+			}
+            var usformat = value ? localStringToNumber(value).toLocaleString(undefined, options): '';
+            val = usformat.replace(/[,]/g,'.');
+            e.target.value = val.replace(/[US]/g,'');
+            this.value = e.target.value;
+      	}, 200);
+    }
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "shop/base.html" %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block content %}
+<h1>Realizar pedido</h1>
+<div class="order-info col-md-6 col-sm-12 pb-1 mb-2">
+    <h3>Tu Pedido</h3>
+    <ul>
+        {% for item in cart %}
+        <li>
+            {{ item.quantity }}x {{ item.product.name }}
+            <span>${{ item.total_price }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <p>Total: ${{ cart.get_total_price }}*</p>
+        <span style="background:#ffff90;padding:3px;">*Costo de envio no incluido ($2000). Al hacer click en<strong> Hacer pedido </strong>seras contactado por telefono/whatsapp para confirmar tu pedido.
+            No te preocupes si cambias de opinion<strong> Puedes retractarte </strong> cuando te contactemos.
+        </span>
+
+</div>
+<div class="col-md-6 col-sm-12 m-2">
+    <form action="." method="post" >
+        <div class="form-group col-md-10 col-sm-12">
+        {{ form.as_p }}
+        </div>
+        <p><input type="submit" class="btn btn-primary" value="Hacer pedido"></p>
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $("input").addClass("form-control")
+</script>
+{% endblock %}

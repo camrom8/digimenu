@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+    <style>
+        /* For Firefox */
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        /* Webkit browsers like Safari and Chrome */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'itemslider1.0/css/style.css' %}" />
+    <script src="{% static 'itemslider1.0/js/modernizr.custom.63321.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row mt-3">
+        <h2>{{menu.title}}</h2>
+    </div>
+    <div id="mi-slider" class="mi-slider">
+        {% for category in items %}
+            <ul>
+                {% for item in category %}
+                {% with prices=item.prices.all %}
+                    <li><a href="#"><img src="{{item.photo.url}}" width="280" alt="img{{item.id}}">
+                        <div><h5>{{item.name}}</h5></div>
+                        <h4>{{prices.0.price_str}}</h4></a>
+                        <div class="input-group input-group-xs px-1 px-lg-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-xs btn-secondary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1)">-</button>
+                            </div>
+                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity" value="0"  disabled>
+                            <div class="input-group-append">
+                                <button class="btn btn-xs btn-secondary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1)">+</button>
+                            </div>
+                        </div>
+                    </li>
+                {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        <nav>
+        {% for category in categories %}
+        <a href="#">{{category}}</a>
+        {% endfor %}
+        </nav>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'itemslider1.0/js/jquery.catslider.js' %}"></script>
+    <script>
+        $(function() {
+            $( '#mi-slider' ).catslider();
+        });
+
+        function toCart(id, command) {
+            inputId = '#product_'+id;
+            qty_current = parseInt($(inputId).val()) + command;
+            $(inputId).val(qty_current);
+            let url = "{% url 'cart:cart_add' 123 %}".replace(/123/, id);
+            let qty_update = $(inputId).val();
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
+                success: function(data) {
+                 console.log('product added')
+                 $('.cart').load(document.URL +  ' .cart');
+                }
+            });
+        };
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        console.log(csrftoken)
+    </script>
+{% endblock %}

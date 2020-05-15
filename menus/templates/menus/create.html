@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block body %}
+<form  method="post">{% csrf_token %}
+    <div class="row">
+        <div class="col-7">
+                <div>
+                    {{form.owner.label}}
+                    {{form.owner}}
+                </div>
+                <div>
+                    {{form.establishment.label}}
+                    {{form.establishment}}
+                </div>
+                <div>
+                    {{form.title.label}}
+                    {{form.title}}
+                </div>
+                <div>
+                    {{form.subtitle.label}}
+                    {{form.subtitle}}
+                </div>
+                <div>
+                    {{form.description.label}}
+                    {{form.description}}
+                </div>
+        </div>
+        <div class="col-5">
+            <div>
+                {{form.logo.label}}
+                {{form.logo}}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-2">
+        <div class="col-8 offset-2">
+        <button class="btn btn-block btn-primary" type="submit">{% trans 'SAVE' %}</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
