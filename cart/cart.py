@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 
-from menus.models import Item
+from menus.models import Item, Price
 from shop.models import Product
 
 
@@ -20,16 +20,16 @@ class Cart(object):
 
     def __iter__(self):
         """
-        Iterate over the items in the cart and get the products 
+        Iterate over the prices of the products  in the cart and get the products
         from the database.
         """
-        product_ids = self.cart.keys()
+        prices_ids = self.cart.keys()
         # get the product objects and add them to the cart
-        products = Item.objects.filter(id__in=product_ids)
+        prices = Price.objects.filter(id__in=prices_ids)
 
         cart = self.cart.copy()
-        for product in products:
-            cart[str(product.id)]['product'] = product
+        for price in prices:
+            cart[str(price.id)]['product'] = price
 
         for item in cart.values():
             item['price'] = Decimal(item['price'])
@@ -42,20 +42,20 @@ class Cart(object):
         """
         return sum(item['quantity'] for item in self.cart.values())
 
-    def add(self, product, quantity=1, update_quantity=False, color='color'):
+    def add(self, price, quantity=1, update_quantity=False):
         """
         Add a product to the cart or update its quantity.
         """
-        product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.prices.all()[0].price),
-                                     'color': color
-                                     }
+        price_id = str(price.id)
+        if price_id not in self.cart:
+            self.cart[price_id] = {'quantity': 0,
+                                   'price': str(price.price),
+                                   'size': price.size,
+                                   }
         if update_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            self.cart[price_id]['quantity'] = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
+            self.cart[price_id]['quantity'] += quantity
         self.save()
 
     def save(self):

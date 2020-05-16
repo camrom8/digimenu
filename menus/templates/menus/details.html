@@ -2,7 +2,7 @@
 
 {% load i18n %}
 {% load static %}
-
+{% load menu_tags %}
 {% block title %}
 {% trans 'Menu' %}
 {% endblock %}
@@ -28,6 +28,7 @@
 {% block body %}
     <div class="row mt-3">
         <h2>{{menu.title}}</h2>
+<!--        {{request.session.cart}}-->
     </div>
     <div id="mi-slider" class="mi-slider">
         {% for category in items %}
@@ -39,11 +40,12 @@
                         <h4>{{prices.0.price_str}}</h4></a>
                         <div class="input-group input-group-xs px-1 px-lg-3">
                             <div class="input-group-prepend">
-                                <button class="btn btn-xs btn-secondary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1)">-</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1)">-</button>
                             </div>
-                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity" value="0"  disabled>
+                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
+                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
                             <div class="input-group-append">
-                                <button class="btn btn-xs btn-secondary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1)">+</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1)">+</button>
                             </div>
                         </div>
                     </li>
@@ -68,17 +70,61 @@
 
         function toCart(id, command) {
             inputId = '#product_'+id;
-            qty_current = parseInt($(inputId).val()) + command;
-            $(inputId).val(qty_current);
-            let url = "{% url 'cart:cart_add' 123 %}".replace(/123/, id);
-            let qty_update = $(inputId).val();
+            let qty_update = parseInt(command);
+            console.log(qty_update)
+            let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
             $.ajax({
                 type: "post",
                 url: url,
-                data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
+                data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
                 success: function(data) {
-                 console.log('product added')
-                 $('.cart').load(document.URL +  ' .cart');
+                    if (Object.keys(data.list).length > 1){
+                        (async () => {
+                                const { value: item_id } = await Swal.fire({
+                                    title: data.msg,
+                                    input: 'select',
+                                    inputOptions: data.list,
+                                    showCancelButton: true,
+                                    inputValidator: (value) => {
+                                        return new Promise((resolve) => {
+                                          if (value != '') {
+                                            resolve()
+                                          } else {
+                                            resolve('You need to select an option :)')
+                                          }
+                                    })
+                                  }
+                                })
+                                if (item_id) {
+                                    console.log("item_id")
+                                    console.log(item_id)
+                                    let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, item_id);
+                                    $.ajax({
+                                        type: "post",
+                                        url: url2,
+                                        data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
+                                        success: function(data) {
+                                            console.log(data.qty)
+                                            inputDiv = $(inputId).val(parseInt($(inputId).val()) + data.qty)
+                                            $('.cart').load(document.URL +  ' .cart');
+                                        }
+                                    });
+                                }
+                        })()
+                    }else {
+                        let item_id = Object.keys(data.list)[0];
+                        let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, item_id);
+                            $.ajax({
+                                type: "post",
+                                url: url2,
+                                data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
+                                success: function(data) {
+                                    console.log(data.qty)
+                                    inputDiv = $(inputId).val(parseInt($(inputId).val()) + data.qty)
+                                    $('.cart').load(document.URL +  ' .cart');
+                                }
+                        });
+                    }
                 }
             });
         };
@@ -98,6 +144,5 @@
             return cookieValue;
         }
         var csrftoken = getCookie('csrftoken');
-        console.log(csrftoken)
     </script>
 {% endblock %}

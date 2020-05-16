@@ -1,11 +1,11 @@
-{% extends "shop/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
   tu carrito de compra
 {% endblock %}
 
-{% block content %}
+{% block body %}
   <h1>Tu carrito de compra</h1>
 <div class="table-responsive">
   <table class="cart " id="theTable">
@@ -28,10 +28,10 @@
           <tr>
             <td>
               <a href="{{ product.get_absolute_url }}">
-                <img  src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+                <img  src="{% if product.item.photo %}{{ product.item.photo.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
               </a>
             </td>
-            <td>{{ product.name }}  <strong>{{item.color}}</strong></td>
+            <td>{{ product.item.name }}  <strong>{{product.size}}</strong></td>
             <td>
               <form action="{% url "cart:cart_add" product.id %}" method="post">
                 {{ item.update_quantity_form.quantity }}
@@ -56,9 +56,9 @@
 </div>
 <div class="m-3">
   <p class="text-right">
-    <a href="{% url 'shop:product_list' %}" class="btn btn-secondary p-1">Continuar Comprando</a>
+    <a href="#" class="btn btn-secondary p-1">Continuar Comprando</a>
 
-    <a href="{% url 'orders:order_create' %}" class="btn btn-primary p-1">
+    <a href="#" class="btn btn-primary p-1">
     Siguiente
     </a>
   </p>

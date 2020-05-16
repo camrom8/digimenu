@@ -4,6 +4,7 @@ from . import views
 app_name = "menu"
 urlpatterns = [
     path('test/', views.ViewTest.as_view(), name='test'),
+    path('price/<int:item_id>', views.item_prices_get, name='price'),
     path('details/<int:pk>', views.MenuDetails.as_view(), name='details'),
     path('create/', views.MenuCreate.as_view(), name='create'),
     path('list/', views.MenuList.as_view(), name='list'),

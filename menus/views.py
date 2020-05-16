@@ -1,10 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
-from menus.models import Menu, Item, Category, Establishment
-
+from menus.models import Menu, Item, Category, Establishment, Price
+from django.utils.translation import gettext_lazy as _
 
 class MenuCreate(CreateView):
     """View to create menu"""
@@ -80,3 +81,19 @@ class MenuDetails(DetailView):
         for category in context['categories']:
             context['items'].append([item for item in self.object.items.filter(category__name=category)])
         return context
+
+
+def item_prices_get(request, item_id):
+    """get all the prices for a item """
+    command = request.POST['command']
+    if int(command) < 0:
+        keys = request.session['cart'].keys()
+        prices = [price for price in Price.objects.filter(item__id=item_id, id__in=keys)]
+        message = _("Which size would you like to remove?")
+    else:
+        prices = [price for price in Price.objects.filter(item__id=item_id)]
+        message = _("How hungry are you?")
+    prices_dict = {}
+    for price in prices:
+        prices_dict[price.id] = price.size + " " + price.price_str
+    return JsonResponse({'list': prices_dict, 'msg': message})
