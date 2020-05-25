@@ -107,7 +107,7 @@ def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
     keys = request.session['cart'].keys()
-
+    print(request.session['cart'])
     if int(command) < 0:
         prices = [price for price in Price.objects.filter(item__id=item_id, id__in=keys)]
         message = _("Which size would you like to remove?")
@@ -125,6 +125,9 @@ def item_prices_get(request, item_id):
         message = _("How hungry are you?")
 
     prices_dict = {}
+    if len(prices) == 1:
+        return JsonResponse({'id': str(prices[0].id)})
     for price in prices:
         prices_dict[price.id] = _(price.size) + " " + price.price_str
+
     return JsonResponse({'list': prices_dict, 'msg': message})

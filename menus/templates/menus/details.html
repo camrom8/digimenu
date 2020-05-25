@@ -74,6 +74,9 @@
             let inputId = '#product_'+id;
             let qty_update = parseInt(command);
 
+            if ($(inputId).val() === "0" && command=== -1)
+			    return true;
+
             // if size is already given (order confirmation)
             if (itemId > 0){
                 updateQuantity(itemId, qty_update, inputId)
@@ -118,8 +121,7 @@
                             }
                         })()
                     }else {
-                        let item_id = Object.keys(data.list)[0];
-                        updateQuantity(item_id, qty_update, inputId);
+                        updateQuantity(data.id, qty_update, inputId);
                     }
                 }
             });

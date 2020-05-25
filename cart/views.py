@@ -17,15 +17,15 @@ def cart_add(request, price_id):
     if form.is_valid():
         cd = form.cleaned_data
         quantity = cd['quantity']
-        print('quantity')
-        print(quantity)
+        # print('quantity')
+        # print(quantity)
         qty_current = 0
         cart_current = request.session['cart'].copy()
         item_size = cart_current.pop(str(price_id), False)
-        print("item_size")
-        print(item_size)
+        # print("item_size")
+        # print(item_size)
         if item_size:
-            print('yes')
+            # print('yes')
             qty_current = item_size['quantity']
         if quantity == -1 and qty_current <= 1:
             cart.remove(price)
@@ -57,7 +57,7 @@ def cart_detail(request):
             print(item['product'].item.menu.owner.profile.phone)
             phone = item['product'].item.menu.owner.profile.phone
     order = order[:-2] + f" Total: {cart.get_total_price()}"
-    print(order)
+    # print(order)
     wurl = whatsapp_url(order, str(phone))
     # print(cart[0]['product'].item.menu.owner)
     return render(request, 'cart/detail.html', {'cart': cart, 'wurl':wurl})
