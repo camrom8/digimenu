@@ -38,22 +38,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop.apps.ShopConfig',
-    'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig'
+    'shop',
+    'cart',
+    'orders',
+    'index',
+    'menus',
+    'profiles',
+    'sass_processor',
+    'rosetta',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware'
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CART_SESSION_ID = 'cart'
+
 ROOT_URLCONF = 'myshop.urls'
 
 TEMPLATES = [
@@ -112,13 +117,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
+from django.utils.translation import gettext_lazy as _
+
 LANGUAGES = (
-    ('en', 'English'),
-    ('es', 'Spanish'),
+    ('en', _('English')),
+    ('es', _('Spanish')),
 )
 LANGUAGE_CODE = 'en'
-
-TIME_ZONE = 'UTC'
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
+TIME_ZONE = os.environ.get('TIME_ZONE', 'America/Bogota')
 
 USE_I18N = True
 
@@ -126,15 +135,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale/'),
-)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+]
+# Django Sass
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'index/static/scss')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
