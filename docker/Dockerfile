@@ -26,12 +26,12 @@ RUN chmod 700 /root/.ssh/id_rsa
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 
 WORKDIR /opt
-RUN git clone --depth 1 git@github.com:camilo1rp/myshop.git
+RUN git clone --depth 1 git@github.com:camilo1rp/digimenu.git
 
 FROM repoClone as appBuild
 
-WORKDIR /opt/myshop
-COPY --from=repoClone /opt/myshop .
+WORKDIR /opt/digimenu
+COPY --from=repoClone /opt/digimenu .
 RUN pip3 install -r requirements.txt
 
 FROM appBuild as entrypoint
@@ -40,4 +40,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod ug+x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-VOLUME ["/etc/myshop-nginx/"]
+VOLUME ["/etc/digimenu-nginx/"]

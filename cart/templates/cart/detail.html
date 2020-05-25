@@ -1,66 +1,61 @@
-{% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 
-{% block title %}
-  tu carrito de compra
-{% endblock %}
-
-{% block body %}
-  <h1>Tu carrito de compra</h1>
-<div class="table-responsive">
-  <table class="cart " id="theTable">
+<div class="table-responsive px-0 px-md-3">
+  <table class="table table-striped shadow rounded" id="theTable">
     <thead>
-      <tr>
-        <th>Imagen</th>
-        <th>Producto</th>
-        <th>Cantidad</th>
-        <th>Remover</th>
-        <th>Precio Unidad</th>
-        <th class="headcol">Precio</th>
+      <tr class="text-center">
+        <th>{% trans 'Product'%}</th>
+        <th>{% trans 'Quantity'%}</th>
+        <th>{% trans 'Remove'%}</th>
+        <th>{% trans 'Price' %} (u)</th>
+        <th>{% trans 'Price'%}</th>
       </tr>
     </thead>
     <tbody>
       {% if not cart %}
-      <p>Vacio</p>
+      <p>{% trans 'Empty' %}</p>
       {% endif %}
       {% for item in cart %}
         {% with product=item.product %}
-          <tr>
+          <tr class="text-center">
+            <td>{{ product.item.name }}  (<small><strong>{{product.size}}</strong></small>)</td>
             <td>
-              <a href="{{ product.get_absolute_url }}">
-                <img  src="{% if product.item.photo %}{{ product.item.photo.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
-              </a>
+             <div class="d-flex justify-content-center px-0 px-md-2 px-lg-3">
+                <div>
+                    <button class="rounded-circle text-white bg-primary px-2" type="button"
+                            onclick="toCart({{product.item.id}},-1, {{product.id}})">-</button>
+                </div>
+               <div class="text-center px-1">
+                {{ item.quantity }}
+                 </div>
+                <div>
+                    <button class="rounded-circle text-white bg-primary px-2" type="button"
+                            onclick="toCart({{product.item.id}}, 1, {{product.id}})">+</button>
+                </div>
+            </div>
             </td>
-            <td>{{ product.item.name }}  <strong>{{product.size}}</strong></td>
-            <td>
-              <form action="{% url "cart:cart_add" product.id %}" method="post">
-                {{ item.update_quantity_form.quantity }}
-                {{ item.update_quantity_form.update }}
-                <input type="submit" class="btn btn-primary btn-sm" value="Cambiar">
-                {% csrf_token %}
-              </form>
-            </td>
-            <td><a href="{% url "cart:cart_remove" product.id %}">Remover</a></td>
+            <td><a href="{% url 'cart:cart_remove' product.id %}" class="text-danger"><i class="fas fa-times-circle fa-lg"></i></a></td>
             <td class="num">${{ item.price }}</td>
             <td class="num">${{ item.total_price }}</td>
           </tr>
         {% endwith %}
       {% endfor %}
-      <tr class="total">
-        <td>Total</td>
-        <td colspan="4"></td>
-        <td class="num">${{ cart.get_total_price }}</td>
-      </tr>
     </tbody>
-  </table>
+    </table>
 </div>
-<div class="m-3">
-  <p class="text-right">
-    <a href="#" class="btn btn-secondary p-1">Continuar Comprando</a>
-
-    <a href="#" class="btn btn-primary p-1">
-    Siguiente
-    </a>
-  </p>
-</div>
-{% endblock %}
+    <div class="row lead text-center bg-primary text-white px-1 px-md-5 mb-2">
+      <div class="col-2">Total</div>
+      <div class="col-10 text-right">${{ cart.get_total_price }}</div>
+  </div>
+    <div class="text-righ">
+        {% if cart|length > 0 %}
+        <a type="button" class="btn btn-success float-right mx-3" href="{{wurl}}">
+            {%trans 'Confirm & Send'%} <i class="fab fa-whatsapp"></i>
+        </a>
+        {% else %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+        {% endif %}
+    </div>

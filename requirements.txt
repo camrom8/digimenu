@@ -8,4 +8,4 @@ daphne==2.4.1
 libsass==0.19.4
 django-compressor==2.4
 django-sass-processor==0.8
-django-rosetta==0.8.1
+django-rosetta==0.9.4

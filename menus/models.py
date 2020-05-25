@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
 
-from menus.helpers.choices import SIZES, NONE
+from menus.helpers.choices import SIZES, NONE, TEMPLATES, SLIDES
 
 
 class Menu(models.Model):
@@ -22,6 +22,7 @@ class Menu(models.Model):
     subtitle = models.CharField(_('subtitle'), max_length=50)
     description = models.TextField(_('description'), max_length=500)
     logo = models.ImageField(_('logo'), blank=True)
+    template = models.CharField(max_length=20, choices=TEMPLATES, default=NONE)
 
     def __str__(self):
         return self.title
@@ -57,8 +58,17 @@ class Establishment(models.Model):
 
 
 class Category(models.Model):
-    """Database model for Establishments"""
+    """Database model for Category"""
+    owner = models.ForeignKey(get_user_model(),
+                              on_delete=models.CASCADE,
+                              related_name='categories',
+                              verbose_name=_('owner')
+                              )
     name = models.CharField(_('name'), max_length=30)
+    position = models.PositiveSmallIntegerField(_('position'),)
+
+    class Meta:
+        ordering = ['position']
 
     def __str__(self):
         return self.name

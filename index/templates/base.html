@@ -8,7 +8,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <!--    JQUERY-->
@@ -25,36 +26,40 @@
     <script src="{% static 'bootstrap-4.4.1/js/bootstrap.min.js' %}"></script>
     <!--    SWEET ALERT 2-->
     <script src="{% static 'sweetalert2-9.10.12/sweetalert2.all.min.js' %}"></script>
-
+    <!--    GOOGLE FONTS LOBSTER-->
+    <link href="//fonts.googleapis.com/css?family=Montserrat&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     {% block styles %}
     {% endblock %}
-
+    <style>
+        .digi {
+            font-family: 'Montserrat';
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light digi">
         <a class="navbar-brand py-0" href="#">
-            <img src="{% static 'images/test/logo.png'%}" width="130" height="46" alt="">
+            <img src="{% static 'images/test/logo2.png'%}" width="200" height="50" alt="">
         </a>
-<!--        <a class="navbar-brand" href="#">{% trans 'My Menu' %}</a>-->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse flex-grow-1 text-right" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto flex-nowrap">
-                <li class="nav-item {% if page == 'home' %} active {% endif %}">
-                    <a class="nav-link" href="#">{% trans 'Home' %}</a>
-                </li>
-                <li class="nav-item {% if page == 'login' %} active {% endif %}">
-                    {% if user.is_authenticated %}
-                        <a class="nav-link" href="#">{% trans 'Logout' %}</a>
-                    {% else %}
-                        <a class="nav-link" href="#">{% trans 'Login' %}</a>
-                    {% endif %}
-                </li>
+<!--                <li class="nav-item {% if page == 'home' %} active {% endif %}">-->
+<!--                    <a class="nav-link" href="#">{% trans 'Home' %}</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item {% if page == 'login' %} active {% endif %}">-->
+<!--                    {% if user.is_authenticated %}-->
+<!--                        <a class="nav-link" href="#">{% trans 'Logout' %}</a>-->
+<!--                    {% else %}-->
+<!--                        <a class="nav-link" href="#">{% trans 'Login' %}</a>-->
+<!--                    {% endif %}-->
+<!--                </li>-->
                 <li class="nav-item mx-1">
-                    <a href="{% url 'menu:create' %}" type="button" class="btn btn-secondary my-1">
-                        {% trans 'Publish my menu' %}
+                    <a href="https://api.whatsapp.com/send?phone=1334534&text=Hola!%20Quisiera%20saber%20mas%20sobre%20Digimenu!%20Como%20podria%20tener%20mi%20menu%20digital?%20" type="button" class="btn btn-secondary">
+                        {% trans 'Publish a menu' %}
                     </a>
                 </li>
             </ul>
@@ -72,30 +77,72 @@
             </div>
         </div>
     </nav>
-
-             <div class="cart float-right">
-                {% with total_items=cart|length %}
-                <div class="float-right text-primary bg-secondary">
-                    {% if cart|length > 0 %}
-                    <i class="fas fa-utensils"></i> Tu plato:
-                        <a href="{% url "cart:cart_detail" %}">
-                        {{ total_items }} producto{{ total_items|pluralize }},
-                         ${{ cart.get_total_price }}
-                        </a>
-                        {% else %}
-                       Tu plato esta vacio. <i class="fas fa-utensils"></i>
-                    {% endif %}
-                </div>
-                {% endwith %}
-            </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-primary" id="modalOrderTitle">{% trans 'Your Order'%}</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-0" id="modalBody">
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
+        {% with total_items=cart|length %}
     <div class="container-sm">
         {% block body %}
         {% endblock %}
     </div>
+    <div class="cart fixed-bottom digi py-1 bg-primary">
+        <div class="offset-lg-6 offset-md-3 row px-3">
+            <div class="col-7 col-lg-8 text-right">
+                <button type="button" class="btn btn-block btn-light float-right px-3" onClick="getOrder()">
+                    {% if cart|length > 0 %}
+                    <span class="fas fa-utensils d-none d-md-inline"> {% trans 'Order' %}:</span>
+                    <a>
+                        <span class="d-none d-md-inline">{{ total_items }} {% trans 'Product'%}{{ total_items|pluralize }},</span>
+                        <span class="d-sm-inline d-md-none">Total: </span>${{ cart.get_total_price }}
+                    </a>
+
+                    {% else %}
+                    <span class="fas fa-utensils"> {% trans 'Empty' %}</span>
+                    {% endif %}
+                </button>
+            </div>
+            {% if cart|length > 0 %}
+            <div class="col-lg-4 col-5">
+                <button type="button" class="btn btn-block btn-success" onClick="getOrder()">
+                    <span class="d-none d-sm-inline">{%trans 'Send order'%}</span> <i class="fab fa-whatsapp"></i>
+                </button>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endwith %}
+    </div>
+    <script>
+        function getOrder() {
+            $('#modalOrder').modal('show');
+            $.ajax({
+                type: "get",
+                url: "{% url 'cart:cart_detail' %}",
+                success: function(data) {
+                    console.log(data)
+                    let div = document.getElementById('modalBody');
+                    div.innerHTML = data;
+                }
+            });
+        };
+    </script>
     {% block scripts %}
     {% endblock %}
     <footer>
-        <div class="col-md-12 text-center bg-primary text-white">
+        <div class="col-md-12 text-center bg-primary text-white digi">
             <p>Made with love by My2Menu</p>
         </div>
     </footer>

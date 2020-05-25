@@ -26,14 +26,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row mt-3">
-        <h2>{{menu.title}}</h2>
+    <div class="row">
+        <div class="p-3">
+            <h2>{{menu.title}}</h2>
+        </div>
 <!--        {{request.session.cart}}-->
     </div>
+
     <div id="mi-slider" class="mi-slider">
-        {% for category in items %}
-            <ul>
-                {% for item in category %}
+        {% for category, item in items.items %}
+        <ul id="{{category}}">
+            {% for item in item %}
                 {% with prices=item.prices.all %}
                     <li><a href="#"><img src="{{item.photo.url}}" width="280" alt="img{{item.id}}">
                         <div><h5>{{item.name}}</h5></div>
@@ -50,17 +53,16 @@
                         </div>
                     </li>
                 {% endwith %}
-                {% endfor %}
-            </ul>
+            {% endfor %}
+        </ul>
         {% endfor %}
         <nav>
-        {% for category in categories %}
+        {% for category in items.keys %}
         <a href="#">{{category}}</a>
         {% endfor %}
         </nav>
     </div>
 {% endblock %}
-
 {% block scripts %}
     <script src="{% static 'itemslider1.0/js/jquery.catslider.js' %}"></script>
     <script>
@@ -68,66 +70,100 @@
             $( '#mi-slider' ).catslider();
         });
 
-        function toCart(id, command) {
-            inputId = '#product_'+id;
+        function toCart(id, command, itemId=0) {
+            let inputId = '#product_'+id;
             let qty_update = parseInt(command);
-            console.log(qty_update)
+
+            // if size is already given (order confirmation)
+            if (itemId > 0){
+                updateQuantity(itemId, qty_update, inputId)
+                return true;
+            }
+
             let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+
+            //get all sizes of the product in the db
+            //or in the order and if it is more than one, show modal to choose.
             $.ajax({
                 type: "post",
                 url: url,
                 data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
                 success: function(data) {
+                    if (data.list == -1) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: data.msg,
+                          text: data.text,
+                        })
+                    }
                     if (Object.keys(data.list).length > 1){
                         (async () => {
-                                const { value: item_id } = await Swal.fire({
-                                    title: data.msg,
-                                    input: 'select',
-                                    inputOptions: data.list,
-                                    showCancelButton: true,
-                                    inputValidator: (value) => {
-                                        return new Promise((resolve) => {
-                                          if (value != '') {
-                                            resolve()
-                                          } else {
-                                            resolve('You need to select an option :)')
-                                          }
-                                    })
-                                  }
+                            const { value: item_id } = await Swal.fire({
+                                title: data.msg,
+                                input: 'select',
+                                inputOptions: data.list,
+                                showCancelButton: true,
+                                inputValidator: (value) => {
+                                    return new Promise((resolve) => {
+                                      if (value) {
+                                        resolve()
+                                      } else {
+                                        resolve('You need to select an option :)')
+                                      }
                                 })
-                                if (item_id) {
-                                    console.log("item_id")
-                                    console.log(item_id)
-                                    let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, item_id);
-                                    $.ajax({
-                                        type: "post",
-                                        url: url2,
-                                        data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
-                                        success: function(data) {
-                                            console.log(data.qty)
-                                            inputDiv = $(inputId).val(parseInt($(inputId).val()) + data.qty)
-                                            $('.cart').load(document.URL +  ' .cart');
-                                        }
-                                    });
-                                }
+                              }
+                            })
+                            if (item_id) {
+                                updateQuantity(item_id, qty_update, inputId);
+                            }
                         })()
                     }else {
                         let item_id = Object.keys(data.list)[0];
-                        let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, item_id);
-                            $.ajax({
-                                type: "post",
-                                url: url2,
-                                data: {'quantity': qty_update, 'csrfmiddlewaretoken': csrftoken},
-                                success: function(data) {
-                                    console.log(data.qty)
-                                    inputDiv = $(inputId).val(parseInt($(inputId).val()) + data.qty)
-                                    $('.cart').load(document.URL +  ' .cart');
-                                }
-                        });
+                        updateQuantity(item_id, qty_update, inputId);
                     }
                 }
             });
         };
+        $('#modalOrder').on('shown.bs.modal', function (e) {
+          $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+        })
+
+        function updateQuantity(itemId, qty, inputId){
+            let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, itemId);
+            $.ajax({
+                type: "post",
+                url: url2,
+                data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+                success: function(data) {
+                    $(inputId).val(parseInt($(inputId).val()) + data.qty)
+                    $('.cart').load(document.URL +  ' .cart');
+                    if( $('#modalOrder').hasClass('show')){
+                        getOrder()
+                    }
+                }
+            });
+        }
+
+        // adding and removing category for plugin to work
+        if (parseInt($(window).width()) < 576) {
+            if(!$(".category").length){
+                $('ul').each( function () {
+                    $('<div class="lead category bg-secondary mt-3 rounded">' + this.id + '</div>').insertBefore(this)
+                });
+            }
+        }
+        $( window ).resize( function(){
+            if (parseInt($(window).width()) < 576) {
+                if(!$(".category").length){
+                    $('ul').each( function () {
+                        $('<div class="lead category bg-secondary mt-3 rounded">' + this.id + '</div>').insertBefore(this)
+                    });
+                }
+            } else {
+                $(".category").remove();
+            }
+        });
+
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {

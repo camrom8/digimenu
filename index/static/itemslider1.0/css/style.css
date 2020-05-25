@@ -304,7 +304,7 @@
 	}
 }
 
-@media screen and (max-width: 740px){
+@media screen and (max-width: 768px){
 	.mi-slider {
 		height: 370px;
 	}
@@ -313,7 +313,7 @@
 	}
 }
 
-@media screen and (max-width: 490px){ 
+@media screen and (max-width: 576px){
 	.mi-slider {
 		text-align: center;
 		height: auto;
@@ -326,7 +326,7 @@
 		pointer-events: auto;
 	}
 
-	.mi-slider ul li {
+	.mi-slider ul li  {
 		-webkit-animation: none !important;
 		animation: none !important;
 		-webkit-transform: translateX(0) !important;

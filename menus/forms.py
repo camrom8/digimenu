@@ -25,17 +25,20 @@ class ItemForm(forms.ModelForm):
     """Form for creating and editing item"""
 
     def __init__(self, *args, **kwargs):
+        owner = kwargs.pop('owner')
         super().__init__(*args, **kwargs)
+        self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(owner=owner))
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = "form-control"
 
         self.fields['photo'].widget.attrs['class'] = "custom-file-input"
         self.fields['menu'].empty_label = gettext('Select menu')
-        self.fields['category'].empty_label = gettext('Select category')
+        # self.fields['category'].empty_label = gettext('Select category')
         self.fields['ingredients'].widget.attrs['placeholder'] = gettext('optional')
         self.fields['description'].widget.attrs['placeholder'] = gettext('optional')
         self.fields['ingredients'].required = False
         self.fields['description'].required = False
+
     class Meta:
         model = Item
         fields = ['menu', 'category', 'name',
@@ -90,4 +93,3 @@ ItemPriceFormSet = inlineformset_factory(Item,
                                          form=PriceForm,
                                          extra=1
                                          )
-

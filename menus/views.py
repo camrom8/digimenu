@@ -7,6 +7,7 @@ from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, Ite
 from menus.models import Menu, Item, Category, Establishment, Price
 from django.utils.translation import gettext_lazy as _
 
+
 class MenuCreate(CreateView):
     """View to create menu"""
     model = Menu
@@ -49,6 +50,11 @@ class ItemCreate(CreateView):
 
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super(ItemCreate, self).get_form_kwargs()
+        kwargs['owner'] = self.request.user
+        return kwargs
+
 
 class CategoryCreate(CreateView):
     """View to create Category"""
@@ -65,7 +71,7 @@ class EstablishmentCreate(CreateView):
 
 
 class ViewTest(TemplateView):
-    template_name = "menus/details.html"
+    template_name = "menus/details3.html"
 
 
 class MenuDetails(DetailView):
@@ -76,24 +82,49 @@ class MenuDetails(DetailView):
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
-        context['categories'] = [item.category.name for item in self.object.items.all().distinct('category__name')]
-        context['items'] = []
-        for category in context['categories']:
-            context['items'].append([item for item in self.object.items.filter(category__name=category)])
+        categories_id = [item.category.id for item in self.object.items.all().distinct('category__name')]
+        categories = Category.objects.filter(id__in=categories_id)
+        context['items'] = {}
+        for category in categories:
+            context['items'][category.name] = [item for item in self.object.items.filter(category=category)]
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs.setdefault('content_type', self.content_type)
+        template_name = self.object.template
+        if not template_name:
+            template_name = "menus/details2.html"
+        return self.response_class(
+            request=self.request,
+            template=template_name,
+            context=context,
+            using=self.template_engine,
+            **response_kwargs
+        )
 
 
 def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
+    keys = request.session['cart'].keys()
+
     if int(command) < 0:
-        keys = request.session['cart'].keys()
         prices = [price for price in Price.objects.filter(item__id=item_id, id__in=keys)]
         message = _("Which size would you like to remove?")
     else:
+        if keys:
+            key_list = list(keys)
+            # check that product belongs to the same menu
+            menu = Price.objects.get(id=key_list[0])
+            if menu.item.menu != Item.objects.get(id=item_id).menu:
+                message = _('All items on plate must belong to the same menu')
+                text = _('Send your order or clear your plate before adding this item')
+                return JsonResponse({'list': -1, 'msg': message, 'text': text})
+
         prices = [price for price in Price.objects.filter(item__id=item_id)]
         message = _("How hungry are you?")
+
     prices_dict = {}
     for price in prices:
-        prices_dict[price.id] = price.size + " " + price.price_str
+        prices_dict[price.id] = _(price.size) + " " + price.price_str
     return JsonResponse({'list': prices_dict, 'msg': message})

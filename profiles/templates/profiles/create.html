@@ -14,39 +14,40 @@
     </style>
 </head>
 <body>
-     <form id="formulario2" action="{% url 'profile:create' %}" method="post">{% csrf_token %}
-      <label>
-        <span>{% trans 'Username' %}</span>
-        {{ form.username }}
-      </label>
-         {{form.username.errors}}
-         <label>
-        <span>{% trans 'First Name' %}</span>
-        {{ form.first_name }}
-      </label>
-         {{form.first_name.errors}}
-         <label>
-        <span>{% trans 'Last Name' %}</span>
-        {{ form.last_name }}
-      </label>
-         {{form.last_name.errors}}
-         <label>
-        <span>{% trans 'Email' %}</span>
-        {{ form.email }}
-      </label>
-         {{form.email.errors}}
-         <label>
-        <span>{% trans 'Password' %}</span>
-        {{ form.password1 }}
-      </label>
-         {{form.password1.errors}}
-         <label>
-        <span>{% trans 'Confirm Password' %}</span>
-        {{ form.password2 }}
-      </label>
-         {{form.password2.errors}}
-         {{ form.non_field_errors }}
-      <button type="button" onclick="sendForm()" class="submit" >{% trans 'sign up' %}</button>
+     <form action="{% url 'profile:create' %}" method="post">{% csrf_token %}
+         {{form}}
+<!--      <label>-->
+<!--        <span>{% trans 'Username' %}</span>-->
+<!--        {{ form.username }}-->
+<!--      </label>-->
+<!--         {{form.username.errors}}-->
+<!--         <label>-->
+<!--        <span>{% trans 'First Name' %}</span>-->
+<!--        {{ form.first_name }}-->
+<!--      </label>-->
+<!--         {{form.first_name.errors}}-->
+<!--         <label>-->
+<!--        <span>{% trans 'Last Name' %}</span>-->
+<!--        {{ form.last_name }}-->
+<!--      </label>-->
+<!--         {{form.last_name.errors}}-->
+<!--         <label>-->
+<!--        <span>{% trans 'Email' %}</span>-->
+<!--        {{ form.email }}-->
+<!--      </label>-->
+<!--         {{form.email.errors}}-->
+<!--         <label>-->
+<!--        <span>{% trans 'Password' %}</span>-->
+<!--        {{ form.password1 }}-->
+<!--      </label>-->
+<!--         {{form.password1.errors}}-->
+<!--         <label>-->
+<!--        <span>{% trans 'Confirm Password' %}</span>-->
+<!--        {{ form.password2 }}-->
+<!--      </label>-->
+<!--         {{form.password2.errors}}-->
+<!--         {{ form.non_field_errors }}-->
+      <button type="submit" class="submit" >{% trans 'sign up' %}</button>
 <!--      <button type="button" class="fb-btn">Join with <span>facebook</span></button>-->
      </form>
 </body>

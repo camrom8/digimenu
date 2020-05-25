@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+<link href="https://fonts.googleapis.com/css2?family=Vast+Shadow&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Crushed&family=Vast+Shadow&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'smoothTransition1.0/css/style.css' %}" />
+    <style>
+        /* For Firefox */
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        /* Webkit browsers like Safari and Chrome */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        #category1 {
+        	color: green !important;
+        }
+        #category1 button {
+        	background: green !important;
+        }
+        #category2 {
+        	color: red !important;
+        }
+        #category2 button{
+        	background: red !important;
+        }
+        #category3 {
+        	color: yellow !important;
+        }
+        #category3 button{
+        	background: yellow !important;
+        }
+        .ingredients{
+        	font-family: 'Crushed';
+        	color: 	#484848;
+        }
+        input[type="number"]:disabled{
+        	background-color:transparent;
+        	border: none;
+        	font-size: 1.3rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+			<div class="st-container">
+					<input type="radio" name="radio-set" checked="checked" id="st-control-1" onclick="showSection('1')"/>
+					<a class="one" href="#st-panel-1">Entradas</a>
+					<input type="radio" name="radio-set" id="st-control-2" onclick="showSection('2')"/>
+					<a class="two" href="#st-panel-2">Fuertes</a>
+					<input type="radio" name="radio-set" id="st-control-3" onclick="showSection('3')"/>
+					<a class="three" href="#st-panel-3">Bebidas</a>
+
+				<div class="container">
+					<div class="text-center">
+						<img src="{% static 'images/test/mex1.png' %}" width="150" height="100">
+					</div>
+					{% for category, item in items.items %}
+					<section id="category{{forloop.counter}}" class="pt-4" style="display:none;">
+						<div class="row my-4">
+							<div class="row col-md-12 col-lg-4 mt-4">
+								<div class="col-md-6 col-lg-12 ">
+								<img src="{% static 'images/test/tacos_1.jpg' %}" class="img-fluid img-thumbnail">
+								</div>
+								<div class="col-md-6 col-lg-12 ">
+								<img src="{% static 'images/test/tacos_2.jpg' %}" class="img-fluid img-thumbnail">
+								</div>
+							</div>
+							<div class="row col-md-12 col-lg-8 mt-4 pr-0">
+								{% for item in item %}
+									{% with prices=item.prices.all %}
+										<div class="col-sm-12 col-md-6 col-lg-6 pt-3 bg-light">
+											<h4>{{item.name}}</h4>
+											<h5 class="ingredients">{{item.ingredients}}</h5>
+										</div>
+										<div class="col-6 col-sm-7 col-md-3 col-lg-3 pt-3 bg-light">
+											<h4>{{prices.0.price_str}}</h4>
+										</div>
+										<div class="col-6 col-sm-5 col-md-3 col-lg-3 pr-lg-0 pt-3 bg-light">
+											<div class="d-flex justify-content-center px-1 px-lg-2">
+												<div>
+													<button class="rounded-circle text-white px-lg-2" type="button"
+															onclick="toCart({{item.id}},-1)"><i class="fas fa-minus"></i></button>
+												</div>
+											   	<div class="text-center px-1">
+													<input type="number" id="product_{{item.id}}" class="form-control text-center px-2 pb-4" name="quantity"
+																					   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+												</div>
+												<div>
+													<button class="rounded-circle text-white px-lg-2" type="button"
+															onclick="toCart({{item.id}},1)"><i class="fas fa-plus"></i></button>
+												</div>
+											</div>
+										</div>
+									{% endwith %}
+								{% endfor %}
+							</div>
+						</div>
+					</section>
+					{% endfor %}
+
+				</div><!-- // st-scroll -->
+
+			</div><!-- // st-container -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+	$("input[type='radio']").each( function (){
+		if ($(this).prop('checked')) {
+			$(this).trigger('click');
+		}
+	});
+	function showSection(id){
+		if($('#category'+id).is(":hidden")){
+			$('section').slideUp(700);
+			$('#category'+id).slideDown(700);
+		};
+	};
+
+	function toCart(id, command, itemId=0) {
+		let inputId = '#product_'+id;
+		let qty_update = parseInt(command);
+
+		// if size is already given (order confirmation)
+		if (itemId > 0){
+			updateQuantity(itemId, qty_update, inputId)
+			return true;
+		}
+
+		let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+
+		//get all sizes of the product in the db
+		//or in the order and if it is more than one, show modal to choose.
+		$.ajax({
+			type: "post",
+			url: url,
+			data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+			success: function(data) {
+				if (data.list == -1) {
+					Swal.fire({
+					  icon: 'error',
+					  title: data.msg,
+					  text: data.text,
+					})
+				}
+				if (Object.keys(data.list).length > 1){
+					(async () => {
+						const { value: item_id } = await Swal.fire({
+							title: data.msg,
+							input: 'select',
+							inputOptions: data.list,
+							showCancelButton: true,
+							inputValidator: (value) => {
+								return new Promise((resolve) => {
+								  if (value) {
+									resolve()
+								  } else {
+									resolve('You need to select an option :)')
+								  }
+							})
+						  }
+						})
+						if (item_id) {
+							updateQuantity(item_id, qty_update, inputId);
+						}
+					})()
+				}else {
+					let item_id = Object.keys(data.list)[0];
+					updateQuantity(item_id, qty_update, inputId);
+				}
+			}
+		});
+	};
+	$('#modalOrder').on('shown.bs.modal', function (e) {
+	  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+	})
+
+	function updateQuantity(itemId, qty, inputId){
+		let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, itemId);
+		$.ajax({
+			type: "post",
+			url: url2,
+			data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+			success: function(data) {
+				$(inputId).val(parseInt($(inputId).val()) + data.qty)
+				$('.cart').load(document.URL +  ' .cart');
+				if( $('#modalOrder').hasClass('show')){
+					getOrder()
+				}
+			}
+		});
+	}
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
+
+</script>
+{% endblock %}

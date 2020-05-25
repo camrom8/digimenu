@@ -11,7 +11,7 @@ export EMAIL_HOST_PASSWORD=$(cat /run/secrets/email_host_password)
 
 
 # run db migrations (retry on error)
-while ! python3 /opt/myshop/manage.py migrate 2>&1; do
+while ! python3 /opt/digimenu/manage.py migrate 2>&1; do
   sleep 5
 done
 
@@ -33,7 +33,7 @@ else
     fi
   fi
 
-python3 /opt/myshop/manage.py shell << END
+python3 /opt/digimenu/manage.py shell << END
 from django.contrib.auth.models import User
 if not User.objects.filter(username='${DJANGO_SUPERUSER_NAME}'):
   u=User.objects.create_superuser('${DJANGO_SUPERUSER_NAME}', '${DJANGO_SUPERUSER_MAIL}', '${DJANGO_SUPERUSER_PASSWORD}')
@@ -43,9 +43,9 @@ fi
 
 
 # run python3 manage.py collectstatic
-python3 /opt/myshop/manage.py collectstatic --noinput
+python3 /opt/digimenu/manage.py collectstatic --noinput
 
-#move to myshop directory
-cd /opt/myshop/
+#move to digimenu directory
+cd /opt/digimenu/
 
 daphne -b myshop -p 8080 myshop.asgi:application
