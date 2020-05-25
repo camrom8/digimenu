@@ -42,6 +42,8 @@ END
 fi
 
 
+# run python3 manage.py cto compilescss
+python3 /opt/digimenu/manage.py compilescss
 # run python3 manage.py collectstatic
 python3 /opt/digimenu/manage.py collectstatic --noinput
 

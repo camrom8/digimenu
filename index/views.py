@@ -8,4 +8,4 @@ class Index(View):
     def get(self, request):
         """render home page"""
         form = SearchBarForm()
-        return render(request, "index/details3.html", {'page': 'home', 'form': form})
+        return render(request, "index/index.html", {'page': 'home', 'form': form})
