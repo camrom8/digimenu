@@ -1,6 +1,4 @@
 /* General Demo Style */
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700,900);
-
 html { height: 100%; }
 
 *,
@@ -26,16 +24,6 @@ html { height: 100%; }
 
 .clearfix {
     *zoom: 1;
-}
-
-body {
-    font-family: 'Lato', Calibri, Arial, sans-serif;
-    background: #fff;
-    font-weight: 400;
-    font-size: 15px;
-    color: #333;
-    overflow: scroll;
-    overflow-x: hidden;
 }
 
 a {

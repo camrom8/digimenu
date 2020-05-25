@@ -43,12 +43,12 @@
                         <h4>{{prices.0.price_str}}</h4></a>
                         <div class="input-group input-group-xs px-1 px-lg-3">
                             <div class="input-group-prepend">
-                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1)">-</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1,0)">-</button>
                             </div>
                             <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
                                    value="{% quantity_in_cart request.session.cart item.id %}" disabled>
                             <div class="input-group-append">
-                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1)">+</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1,0)">+</button>
                             </div>
                         </div>
                     </li>

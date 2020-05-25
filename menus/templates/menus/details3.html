@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+{% block styles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/demo.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/style.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/custom.css' %}" />
+	<link href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap" rel="stylesheet">
+	<style>
+		footer{
+			display: none;
+		 }
+		/* For Firefox */
+		input[type='number'] {
+			-moz-appearance:textfield;
+		}
+
+		/* Webkit browsers like Safari and Chrome */
+		input[type=number]::-webkit-inner-spin-button,
+		input[type=number]::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+			input[type="number"]:disabled{
+			background-color:transparent;
+			border: none;
+			color: white;
+			font-size: 1.3rem;
+		}
+		body{
+        	font-family: 'Carter One';
+        	color: 	#484848;
+        }
+
+	</style>
+{% endblock %}
+{% block body %}
+        <div class="container demo-1 px-0">
+            <div id="slider" class="sl-slider-wrapper pb-5 mb-5">
+				<div class="sl-slider mb-5">
+					{% for category, item in items.items %}
+					{% if forloop.counter == 1 %}
+					<div class="sl-slide bg-1" data-orientation="horizontal" data-slice1-rotation="-25" data-slice2-rotation="-25" data-slice1-scale="2" data-slice2-scale="2">
+						<div class="sl-slide-inner">
+					{% endif %}
+					{% if forloop.counter == 2 %}
+					<div class="sl-slide bg-2" data-orientation="vertical" data-slice1-rotation="10" data-slice2-rotation="-15" data-slice1-scale="1.5" data-slice2-scale="1.5">
+						<div class="sl-slide-inner">
+					{% endif %}
+					{% if forloop.counter == 3 %}
+					<div class="sl-slide bg-3" data-orientation="horizontal" data-slice1-rotation="3" data-slice2-rotation="3" data-slice1-scale="2" data-slice2-scale="1">
+						<div class="sl-slide-inner">
+					{% endif %}
+					{% if forloop.counter > 3 %}
+					<div class="sl-slide bg-{{forloop.counter}}" data-orientation="vertical" data-slice1-rotation="3" data-slice2-rotation="3" data-slice1-scale="2" data-slice2-scale="1">
+						<div class="sl-slide-inner">
+					{% endif %}
+							<div class="deco"><img src="{%static 'images/test/italian1.jpg' %}" class="img-fluid rounded-circle "></div>
+							<div class="deco2"><img src="{%static 'images/test/italian2.jpg' %}" class="img-fluid rounded-circle"></div>
+								<div class="row offset-md-1 mt-md-3 pt-3 pt-md-2 px-1 mt-5 text-center">
+									<div class="col-12 mt-md-3 my-4 pt-3 pt-md-2 text-white">
+										<h1>Bertucci</h1>
+									</div>
+										<div class="col-lg-7 offset-lg-3  col-md-8 offset-md-2 text-white" style="{% if forloop.counter == 2 %}background-color:#1f414a;{%else%}background-color:#d46454;{%endif%}">
+											<h3>{{category}}</h3>
+										</div>
+									{% for item in item %}
+									{% with prices=item.prices.all %}
+										<div class="row col-12 col-lg-7 col-md-8  offset-md-2  offset-lg-3 text-white mt-3 px-3 border-bottom">
+											<div class="col-5 col-sm-5 col-md-4 col-lg-6 pl-4 pr-0 text-left">
+												<h5>{{item.name}}</h5>
+												<h6>{{item.name}}</h6>
+											</div>
+											<div class="col-3 col-md-4 col-lg-3 px-1 px-md-1">
+												<h6>{{prices.0.price_str}}</h6>
+											</div>
+											<div class="col-4 col-md-4 col-lg-3 pr-3 px-md-1">
+												<div class="input-group input-group-xs px-1 px-lg-3">
+													<div class="input-group-prepend">
+														<button class="btn btn-xs bg-light my-1 px-2 px-lg-1" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+													</div>
+														<input type="number" id="product_{{item.id}}" class="form-control text-center px-1" name="quantity"
+															   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+														<div class="input-group-append">
+														<button class="btn btn-xs bg-light my-1 px-2 px-lg-1" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+													</div>
+                        						</div>
+											</div>
+										</div>
+									{% endwith %}
+								{% endfor %}
+								</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div><!-- /sl-slider -->
+				
+				<nav id="nav-arrows" class="nav-arrows">
+					<span class="nav-arrow-prev">Previous</span>
+					<span class="nav-arrow-next">Next</span>
+				</nav>
+
+				<nav id="nav-dots" class="nav-dots">
+<!--					<span class="nav-dot-current"></span>-->
+					{% for i  in items.keys %}
+					 {% if forloop.counter == 1 %}
+						<span class="nav-dot-current" title="{{i}}"></span>
+					 {% else %}
+						<span title="{{i}}"></span>
+					 {% endif %}
+					{%endfor%}
+				</nav>
+
+			</div><!-- /slider-wrapper -->
+
+        </div>
+{% endblock %}
+{% block scripts %}
+
+		<script type="text/javascript" src="{% static 'FullScreenSlider/js/modernizr.custom.79639.js' %}"></script>
+		<noscript>
+			<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/styleNoJS.css' %}" />
+		</noscript>
+		<script type="text/javascript" src="{% static 'FullScreenSlider/js/jquery.ba-cond.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'FullScreenSlider/js/jquery.slitslider.js' %}"></script>
+		<script type="text/javascript">	
+			$(function() {
+				var Page = (function() {
+					var $navArrows = $( '#nav-arrows' ),
+						$nav = $( '#nav-dots > span' ),
+						slitslider = $( '#slider' ).slitslider( {
+							onBeforeChange : function( slide, pos ) {
+
+								$nav.removeClass( 'nav-dot-current' );
+								$nav.eq( pos ).addClass( 'nav-dot-current' );
+
+							}
+						} ),
+
+						init = function() {
+
+							initEvents();
+							
+						},
+						initEvents = function() {
+
+							// add navigation events
+							$navArrows.children( ':last' ).on( 'click', function() {
+
+								slitslider.next();
+								return false;
+
+							} );
+
+							$navArrows.children( ':first' ).on( 'click', function() {
+								
+								slitslider.previous();
+								return false;
+
+							} );
+
+							$nav.each( function( i ) {
+							
+								$( this ).on( 'click', function( event ) {
+									
+									var $dot = $( this );
+									
+									if( !slitslider.isActive() ) {
+
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									
+									}
+									
+									slitslider.jump( i + 1 );
+									return false;
+								
+								} );
+								
+							} );
+
+						};
+
+						return { init : init };
+
+				})();
+
+				Page.init();
+
+				/**
+				 * Notes: 
+				 * 
+				 * example how to add items:
+				 */
+
+				/*
+				
+				var $items  = $('<div class="sl-slide sl-slide-color-2" data-orientation="horizontal" data-slice1-rotation="-5" data-slice2-rotation="10" data-slice1-scale="2" data-slice2-scale="1"><div class="sl-slide-inner bg-1"><div class="sl-deco" data-icon="t"></div><h2>some text</h2><blockquote><p>bla bla</p><cite>Margi Clarke</cite></blockquote></div></div>');
+				
+				// call the plugin's add method
+				ss.add($items);
+
+				*/
+			
+			});
+		</script>
+		<script>
+		function toCart(id, command, itemId=0) {
+		let inputId = '#product_'+id;
+		let qty_update = parseInt(command);
+
+		// if size is already given (order confirmation)
+		if (itemId > 0){
+			updateQuantity(itemId, qty_update, inputId)
+			return true;
+		}
+
+		let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+
+		//get all sizes of the product in the db
+		//or in the order and if it is more than one, show modal to choose.
+		$.ajax({
+			type: "post",
+			url: url,
+			data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+			success: function(data) {
+				if (data.list == -1) {
+					Swal.fire({
+					  icon: 'error',
+					  title: data.msg,
+					  text: data.text,
+					})
+				}
+				if (Object.keys(data.list).length > 1){
+					(async () => {
+						const { value: item_id } = await Swal.fire({
+							title: data.msg,
+							input: 'select',
+							inputOptions: data.list,
+							showCancelButton: true,
+							confirmButtonText: '{% trans "Add" %}',
+  							confirmButtonColor: '#1f414a',
+							inputValidator: (value) => {
+								return new Promise((resolve) => {
+								  if (value) {
+									resolve()
+								  } else {
+									resolve('You need to select an option :)')
+								  }
+							})
+						  }
+						})
+						if (item_id) {
+							updateQuantity(item_id, qty_update, inputId);
+						}
+					})()
+				}else {
+					let item_id = Object.keys(data.list)[0];
+					updateQuantity(item_id, qty_update, inputId);
+				}
+			}
+		});
+	};
+	$('#modalOrder').on('shown.bs.modal', function (e) {
+	  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+	})
+
+	function updateQuantity(itemId, qty, inputId){
+		let url_base = "{% url 'cart:cart_add' 1 %}";
+		let url2 = url_base.replace(1,itemId);
+		$.ajax({
+			type: "post",
+			url: url2,
+			data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+			success: function(data) {
+				$(inputId).val(parseInt($(inputId).val()) + data.qty)
+				$('.cart').load(document.URL +  ' .cart');
+				if( $('#modalOrder').hasClass('show')){
+					getOrder()
+				}
+			}
+		});
+	}
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
+</script>
+
+{% endblock %}
