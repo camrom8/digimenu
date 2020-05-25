@@ -48,4 +48,4 @@ python3 /opt/digimenu/manage.py collectstatic --noinput
 #move to digimenu directory
 cd /opt/digimenu/
 
-daphne -b myshop -p 8080 myshop.asgi:application
+daphne -b digimenu -p 8080 myshop.asgi:application
