@@ -68,29 +68,28 @@
 					</div>
 					{% for category, item in items.items %}
 					<section id="category{{forloop.counter}}" class="pt-4" style="display:none;">
-						<div class="row my-4">
-							<div class="row col-md-12 col-lg-4 mt-4">
-								<div class="col-md-6 col-lg-12 ">
+													<div class="col-md-12 col-lg-4 mt-3">
+								<div class="col-md-5 col-lg-12">
 								<img src="{% static 'images/test/tacos_1.jpg' %}" class="img-fluid img-thumbnail">
 								</div>
-								<div class="col-md-6 col-lg-12 ">
+								<div class="col-md-5 col-lg-12 ">
 								<img src="{% static 'images/test/tacos_2.jpg' %}" class="img-fluid img-thumbnail">
 								</div>
 							</div>
-							<div class="row col-md-12 col-lg-8 mt-4 pr-0">
+							<div class="row  mt-4 px-0">
 								{% for item in item %}
 									{% with prices=item.prices.all %}
-										<div class="col-sm-12 col-md-6 col-lg-6 pt-3 bg-light">
-											<h4>{{item.name}}</h4>
-											<h5 class="ingredients">{{item.ingredients}}</h5>
+										<div class="col-5 px-1 bg-light">
+											<p>{{item.name}}</p>
+											<p class="ingredients">{{item.ingredients}}</p>
 										</div>
-										<div class="col-6 col-sm-7 col-md-3 col-lg-3 pt-3 bg-light">
-											<h4>{{prices.0.price_str}}</h4>
+										<div class="col-3 px-1 bg-light">
+											<p>{{prices.0.price_str}}</p>
 										</div>
-										<div class="col-6 col-sm-5 col-md-3 col-lg-3 pr-lg-0 pt-3 bg-light">
-											<div class="d-flex justify-content-center px-1 px-lg-2">
+										<div class="col-4 px-1 bg-light">
+											<div class="d-flex justify-content-center">
 												<div>
-													<button class="rounded-circle text-white px-lg-2" type="button"
+													<button class="rounded-circle text-white px-1 px-lg-2" type="button"
 															onclick="toCart({{item.id}}, -1, 0)"><i class="fas fa-minus"></i></button>
 												</div>
 											   	<div class="text-center px-1">
@@ -98,7 +97,7 @@
 																					   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
 												</div>
 												<div>
-													<button class="rounded-circle text-white px-lg-2" type="button"
+													<button class="rounded-circle text-white px-1 px-lg-2" type="button"
 															onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
 												</div>
 											</div>
@@ -106,13 +105,13 @@
 									{% endwith %}
 								{% endfor %}
 							</div>
-						</div>
 					</section>
 					{% endfor %}
 
 				</div><!-- // st-scroll -->
 
 			</div><!-- // st-container -->
+	{% csrf_token %}
 {% endblock %}
 
 {% block scripts %}
@@ -155,7 +154,7 @@
 					  text: data.text,
 					})
 				}
-				if (Object.keys(data.list).length > 1){
+				if (data.list) {
 					(async () => {
 						const { value: item_id } = await Swal.fire({
 							title: data.msg,
@@ -177,8 +176,7 @@
 						}
 					})()
 				}else {
-					let item_id = Object.keys(data.list)[0];
-					updateQuantity(item_id, qty_update, inputId);
+					updateQuantity(data.id, qty_update, inputId);
 				}
 			}
 		});
@@ -202,22 +200,6 @@
 			}
 		});
 	}
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie !== '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = cookies[i].trim();
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) === (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-	var csrftoken = getCookie('csrftoken');
-
+	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 </script>
 {% endblock %}

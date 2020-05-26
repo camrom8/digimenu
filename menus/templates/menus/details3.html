@@ -70,7 +70,7 @@
 										</div>
 									{% for item in item %}
 									{% with prices=item.prices.all %}
-										<div class="row col-12 col-lg-7 col-md-8  offset-md-2  offset-lg-3 text-white mt-3 px-3 border-bottom">
+										<div class="row col-12 col-lg-7 col-md-8  offset-md-2  offset-lg-3 text-white mt-3 pr-0 px-md-2 border-bottom">
 											<div class="col-5 col-sm-5 col-md-4 col-lg-6 pl-4 pr-0 text-left">
 												<h5>{{item.name}}</h5>
 												<h6>{{item.name}}</h6>
@@ -78,15 +78,15 @@
 											<div class="col-3 col-md-4 col-lg-3 px-1 px-md-1">
 												<h6>{{prices.0.price_str}}</h6>
 											</div>
-											<div class="col-4 col-md-4 col-lg-3 pr-3 px-md-1">
+											<div class="col-4 col-md-4 col-lg-3 pr-3 pl-1 px-md-1">
 												<div class="input-group input-group-xs px-1 px-lg-3">
 													<div class="input-group-prepend">
-														<button class="btn btn-xs bg-light my-1 px-2 px-lg-1" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+														<button class="btn btn-xs bg-light my-1 px-1 px-lg-1" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
 													</div>
-														<input type="number" id="product_{{item.id}}" class="form-control text-center px-1" name="quantity"
+														<input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
 															   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
 														<div class="input-group-append">
-														<button class="btn btn-xs bg-light my-1 px-2 px-lg-1" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+														<button class="btn btn-xs bg-light my-1 px-1 px-lg-1" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
 													</div>
                         						</div>
 											</div>
@@ -118,6 +118,7 @@
 			</div><!-- /slider-wrapper -->
 
         </div>
+	{% csrf_token %}
 {% endblock %}
 {% block scripts %}
 
@@ -127,7 +128,7 @@
 		</noscript>
 		<script type="text/javascript" src="{% static 'FullScreenSlider/js/jquery.ba-cond.min.js' %}"></script>
 		<script type="text/javascript" src="{% static 'FullScreenSlider/js/jquery.slitslider.js' %}"></script>
-		<script type="text/javascript">	
+		<script type="text/javascript">
 			$(function() {
 				var Page = (function() {
 					var $navArrows = $( '#nav-arrows' ),
@@ -205,104 +206,105 @@
 				ss.add($items);
 
 				*/
-			
+
 			});
 		</script>
 	<script>
 		function toCart(id, command, itemId=0) {
-		let inputId = '#product_'+id;
-		let qty_update = parseInt(command);
+			let inputId = '#product_'+id;
+			let qty_update = parseInt(command);
 
-		if ($(inputId).val() === "0" && command=== -1)
-			return true;
+			if ($(inputId).val() === "0" && command=== -1)
+				return true;
 
-		// if size is already given (order confirmation)
-		if (itemId > 0){
-			updateQuantity(itemId, qty_update, inputId)
-			return true;
-		}
+			// if size is already given (order confirmation)
+			if (itemId > 0){
+				updateQuantity(itemId, qty_update, inputId)
+				return true;
+			}
 
-		let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+			let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
 
-		//get all sizes of the product in the db
-		//or in the order and if it is more than one, show modal to choose.
-		$.ajax({
-			type: "post",
-			url: url,
-			data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
-			success: function(data) {
-				if (data.list == -1) {
-					Swal.fire({
-					  icon: 'error',
-					  title: data.msg,
-					  text: data.text,
-					})
-				}
-				if (data.list){
-					(async () => {
-						const { value: item_id } = await Swal.fire({
-							title: data.msg,
-							input: 'select',
-							inputOptions: data.list,
-							showCancelButton: true,
-							confirmButtonText: '{% trans "Add" %}',
-  							confirmButtonColor: '#1f414a',
-							inputValidator: (value) => {
-								return new Promise((resolve) => {
-								  if (value) {
-									resolve()
-								  } else {
-									resolve('You need to select an option :)')
-								  }
-							})
-						  }
+			//get all sizes of the product in the db
+			//or in the order and if it is more than one, show modal to choose.
+			$.ajax({
+				type: "post",
+				url: url,
+				data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+				success: function(data) {
+					if (data.list == -1) {
+						Swal.fire({
+						  icon: 'error',
+						  title: data.msg,
+						  text: data.text,
 						})
-						if (item_id) {
-							updateQuantity(item_id, qty_update, inputId);
-						}
-					})()
-				}else {
-					updateQuantity(data.id, qty_update, inputId);
+					}
+					if (data.list){
+						(async () => {
+							const { value: item_id } = await Swal.fire({
+								title: data.msg,
+								input: 'select',
+								inputOptions: data.list,
+								showCancelButton: true,
+								confirmButtonText: '{% trans "Add" %}',
+								confirmButtonColor: '#1f414a',
+								inputValidator: (value) => {
+									return new Promise((resolve) => {
+									  if (value) {
+										resolve()
+									  } else {
+										resolve('You need to select an option :)')
+									  }
+								})
+							  }
+							})
+							if (item_id) {
+								updateQuantity(item_id, qty_update, inputId);
+							}
+						})()
+					}else {
+						updateQuantity(data.id, qty_update, inputId);
+					}
 				}
-			}
-		});
-	};
-	$('#modalOrder').on('shown.bs.modal', function (e) {
-	  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
-	})
+			});
+		};
+		$('#modalOrder').on('shown.bs.modal', function (e) {
+		  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+		})
 
-	function updateQuantity(itemId, qty, inputId){
-		let url_base = "{% url 'cart:cart_add' 1 %}";
-		let url2 = url_base.replace(1,itemId);
-		$.ajax({
-			type: "post",
-			url: url2,
-			data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
-			success: function(data) {
-				$(inputId).val(parseInt($(inputId).val()) + data.qty)
-				$('.cart').load(document.URL +  ' .cart');
-				if( $('#modalOrder').hasClass('show')){
-					getOrder()
+		function updateQuantity(itemId, qty, inputId){
+			let url_base = "{% url 'cart:cart_add' 1 %}";
+			let url2 = url_base.replace(1,itemId);
+			console.log(csrftoken)
+			$.ajax({
+				type: "post",
+				url: url2,
+				data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+				success: function(data) {
+					$(inputId).val(parseInt($(inputId).val()) + data.qty)
+					$('.cart').load(document.URL +  ' .cart');
+					if( $('#modalOrder').hasClass('show')){
+						getOrder()
+					}
 				}
-			}
-		});
-	}
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie !== '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = cookies[i].trim();
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) === (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
+			});
 		}
-		return cookieValue;
-	}
-	var csrftoken = getCookie('csrftoken');
-</script>
+
+		function removeItem(id){
+			let url_base = "{% url 'cart:cart_remove' 1 %}";
+			let url = url_base.replace(1,id);
+			console.log(url)
+			$.ajax({
+				type: "get",
+				url: url,
+				success: function(data) {
+					if( $('#modalOrder').hasClass('show')){
+						getOrder()
+					}
+				}
+			});
+		}
+		var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	</script>
 
 {% endblock %}

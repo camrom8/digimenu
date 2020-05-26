@@ -41,9 +41,9 @@ def cart_add(request, price_id):
 
 def cart_remove(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Item, id=product_id)
+    product = get_object_or_404(Price, id=product_id)
     cart.remove(product)
-    return redirect('menu:list')
+    return JsonResponse({'msg': 'Product Removed'})
 
 
 def cart_detail(request):

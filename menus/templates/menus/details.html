@@ -62,6 +62,7 @@
         {% endfor %}
         </nav>
     </div>
+    {% csrf_token %}
 {% endblock %}
 {% block scripts %}
     <script src="{% static 'itemslider1.0/js/jquery.catslider.js' %}"></script>
@@ -165,22 +166,6 @@
                 $(".category").remove();
             }
         });
-
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     </script>
 {% endblock %}
