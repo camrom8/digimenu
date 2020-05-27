@@ -18,30 +18,27 @@
 
 .st-container > input {
 	opacity: 0;
-	z-index: 1000;
+	z-index: 10;
 }
 
-.st-container .one {
-	z-index: 10;
-	font-weight: 700;
-	background: green;
+.st-container .in-1 {
+	font-weight: 600;
+	background: #009900;
 	color: #fff;
 	text-align: center;
 }
 
-.st-container > .two{
-	z-index: 10;
-	font-weight: 700;
+.st-container > .in-2{
+	font-weight: 600;
 	background: red;
 	color: #fff;
 	text-align: center;
 }
 
-.st-container > .three{
-	z-index: 10;
-	font-weight: 700;
+.st-container > .in-3 {
+	font-weight: 600;
 	background: yellow;
-	color: #fff;
+	color:  	#585858;
 	text-align: center;
 }
 
@@ -51,7 +48,7 @@
 	position: re;
 	width: 100%;
 	height: 34px;
-	background: green;
+	background: #006600;
 	z-index: 9;
 	bottom: 0;
 }
@@ -78,11 +75,11 @@
 
 .st-container > #st-control-1:checked + a,
 .st-container > #st-control-1:checked:hover + a{
-	background: green ;
+	background: #006600;
 }
 .st-container > #st-control-2:checked + a,
 .st-container > #st-control-2:checked:hover + a{
-	background: red;
+	background: #C80000;
 }
 .st-container > #st-control-3:checked + a,
 .st-container > #st-control-3:checked:hover + a{
@@ -107,39 +104,39 @@
 
 .st-container > #st-control-1:checked + a:after,
 .st-container > #st-control-1:checked:hover + a:after{
-	border-bottom-color: green;
+	border-bottom-color: #006600;
 }
 
 .st-container > #st-control-2:checked + a:after,
 .st-container > #st-control-2:checked:hover + a:after{
-	border-bottom-color: red;
+	border-bottom-color: #C80000;
 }
 .st-container > #st-control-3:checked + a:after,
 .st-container > #st-control-3:checked:hover + a:after{
 	border-bottom-color: yellow;
 }
 
-.st-container > input:checked + .one:after,
-.st-container > input:checked:hover + .one:after{
-    color:green;
+.st-container > input:checked + .in-1:after,
+.st-container > input:checked:hover + .in-1:after{
+    color:#006600;
 }
 
 .st-container > #st-control-1:hover + a{
-	background: green;
+	background: #006600;
 }
 .st-container > #st-control-2:hover + a{
-	background: red;
+	background: #C80000;
 }
 .st-container > #st-control-3:hover + a{
 	background: yellow;
 }
 
 .st-container >  #st-control-1:hover + a:after {
-	border-bottom-color: green;
+	border-bottom-color: #006600;
 }
 
 .st-container >  #st-control-2:hover + a:after {
-	border-bottom-color: red;
+	border-bottom-color: #C80000 ;
 }
 
 .st-container > #st-control-3:hover + a:after {
@@ -168,38 +165,26 @@
 	color: rgba(255,255,255,0.8);
 }
 
-@media screen and (max-width: 520px) {
-	.st-panel h2 {
-		font-size: 42px;
-	}
-	
-	.st-panel p {
-		width: 90%;
-		left: 5%;
-		margin-top: 0;
-	}
-	
+@media screen and (max-width: 768px) {
 	.st-container > a {
-		font-size: 13px;
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	.st-container > a {
+		font-size: 12px;
+	}
+	.item {
+	    border-bottom: solid #A9A9A9 1px !important;
 	}
 }
 @media screen and (max-width: 360px) {
 	.st-container > a {
-		font-size: 10px;
+		font-size: 9px;
 	}
-	
-	.st-deco{
-		width: 120px;
-		height: 120px;
-		margin-left: -60px;
-	}
-	
-	[data-icon]:after {
-		font-size: 60px;
-		-webkit-transform: rotate(-45deg) translateY(15%);
-		-moz-transform: rotate(-45deg) translateY(15%);
-		-o-transform: rotate(-45deg) translateY(15%);
-		-ms-transform: rotate(-45deg) translateY(15%);
-		transform: rotate(-45deg) translateY(15%);
+
+	.item {
+	    border-bottom: solid #A9A9A9 1px !important;
 	}
 }

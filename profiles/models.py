@@ -21,7 +21,7 @@ class Profile(models.Model):
     nickname = models.CharField(_('nickname'), max_length=20, default="none")
     gender = models.CharField(_('gender'), max_length=2, choices=GENDER, default=OTHER)
     address = models.CharField(_('address'), max_length=100, blank=True)
-    photo = models.ImageField(upload_to="media/profiles", default="/profiles/profile.jpg", null=True)
+    photo = models.ImageField(upload_to="media/profiles", default="images/default/no_photo.png", null=True)
     company = models.CharField(_('company'), max_length=30, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

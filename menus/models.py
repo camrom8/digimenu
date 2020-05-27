@@ -21,7 +21,7 @@ class Menu(models.Model):
     title = models.CharField(_('title'), max_length=30)
     subtitle = models.CharField(_('subtitle'), max_length=50)
     description = models.TextField(_('description'), max_length=500)
-    logo = models.ImageField(_('logo'), blank=True)
+    logo = models.ImageField(_('logo'), default="images/default/no_photo.png")
     template = models.CharField(max_length=20, choices=TEMPLATES, default=NONE)
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Item(models.Model):
     name = models.CharField(_('name'), max_length=30)
     ingredients = models.CharField(_('ingredients'), max_length=127)
     description = models.CharField(_('description'), max_length=255)
-    photo = models.ImageField(_('photo'), blank=True)
+    photo = models.ImageField(_('photo'), default="images/default/no_photo.png")
 
     def __str__(self):
         return self.name
