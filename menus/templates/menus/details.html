@@ -91,7 +91,7 @@
             $.ajax({
                 type: "post",
                 url: url,
-                data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+                data: {'command': command},
                 success: function(data) {
                     if (data.list == -1) {
                         Swal.fire({
@@ -136,7 +136,7 @@
             $.ajax({
                 type: "post",
                 url: url2,
-                data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+                data: {'quantity': qty},
                 success: function(data) {
                     $(inputId).val(parseInt($(inputId).val()) + data.qty)
                     $('.cart').load(document.URL +  ' .cart');
@@ -179,21 +179,5 @@
 				}
 			});
 		}
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
     </script>
 {% endblock %}

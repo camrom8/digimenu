@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
@@ -107,7 +107,7 @@ class MenuDetails(DetailView):
         )
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']

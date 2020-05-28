@@ -230,7 +230,7 @@
 			$.ajax({
 				type: "post",
 				url: url,
-				data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+				data: {'command': command},
 				success: function(data) {
 					if (data.list == -1) {
 						Swal.fire({
@@ -278,7 +278,7 @@
 			$.ajax({
 				type: "post",
 				url: url2,
-				data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+				data: {'quantity': qty},
 				success: function(data) {
 					$(inputId).val(parseInt($(inputId).val()) + data.qty)
 					$('.cart').load(document.URL +  ' .cart');
@@ -302,7 +302,5 @@
 				}
 			});
 		}
-		var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 	</script>
-
 {% endblock %}

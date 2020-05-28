@@ -1,7 +1,6 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from menus.helpers.functions import whatsapp_url
@@ -11,7 +10,7 @@ from menus.forms import CartAddProduct
 from django.utils.translation import gettext_lazy as _
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 @require_POST
 def cart_add(request, price_id):
     cart = Cart(request)
@@ -42,7 +41,7 @@ def cart_add(request, price_id):
     return JsonResponse({'error': 'there was an error'})
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Price, id=product_id)
@@ -50,7 +49,7 @@ def cart_remove(request, product_id):
     return JsonResponse({'msg': 'Product Removed', 'id': str(product.item.id), })
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def cart_detail(request):
     cart = Cart(request)
     order = ""
