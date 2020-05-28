@@ -112,13 +112,13 @@ def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
     keys = request.session['cart'].keys()
-    # print(request.session['cart'])
+    print(keys)
     if int(command) < 0:
         prices = [price for price in Price.objects.filter(item__id=item_id, id__in=keys)]
         message = _("Which size would you like to remove?")
     else:
-        if keys:
-            key_list = list(keys)
+        key_list = list(keys)
+        if key_list:
             # check that product belongs to the same menu
             menu = Price.objects.get(id=key_list[0])
             if menu.item.menu != Item.objects.get(id=item_id).menu:
