@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-27 21:36-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: menus/forms.py:35
+msgid "Select menu"
+msgstr ""
+
+#: menus/forms.py:37 menus/forms.py:38
+msgid "optional"
+msgstr ""
+
+#: menus/helpers/choices.py:3
+msgid "U"
+msgstr ""
+
+#: menus/helpers/choices.py:4
+msgid "XS"
+msgstr ""
+
+#: menus/helpers/choices.py:5
+msgid "S"
+msgstr ""
+
+#: menus/helpers/choices.py:6
+msgid "M"
+msgstr ""
+
+#: menus/helpers/choices.py:7
+msgid "L"
+msgstr ""
+
+#: menus/helpers/choices.py:8
+msgid "XL"
+msgstr ""
+
+#: menus/helpers/choices.py:9 menus/helpers/choices.py:18
+msgid "Meal"
+msgstr ""
+
+#: menus/helpers/choices.py:12
+msgid "Only"
+msgstr ""
+
+#: menus/helpers/choices.py:13
+msgid "Extra small"
+msgstr ""
+
+#: menus/helpers/choices.py:14 menus/helpers/choices.py:25
+msgid "Small"
+msgstr ""
+
+#: menus/helpers/choices.py:15 menus/helpers/choices.py:26
+msgid "Medium"
+msgstr ""
+
+#: menus/helpers/choices.py:16
+msgid "Large"
+msgstr ""
+
+#: menus/helpers/choices.py:17
+msgid "Extra large"
+msgstr ""
+
+#: menus/helpers/choices.py:27
+msgid "large"
+msgstr ""
+
+#: menus/models.py:13 menus/models.py:65
+msgid "owner"
+msgstr ""
+
+#: menus/models.py:19
+msgid "establishment"
+msgstr ""
+
+#: menus/models.py:21
+msgid "title"
+msgstr ""
+
+#: menus/models.py:22
+msgid "subtitle"
+msgstr ""
+
+#: menus/models.py:23 menus/models.py:45
+msgid "description"
+msgstr ""
+
+#: menus/models.py:24
+msgid "logo"
+msgstr ""
+
+#: menus/models.py:35
+msgid "menu"
+msgstr ""
+
+#: menus/models.py:41
+msgid "category"
+msgstr ""
+
+#: menus/models.py:43 menus/models.py:67
+msgid "name"
+msgstr ""
+
+#: menus/models.py:44
+msgid "ingredients"
+msgstr ""
+
+#: menus/models.py:46
+msgid "photo"
+msgstr ""
+
+#: menus/models.py:54
+msgid "type"
+msgstr ""
+
+#: menus/models.py:68
+msgid "position"
+msgstr ""
+
+#: menus/models.py:79
+msgid "price_num"
+msgstr ""
+
+#: menus/models.py:80
+msgid "price"
+msgstr ""
+
+#: menus/templates/chunks/category_create.html:7
+msgid "Category"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:7
+msgid "Item"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:19
+msgid "New product"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:35
+msgid "add new menu"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:69
+msgid "choose photo"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:77
+msgid "Sizes"
+msgstr ""
+
+#: menus/templates/chunks/item_create.html:108
+#: menus/templates/menus/create.html:48
+msgid "SAVE"
+msgstr ""
+
+#: menus/templates/menus/create.html:7 menus/templates/menus/details.html:7
+#: menus/templates/menus/details2.html:7 menus/templates/menus/details3.html:6
+#: menus/templates/menus/list.html:7
+msgid "Menu"
+msgstr ""
+
+#: menus/templates/menus/details3.html:252
+msgid "Add"
+msgstr ""
+
+#: menus/templates/menus/list.html:38
+msgid "See Menu"
+msgstr ""
+
+#: menus/templates/menus/list.html:58
+msgid "Close"
+msgstr ""
+
+#: menus/views.py:113
+msgid "Which size would you like to remove?"
+msgstr ""
+
+#: menus/views.py:120
+msgid "All items on plate must belong to the same menu"
+msgstr ""
+
+#: menus/views.py:121
+msgid "Send your order or clear your plate before adding this item"
+msgstr ""
+
+#: menus/views.py:125
+msgid "How hungry are you?"
+msgstr ""

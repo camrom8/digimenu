@@ -172,7 +172,6 @@
         function removeItem(id){
 			let url_base = "{% url 'cart:cart_remove' 1 %}";
 			let url = url_base.replace(1,id);
-			console.log(url)
 			$.ajax({
 				type: "get",
 				url: url,

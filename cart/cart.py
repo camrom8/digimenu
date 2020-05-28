@@ -67,10 +67,10 @@ Initialize the cart.
         Remove a product from the cart.
         """
         product_id = str(product.id)
-        print('product_id')
-        print(product_id)
+        # print('product_id')
+        # print(product_id)
         if product_id in self.cart:
-            print('in_cart')
+            # print('in_cart')
             del self.cart[product_id]
             self.save()
 

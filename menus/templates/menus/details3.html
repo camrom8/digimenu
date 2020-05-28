@@ -278,7 +278,6 @@
 		function updateQuantity(itemId, qty, inputId){
 			let url_base = "{% url 'cart:cart_add' 1 %}";
 			let url2 = url_base.replace(1,itemId);
-			console.log(csrftoken)
 			$.ajax({
 				type: "post",
 				url: url2,
