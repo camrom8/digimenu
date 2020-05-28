@@ -296,6 +296,9 @@
 				type: "get",
 				url: url,
 				success: function(data) {
+					let inputId = '#product_'+data.id;
+					$(inputId).val(0)
+					$('.cart').load(document.URL +  ' .cart');
 					if( $('#modalOrder').hasClass('show')){
 						getOrder()
 					}

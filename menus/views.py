@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
+from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
 from menus.models import Menu, Item, Category, Establishment, Price
 from django.utils.translation import gettext_lazy as _
@@ -120,7 +121,11 @@ def item_prices_get(request, item_id):
         key_list = list(keys)
         if key_list:
             # check that product belongs to the same menu
-            menu = Price.objects.get(id=key_list[0])
+            try:
+                menu = Price.objects.get(id=key_list[0])
+            except:
+                cart = Cart(request)
+                cart.clear()
             if menu.item.menu != Item.objects.get(id=item_id).menu:
                 message = _('All items on plate must belong to the same menu')
                 text = _('Send your order or clear your plate before adding this item')

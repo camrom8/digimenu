@@ -55,6 +55,12 @@ def cart_detail(request):
     order = ""
     phone = 0
     for item in cart:
+        try:
+            item['product'].item.name
+        except:
+            cart = Cart(request)
+            cart.clear()
+            return render(request, 'cart/detail.html', {'cart': cart})
         size = _(item['size'])
         order += f"{item['quantity']}x{item['product'].item.name}({size}): {item['total_price']}, "
         if not phone:
