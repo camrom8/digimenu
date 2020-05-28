@@ -132,14 +132,8 @@
 	};
 
 	function toCart(id, command, itemId=0) {
-		if ( !csrftoken ) {
-			csrftoken = getCookie('csrftoken');
-			console.log("got cookie");
-		}
-		console.log(csrftoken)
 		let inputId = '#product_'+id;
 		let qty_update = parseInt(command);
-
 		if ($(inputId).val() === "0" && command=== -1)
 				return true;
 
@@ -156,7 +150,7 @@
 		$.ajax({
 			type: "post",
 			url: url,
-			data: {'command': command, 'csrfmiddlewaretoken': csrftoken},
+			data: {'command': command},
 			success: function(data) {
 				if (data.list == -1) {
 					Swal.fire({
@@ -164,6 +158,7 @@
 					  title: data.msg,
 					  text: data.text,
 					})
+					return true;
 				}
 				if (data.list) {
 					(async () => {
@@ -201,7 +196,7 @@
 		$.ajax({
 			type: "post",
 			url: url2,
-			data: {'quantity': qty, 'csrfmiddlewaretoken': csrftoken},
+			data: {'quantity': qty},
 			success: function(data) {
 				$(inputId).val(parseInt($(inputId).val()) + data.qty)
 				$('.cart').load(document.URL +  ' .cart');
@@ -242,6 +237,6 @@
 		}
 		return cookieValue;
 	}
-	//var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 </script>
 {% endblock %}
