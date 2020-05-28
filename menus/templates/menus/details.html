@@ -74,6 +74,7 @@
         function toCart(id, command, itemId=0) {
             if ( !csrftoken ) {
                 csrftoken = getCookie('csrftoken');
+                console.log("got cookie");
             }
             let inputId = '#product_'+id;
             let qty_update = parseInt(command);

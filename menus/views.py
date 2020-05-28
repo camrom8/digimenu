@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
@@ -106,7 +107,7 @@ class MenuDetails(DetailView):
         )
 
 
-@ensure_csrf_cookie()
+@method_decorator(ensure_csrf_cookie)
 def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
