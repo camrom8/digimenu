@@ -57,9 +57,9 @@
         </ul>
         {% endfor %}
         <nav>
-        {% for category in items.keys %}
-        <a href="#">{{category}}</a>
-        {% endfor %}
+            {% for category in items.keys %}
+            <a href="#">{{category}}</a>
+            {% endfor %}
         </nav>
     </div>
     {% csrf_token %}
@@ -99,6 +99,7 @@
                           title: data.msg,
                           text: data.text,
                         })
+                        return true;
                     }
                     if (data.list){
                         (async () => {
@@ -162,7 +163,7 @@
                         $('<div class="lead category bg-secondary mt-3 rounded">' + this.id + '</div>').insertBefore(this)
                     });
                 }
-            } else {
+            } else if ($(".category").length){
                 $(".category").remove();
             }
         });

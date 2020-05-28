@@ -4,7 +4,7 @@
 <div class="table-responsive px-0 px-md-3">
   <table class="table table-striped shadow rounded" id="theTable">
     <thead>
-      <tr class="text-center">
+      <tr class="text-center text-secondary bg-primary">
         <th>{% trans 'Product'%}</th>
         <th>{% trans 'Quantity'%}</th>
         <th>{% trans 'Remove'%}</th>
@@ -14,29 +14,29 @@
     </thead>
     <tbody>
       {% if not cart %}
-      <p>{% trans 'Empty' %}</p>
+        {% trans 'Empty' %}
       {% endif %}
       {% for item in cart %}
         {% with product=item.product %}
           <tr class="text-center">
             <td>{{ product.item.name }}  (<small><strong>{{product.size}}</strong></small>)</td>
             <td>
-             <div class="d-flex justify-content-center px-0 px-md-2 px-lg-3">
+             <div class="d-flex justify-content-between px-1 px-md-2 px-lg-3">
                 <div>
-                    <button class="rounded-circle text-white bg-primary px-2" type="button"
-                            onclick="toCart({{product.item.id}},-1, {{product.id}})">-</button>
+                    <button class="rounded-circle text-white bg-primary border-0 mt-1" type="button"
+                            onclick="toCart({{product.item.id}},-1, {{product.id}})"><i class="fas fa-minus"></i></button>
                 </div>
-               <div class="text-center px-1">
-                {{ item.quantity }}
-                 </div>
+               <div class="text-center px-2 my-1">
+                   <strong>{{ item.quantity }}</strong>
+               </div>
                 <div>
-                    <button class="rounded-circle text-white bg-primary px-2" type="button"
-                            onclick="toCart({{product.item.id}}, 1, {{product.id}})">+</button>
+                    <button class="rounded-circle text-white bg-primary border-0 my-1" type="button"
+                            onclick="toCart({{product.item.id}}, 1, {{product.id}})"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
             </td>
             <td><a onclick="removeItem({{product.id}})" class="text-danger"><i class="fas fa-times-circle fa-lg"></i></a></td>
-            <td class="num">${{ item.price_str }}</td>
+            <td class="num">${{ item.price }}</td>
             <td class="num">${{ item.total_price }}</td>
           </tr>
         {% endwith %}
@@ -51,7 +51,7 @@
     <div class="text-righ">
         {% if cart|length > 0 %}
         <a type="button" class="btn btn-success float-right mx-3" href="{{wurl}}">
-            {%trans 'Confirm & Send'%} <i class="fab fa-whatsapp"></i>
+            {%trans 'Confirm and Send'%} <i class="fab fa-whatsapp"></i>
         </a>
         {% else %}
       <div class="modal-footer">
