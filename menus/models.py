@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
 from menus.helpers.choices import SIZES, NONE, TEMPLATES, SLIDES
@@ -18,7 +19,8 @@ class Menu(models.Model):
                                       related_name='establishments',
                                       verbose_name=_('establishment')
                                       )
-    title = models.CharField(_('title'), max_length=30)
+    title = models.CharField(_('title'), max_length=20, unique=True)
+    title_slug = models.SlugField(unique=True)
     subtitle = models.CharField(_('subtitle'), max_length=50)
     description = models.TextField(_('description'), max_length=500)
     logo = models.ImageField(_('logo'), default="images/default/no_photo.png")
@@ -26,6 +28,11 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.title_slug:
+            self.title_slug = slugify(self.title)
+        super(Menu, self).save(*args, **kwargs)
 
 
 class Item(models.Model):

@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import CreateView, ListView, TemplateView, DetailView
 
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
@@ -78,6 +79,8 @@ class MenuDetails(DetailView):
     """View Menu with items"""
     model = Menu
     template_name = "menus/details.html"
+    slug_url_kwarg = 'title_slug'
+    slug_field = 'title_slug'
 
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
@@ -103,6 +106,7 @@ class MenuDetails(DetailView):
         )
 
 
+@ensure_csrf_cookie()
 def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
