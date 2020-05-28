@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from menus.helpers.functions import whatsapp_url
 from menus.models import Item, Price
 from .cart import Cart
-from shop.forms import CartAddProduct
+from menus.forms import CartAddProduct
 from django.utils.translation import gettext_lazy as _
 
 
