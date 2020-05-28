@@ -100,7 +100,7 @@
                           text: data.text,
                         })
                     }
-                    if (Object.keys(data.list).length > 1){
+                    if (data.list){
                         (async () => {
                             const { value: item_id } = await Swal.fire({
                                 title: data.msg,
@@ -166,6 +166,20 @@
                 $(".category").remove();
             }
         });
+        function removeItem(id){
+			let url_base = "{% url 'cart:cart_remove' 1 %}";
+			let url = url_base.replace(1,id);
+			console.log(url)
+			$.ajax({
+				type: "get",
+				url: url,
+				success: function(data) {
+					if( $('#modalOrder').hasClass('show')){
+						getOrder()
+					}
+				}
+			});
+		}
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     </script>
 {% endblock %}
