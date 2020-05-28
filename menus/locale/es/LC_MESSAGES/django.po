@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-27 21:36-0500\n"
-"PO-Revision-Date: 2020-05-24 18:47-0456\n"
+"PO-Revision-Date: 2020-05-27 21:40-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -53,11 +53,11 @@ msgstr ""
 
 #: menus/helpers/choices.py:9 menus/helpers/choices.py:18
 msgid "Meal"
-msgstr ""
+msgstr "Combo"
 
 #: menus/helpers/choices.py:12
 msgid "Only"
-msgstr ""
+msgstr "unico"
 
 #: menus/helpers/choices.py:13
 msgid "Extra small"
