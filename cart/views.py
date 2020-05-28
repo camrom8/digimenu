@@ -43,7 +43,7 @@ def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Price, id=product_id)
     cart.remove(product)
-    return JsonResponse({'msg': 'Product Removed'})
+    return JsonResponse({'msg': 'Product Removed', 'id': str(product.item.id), })
 
 
 def cart_detail(request):
@@ -54,7 +54,6 @@ def cart_detail(request):
         size = _(item['size'])
         order += f"{item['quantity']}x{item['product'].item.name}({size}): {item['total_price']}, "
         if not phone:
-            print(item['product'].item.menu.owner.profile.phone)
             phone = item['product'].item.menu.owner.profile.phone
     order = order[:-2] + f" Total: {cart.get_total_price()}"
     # print(order)

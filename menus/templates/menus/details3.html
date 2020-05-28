@@ -211,6 +211,9 @@
 		</script>
 	<script>
 		function toCart(id, command, itemId=0) {
+			if ( !csrftoken ) {
+				csrftoken = getCookie('csrftoken');
+			}
 			let inputId = '#product_'+id;
 			let qty_update = parseInt(command);
 
@@ -293,7 +296,6 @@
 		function removeItem(id){
 			let url_base = "{% url 'cart:cart_remove' 1 %}";
 			let url = url_base.replace(1,id);
-			console.log(url)
 			$.ajax({
 				type: "get",
 				url: url,
