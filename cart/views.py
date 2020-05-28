@@ -11,7 +11,7 @@ from shop.forms import CartAddProduct
 from django.utils.translation import gettext_lazy as _
 
 
-@method_decorator(ensure_csrf_cookie)
+@ensure_csrf_cookie
 @require_POST
 def cart_add(request, price_id):
     cart = Cart(request)
@@ -42,7 +42,7 @@ def cart_add(request, price_id):
     return JsonResponse({'error': 'there was an error'})
 
 
-@method_decorator(ensure_csrf_cookie)
+@ensure_csrf_cookie
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Price, id=product_id)
@@ -50,7 +50,7 @@ def cart_remove(request, product_id):
     return JsonResponse({'msg': 'Product Removed', 'id': str(product.item.id), })
 
 
-@method_decorator(ensure_csrf_cookie)
+@ensure_csrf_cookie
 def cart_detail(request):
     cart = Cart(request)
     order = ""

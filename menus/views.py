@@ -107,7 +107,7 @@ class MenuDetails(DetailView):
         )
 
 
-@method_decorator(ensure_csrf_cookie)
+@ensure_csrf_cookie
 def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
