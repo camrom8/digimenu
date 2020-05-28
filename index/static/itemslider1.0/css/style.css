@@ -10,7 +10,7 @@
 	position: absolute;
 	width: 100%;
 	left: 0;
-	bottom: 140px;
+	bottom: 7rem;
 	overflow: hidden;
 	text-align: center;
 	pointer-events: none;
@@ -86,7 +86,7 @@
 
 .mi-slider nav {
 	position: relative;
-	top: 260px;
+	top: 18rem;
 	text-align: center;
 	max-width: 800px;
 	margin: 0 auto;

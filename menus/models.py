@@ -19,8 +19,8 @@ class Menu(models.Model):
                                       related_name='establishments',
                                       verbose_name=_('establishment')
                                       )
-    title = models.CharField(_('title'), max_length=20, unique=True)
-    title_slug = models.SlugField(unique=True)
+    title = models.CharField(_('title'), max_length=20)
+    title_slug = models.SlugField(default="hello")
     subtitle = models.CharField(_('subtitle'), max_length=50)
     description = models.TextField(_('description'), max_length=500)
     logo = models.ImageField(_('logo'), default="images/default/no_photo.png")
