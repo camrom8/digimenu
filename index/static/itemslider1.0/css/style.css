@@ -2,7 +2,7 @@
 
 .mi-slider {
 	position: relative;
-	height: 420px;
+	height: 25rem;
 }
 
 .mi-slider ul {
@@ -10,7 +10,7 @@
 	position: absolute;
 	width: 100%;
 	left: 0;
-	bottom: 7rem;
+	bottom: 6rem;
 	overflow: hidden;
 	text-align: center;
 	pointer-events: none;
@@ -30,8 +30,8 @@
 
 .mi-slider ul li {
 	display: inline-block;
-	padding: 1.5%;
-	width: 20%;
+	padding: 2%;
+	width: 24%;
 	max-width: 200px;
 	-webkit-transform: translateX(600%);
 	transform: translateX(600%);
@@ -60,23 +60,22 @@
 	border: none;
 }
 
-.mi-slider ul li h4 {
-	display: inline-block;
-	font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
-	font-style: italic;
-	font-weight: 400;
-	font-size: 18px;
-	padding: 10px 10px 0;
-}
  h2 {
- 	font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
-	font-style: italic;
- }
+    font-family: 'Fredoka One', cursive;
+    Color: #4f4f4f;
+}
+
 .mi-slider ul li h5 {
-	display: inline-block;
-	font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
-	font-style: italic;
-	font-weight: 400;
+    font-family: 'Nixie One', cursive;
+    font-weight: 1000;
+    Color: #333333;
+	font-size: 17px;
+    height: 36px
+}
+  p {
+    font-family: 'Nixie One', cursive;
+    font-weight: 900;
+    Color: #4f4f4f;
 	font-size: 18px;
 }
 
@@ -86,9 +85,9 @@
 
 .mi-slider nav {
 	position: relative;
-	top: 18rem;
+	top: 20rem;
 	text-align: center;
-	max-width: 800px;
+	max-width: 900px;
 	margin: 0 auto;
 	border-top: 5px solid #333;
 }
@@ -100,13 +99,14 @@
 .mi-slider nav a {
 	display: inline-block;
 	text-transform: uppercase;
-	letter-spacing: 5px;
+	letter-spacing: 4px;
 	padding: 40px 30px 30px 34px;
 	position: relative;
-	color: #888;
+	Color: #4f4f4f;
 	outline: none;
 	-webkit-transition: color 0.2s linear;
 	transition: color 0.2s linear;
+	font-family: 'Fredoka One', cursive;
 }
 
 .mi-slider nav a:hover,
@@ -295,21 +295,33 @@
 
 /* Media Queries */
 @media screen and (max-width: 910px){
+	.mi-slider {
+		height: 410px;
+	}
 	.mi-slider nav {
-		max-width: 90%;
+		top: 310px;
+	}
+	.mi-slider ul{
+        bottom: 5rem;
+	}
+	.mi-slider nav {
+		max-width: 100%;
 	}
 	.mi-slider nav a {
 		font-size: 12px;
-		padding: 40px 10px 30px 14px;
+		padding: 30px 10px 10px 10px;
 	}
 }
 
 @media screen and (max-width: 768px){
 	.mi-slider {
-		height: 350px;
+		height: 410px;
 	}
 	.mi-slider nav {
-		top: 220px;
+		top: 270px;
+	}
+	.mi-slider ul{
+        bottom: 8rem;
 	}
 }
 

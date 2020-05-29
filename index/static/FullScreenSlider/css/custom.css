@@ -13,11 +13,10 @@
 	width: 60px;
 	height: 60px;
 	border: 8px solid #ddd;
-	border: 8px solid rgba(150,150,150,0.4);
+    border-color: white;
 	text-indent: -90000px;
 	margin-top: -40px;
 	cursor: pointer;
-	
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
@@ -56,10 +55,10 @@
 .nav-dots span {
 	display: inline-block;
 	position: relative;
-	width: 16px;
-	height: 16px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
-	margin: 3px;
+	margin: 5px;
 	background: #ddd;
 	background: rgba(150,150,150,0.4);
 	cursor: pointer;
@@ -93,10 +92,10 @@
 .nav-dots span.nav-dot-current:after {
 	content: "";
 	position: absolute;
-	width: 10px;
-	height: 10px;
-	top: 3px;
-	left: 3px;
+	width: 20px;
+	height: 20px;
+	top: 5px;
+	left: 5px;
 	border-radius: 50%;
 	background: rgba(255,255,255,0.8);
 }
@@ -104,21 +103,21 @@
 /* Content elements */
 
 .demo-1 .deco {
-	width: 350px;
-	height: 350px;
+	width: 250px;
+	height: 250px;
 	border-radius: 50%;
 	position: absolute;
-	top: -20px;
-	left: 105px;
-	margin: 0 0 0 -170px;
+	top: 15px;
+	left: 210px;
+	margin: 0 0 0 -175px;
 }
 .demo-1 .deco2 {
-	width: 300px;
-	height: 300px;
+	width: 270px;
+	height: 270px;
 	position: absolute;
 	top: 450px;
-	left: 150px;
-	margin: 0 0 0 -150px;
+	left: 210px;
+	margin: 0 0 0 -175px;
 }
 
 
@@ -462,43 +461,66 @@
 	100% {opacity: 0;}
 }
 
+@media screen and (max-width: 992px) {
+	.demo-1 .deco {
+		width: 390px;
+		height: 390px;
+	    top: -25px;
+	    left: 135px;
+	}
+	.demo-1 .deco2 {
+		width: 160px;
+		height: 160px;
+	}
+
+}
 
 /* Media Queries for custom slider */
 
 @media screen and (max-width: 768px) {
     .nav-arrows span {
-        top: 232px;
+        top: 263px;
         width: 25px;
         height: 25px;
-        border-color: white;
     }
 	.demo-1 .deco {
-		width: 230px;
-		height: 230px;
-		top: 0px;
-	    left: 20%;
-		margin-bottom: 50px;
+		width: 200px !important;
+		height: 200px !important;
+		top: -40px;
+	    left: 150px;
 	}
 	.demo-1 .deco2 {
-		width: 210px;
-		height: 210px;
-		top: 0%;
-	    left: 80%;
+		width: 200px;
+		height: 200px;
+		top: -15px;
+	    left: 88%;
 		margin-left: -65px;
 		margin-bottom: 50px;
 	}
 
 }
 /* Media Queries for custom slider */
+footer{
+    display: none;
+ }
+/* For Firefox */
+input[type='number'] {
+    -moz-appearance:textfield;
+}
 
-@media screen and (max-width: 992px) {
-	.demo-1 .deco {
-		width: 250px;
-		height: 250px;
-	}
-	.demo-1 .deco2 {
-		width: 180px;
-		height: 180px;
-	}
-
+/* Webkit browsers like Safari and Chrome */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+    input[type="number"]:disabled{
+    background-color:transparent;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+}
+.sl-slider{
+    font-family: 'Carter One';
+    color: 	#484848;
 }

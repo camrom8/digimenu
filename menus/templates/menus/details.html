@@ -4,7 +4,7 @@
 {% load static %}
 {% load menu_tags %}
 {% block title %}
-{% trans 'Menu' %}
+    Digimenú
 {% endblock %}
 
 {% block styles %}
@@ -21,34 +21,45 @@
             margin: 0;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nixie+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'itemslider1.0/css/style.css' %}" />
     <script src="{% static 'itemslider1.0/js/modernizr.custom.63321.js' %}"></script>
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="p-3">
+    <div class="d-flex flex-row justify-content-center pt-1">
+        <div>
+            {% if menu.logo.url %}
+            <img src="{{menu.logo.url}}" class="img-fluid rounded" height="160" width="120">
+            {% endif%}
+        </div>
+        <div class="d-none d-md-flex pt-3 align-middle align-items-stretch">
             <h2>{{menu.title}}</h2>
         </div>
 <!--        {{request.session.cart}}-->
     </div>
-
+    <hr>
     <div id="mi-slider" class="mi-slider">
         {% for category, item in items.items %}
         <ul id="{{category}}">
             {% for item in item %}
                 {% with prices=item.prices.all %}
                     <li><a href="#"><img src="{{item.photo.url}}" width="280" alt="img{{item.id}}">
-                        <div><h5>{{item.name}}</h5></div>
-                        <h4>{{prices.0.price_str}}</h4></a>
+                        </a>
+                        <h5>{{item.name}}</h5>
+                        <p class="mb-2">{{prices.0.price_str}}</p>
                         <div class="input-group input-group-xs px-1 px-lg-3">
                             <div class="input-group-prepend">
-                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1,0)">-</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}},-1,0)">
+                                    <i class="fas fa-minus fa-sm align-middle"></i>
+                                </button>
                             </div>
                             <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
                                    value="{% quantity_in_cart request.session.cart item.id %}" disabled>
                             <div class="input-group-append">
-                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1,0)">+</button>
+                                <button class="btn btn-xs btn-primary px-2 px-lg-3" type="button" onclick="toCart({{item.id}}, 1,0)">
+                                    <i class="fas fa-plus fa-sm align-middle"></i>
+                                </button>
                             </div>
                         </div>
                     </li>

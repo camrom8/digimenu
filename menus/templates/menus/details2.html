@@ -28,24 +28,21 @@
         }
         #category1 button {
         	background: green;
-        	border-color: green;
         }
         #category2 {
         	color: red !important;
         }
         #category2 button{
         	background: red;
-        	border-color: red;
         }
         #category3 {
         	color: #35352f !important;
         }
         #category3 button{
         	background: yellow;
-        	border-color: yellow;
-        	color: #35352f !important;
+        	color: black !important;
         }
-        .p{
+        p{
         	font-family: 'Crushed';
         	color: 	#484848;
         }
@@ -96,7 +93,7 @@
 							<div class="col-5 col-sm-3 col-lg-3 p-1 item">
 								<div class="d-flex justify-content-between">
 									<div>
-										<button class="rounded-circle text-white" type="button"
+										<button class="btn btn-sm rounded-circle text-white border" type="button"
 												onclick="toCart({{item.id}}, -1, 0)"><i class="fas fa-minus"></i></button>
 									</div>
 									<div class="text-center px-0">
@@ -104,8 +101,8 @@
 																		   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
 									</div>
 									<div>
-										<button class="rounded-circle text-white" type="button"
-												onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+										<button class="btn btn-sm rounded-circle text-white border" type="button"
+												onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus align-middle"></i></button>
 									</div>
 								</div>
 							</div>

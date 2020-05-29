@@ -107,7 +107,7 @@
       </div>
     </div>
         {% with total_items=cart|length %}
-    <div class="container">
+    <div class="container-lg">
         {% block body %}
         {% endblock %}
     </div>
@@ -116,14 +116,15 @@
             {% if cart|length > 0 %}
                 <div class="px-1">
                     <button type="button" class="btn btn-block btn-success" onClick="getOrder()">
-                        <span class="d-sm-inline"><strong>{%trans 'Send order'%}</strong></span> <i class="fab fa-whatsapp fa-lg"></i>
+                         <i class="fab fa-whatsapp fa-lg"></i><span class="d-sm-inline"><strong> {%trans 'Send order'%}</strong></span>
                     </button>
                 </div>
             {% endif %}
             <div class="px-1 text-right">
                 <button type="button" class="btn btn-block btn-light float-right px-4" onClick="getOrder()">
                     {% if cart|length > 0 %}
-                    <span class="fas fa-utensils d-none d-md-inline"> {% trans 'Order' %}:</span>
+                    <span class="fas fa-utensils"></span>
+                    <span class="d-none d-md-inline"><strong>{% trans 'Order' %}:</strong></span>
                     <a>
                         <span class="d-none d-md-inline">{{ total_items }} {% trans 'Product'%}{{ total_items|pluralize }},</span>
                         <span class="d-sm-inline d-md-none">Total: </span>{% to_currency cart.get_total_price %}

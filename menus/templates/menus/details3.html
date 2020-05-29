@@ -6,35 +6,12 @@
 {% trans 'Menu' %}
 {% endblock %}
 {% block styles %}
-	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/demo.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/style.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/custom.css' %}" />
+<!--	<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/demo.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/custom.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'FullScreenSlider/css/style.css' %}" />
 	<link href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap" rel="stylesheet">
 	<style>
-		footer{
-			display: none;
-		 }
-		/* For Firefox */
-		input[type='number'] {
-			-moz-appearance:textfield;
-		}
 
-		/* Webkit browsers like Safari and Chrome */
-		input[type=number]::-webkit-inner-spin-button,
-		input[type=number]::-webkit-outer-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
-			input[type="number"]:disabled{
-			background-color:transparent;
-			border: none;
-			color: white;
-			font-size: 1.3rem;
-		}
-		body{
-        	font-family: 'Carter One';
-        	color: 	#484848;
-        }
 
 	</style>
 {% endblock %}
@@ -59,21 +36,20 @@
 						<div class="sl-slide bg-{{forloop.counter}}" data-orientation="vertical" data-slice1-rotation="3" data-slice2-rotation="3" data-slice1-scale="2" data-slice2-scale="1">
 							<div class="sl-slide-inner">
 						{% endif %}
-							<div class="deco"><img src="{{item.0.photo.url}}" class="img-fluid rounded-circle "></div>
+							<div class="deco"><img src="{{item.1.photo.url}}" class="img-fluid rounded-circle"></div>
 							<div class="deco2"><img src="{{item.1.photo.url}}" class="img-fluid rounded-circle"></div>
-								<div class="row offset-md-1 mt-md-3 pt-3 pt-md-2 px-1 mt-5 text-center">
-									<div class="col-lg-7 offset-lg-3  col-md-8 offset-md-2 text-white">
-										<h1>{{item.0.menu.title}}</h1>
+								<div class="row offset-md-1 mt-md-3 pt-5 pt-md-2 px-1 mt-5 text-center">
+									<div class="col-lg-7 offset-lg-3 col-md-8 offset-md-2 mt-5 pt-3 mb-2 text-white">
+										<h2>{{item.0.menu.title}}</h2>
 									</div>
-									<div class="col-lg-7 offset-lg-3  col-md-8 offset-md-2 text-white" style="{% if forloop.counter == 2 %}background-color:#1f414a;{%else%}background-color:#d46454;{%endif%}">
+									<div class="col-lg-7 offset-lg-3 col-md-8 offset-md-2 text-white" style="{% if forloop.counter == 2 %}background-color:#1f414a;{%else%}background-color:#d46454;{%endif%}">
 										<h3>{{category}}</h3>
 									</div>
 									{% for item in item %}
 									{% with prices=item.prices.all %}
 										<div class="row col-12 col-md-8 offset-md-2 col-lg-7 offset-lg-3 text-white mt-3 pr-0 px-md-2 border-bottom">
-											<div class="col-5  col-md-5 col-lg-6 pl-4 pr-0 text-left">
+											<div class="col-5  col-md-5 col-lg-6 pl-4 pl-md-2 pr-0 text-left">
 												<h5>{{item.name}}</h5>
-												<h6>{{item.ingredients}}</h6>
 											</div>
 											<div class="col-3 col-md-4 col-lg-3 px-1 px-md-1">
 												<h6>{{prices.0.price_str}}</h6>
@@ -89,6 +65,9 @@
 														<button class="btn btn-xs bg-light my-1 px-1" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
 													</div>
                         						</div>
+											</div>
+											<div class="col-8 pl-4 pl-md-2 col-md-9 col-lg-10 px-1 px-md-1 text-left">
+												<h6>{{item.ingredients}}</h6>
 											</div>
 										</div>
 									{% endwith %}

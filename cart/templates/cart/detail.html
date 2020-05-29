@@ -4,38 +4,35 @@
 <div class="table-responsive px-0 px-md-3">
   <table class="table table-striped shadow rounded" id="theTable">
     <thead>
-      <tr class="text-center text-secondary bg-primary">
+      <tr class="text-center text-white bg-primary px-0">
         <th>{% trans 'Product'%}</th>
         <th>{% trans 'Quantity'%}</th>
-        <th>{% trans 'Remove'%}</th>
-        <th>{% trans 'Price' %} (u)</th>
-        <th>{% trans 'Price'%}</th>
+        <th class="px-0">{% trans 'Remove'%}</th>
+        <th class="px-0">{% trans 'Price' %} (u)</th>
+        <th class="px-0">{% trans 'Price'%}</th>
       </tr>
     </thead>
     <tbody>
-      {% if not cart %}
-        {% trans 'Empty' %}
-      {% endif %}
       {% for item in cart %}
         {% with product=item.product %}
           <tr class="text-center">
             <td>{{ product.item.name }}  (<small><strong>{{product.size}}</strong></small>)</td>
             <td>
-             <div class="d-flex justify-content-between px-1 px-md-2 px-lg-3">
+             <div class="d-flex justify-content-between px-1 px-lg-2 mt-1">
                 <div>
-                    <button class="rounded-circle text-white bg-primary border-0 mt-1" type="button"
+                    <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
                             onclick="toCart({{product.item.id}},-1, {{product.id}})"><i class="fas fa-minus"></i></button>
                 </div>
-               <div class="text-center px-2 my-1">
+               <div class="text-center px-2 text-dark">
                    <strong>{{ item.quantity }}</strong>
                </div>
                 <div>
-                    <button class="rounded-circle text-white bg-primary border-0 my-1" type="button"
+                    <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
                             onclick="toCart({{product.item.id}}, 1, {{product.id}})"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
             </td>
-            <td><a onclick="removeItem({{product.id}})" class="text-danger"><i class="fas fa-times-circle fa-lg"></i></a></td>
+            <td><a onclick="removeItem({{product.id}})" class="btn btn-sm rounded-circle text-danger"><i class="fas fa-times-circle fa-2x   "></i></a></td>
             <td class="num">{{ item.price_str }}</td>
             <td class="num">{% to_currency item.total_price %}</td>
           </tr>
@@ -44,18 +41,18 @@
     </tbody>
     </table>
 </div>
-    <div class="row lead text-center bg-primary text-white px-1 px-md-5 mb-2">
-      <div class="col-2">Total</div>
-      <div class="col-10 text-right">{% to_currency cart.get_total_price %}</div>
-  </div>
-    <div class="text-righ">
-        {% if cart|length > 0 %}
-        <a type="button" class="btn btn-success float-right mx-3" href="{{wurl}}">
-            {%trans 'Confirm and Send'%} <i class="fab fa-whatsapp"></i>
-        </a>
-        {% else %}
+<div class="row lead text-center bg-primary text-white mx-3 px-1 px-md-5 mb-2">
+  <div class="col-2">Total</div>
+  <div class="col-10 text-right">{% to_currency cart.get_total_price %}</div>
+</div>
+<div class="text-right">
+    {% if cart|length > 0 %}
+    <a type="button" class="btn btn-success float-right mx-3" href="{{wurl}}">
+        {%trans 'Confirm and Send'%} <i class="fab fa-whatsapp"></i>
+    </a>
+    {% else %}
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{%trans 'Close'%}</button>
       </div>
-        {% endif %}
-    </div>
+    {% endif %}
+</div>
