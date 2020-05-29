@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 {% load base_tags %}
+{% load cart_tags %}
 {% load static %}
 {% load i18n %}
-
 {% load sass_tags %}
 
 <html lang="en">
@@ -126,7 +126,7 @@
                     <span class="fas fa-utensils d-none d-md-inline"> {% trans 'Order' %}:</span>
                     <a>
                         <span class="d-none d-md-inline">{{ total_items }} {% trans 'Product'%}{{ total_items|pluralize }},</span>
-                        <span class="d-sm-inline d-md-none">Total: </span>${{ cart.get_total_price }}
+                        <span class="d-sm-inline d-md-none">Total: </span>{% to_currency cart.get_total_price %}
                     </a>
 
                     {% else %}

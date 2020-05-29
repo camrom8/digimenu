@@ -50,6 +50,7 @@ Initialize the cart.
             self.cart[price_id] = {'quantity': 0,
                                    'price': str(price.price),
                                    'size': price.size,
+                                   'price_str': price.price_str,
                                    }
         if update_quantity:
             self.cart[price_id]['quantity'] = quantity

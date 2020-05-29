@@ -99,7 +99,7 @@
 										<button class="rounded-circle text-white" type="button"
 												onclick="toCart({{item.id}}, -1, 0)"><i class="fas fa-minus"></i></button>
 									</div>
-									<div class="text-center px-1">
+									<div class="text-center px-0">
 										<input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-4" name="quantity"
 																		   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
 									</div>

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load static %}
-
+{% load cart_tags %}
 <div class="table-responsive px-0 px-md-3">
   <table class="table table-striped shadow rounded" id="theTable">
     <thead>
@@ -36,8 +36,8 @@
             </div>
             </td>
             <td><a onclick="removeItem({{product.id}})" class="text-danger"><i class="fas fa-times-circle fa-lg"></i></a></td>
-            <td class="num">${{ item.price }}</td>
-            <td class="num">${{ item.total_price }}</td>
+            <td class="num">{{ item.price_str }}</td>
+            <td class="num">{% to_currency item.total_price %}</td>
           </tr>
         {% endwith %}
       {% endfor %}
@@ -46,7 +46,7 @@
 </div>
     <div class="row lead text-center bg-primary text-white px-1 px-md-5 mb-2">
       <div class="col-2">Total</div>
-      <div class="col-10 text-right">${{ cart.get_total_price }}</div>
+      <div class="col-10 text-right">{% to_currency cart.get_total_price %}</div>
   </div>
     <div class="text-righ">
         {% if cart|length > 0 %}
