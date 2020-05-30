@@ -4,7 +4,7 @@
 {% load static %}
 {% load menu_tags %}
 {% block title %}
-    Digimenú`
+    Digimenú
 {% endblock %}
 
 {% block styles %}
@@ -61,7 +61,7 @@
 <!--        {{request.session.cart}}-->
 	<div class="st-container">
 		{% for category in items.keys %}
-			<input type="radio" name="radio-set" id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
+			<input type="radio" name="radio-set" checked="{%if forloop.counter == 1%}checked{% endif %}"  id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
 			<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
 		{%endfor%}
 		<div class="container">
@@ -119,12 +119,6 @@
 
 {% block scripts %}
 <script>
-	$("input[type='radio']").each( function (){
-		if ($(this).prop('checked')) {
-			console.log("here");
-			$(this).trigger('click');
-		}
-	});
 	function showSection(id){
 		if($('#category'+id).is(":hidden")){
 			$('section').slideUp(700);
