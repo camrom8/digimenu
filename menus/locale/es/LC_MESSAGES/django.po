@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-30 11:18-0500\n"
-"PO-Revision-Date: 2020-05-27 21:40-0456\n"
+"PO-Revision-Date: 2020-05-30 12:13-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -205,7 +205,7 @@ msgstr "Todos los productos en el pedido deben pertenecer al mismo menu"
 
 #: menus/views.py:131
 msgid "Send your order or clear your plate before adding this item"
-msgstr "Envía tu pedido o vacía tu pedido antes de agregar este producto"
+msgstr "Envía o vacía tu pedido antes de agregar este producto"
 
 #: menus/views.py:135
 msgid "How hungry are you?"
