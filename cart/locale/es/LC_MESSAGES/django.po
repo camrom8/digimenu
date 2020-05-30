@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-27 21:36-0500\n"
-"PO-Revision-Date: 2020-05-27 21:39-0456\n"
+"POT-Creation-Date: 2020-05-30 11:18-0500\n"
+"PO-Revision-Date: 2020-05-30 11:21-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -35,10 +35,14 @@ msgstr "Quitar"
 msgid "Price"
 msgstr "Precio"
 
-#: cart/templates/cart/detail.html:17
-msgid "Empty"
-msgstr "Vacio"
-
-#: cart/templates/cart/detail.html:54
-msgid "Confirm & Send"
+#: cart/templates/cart/detail.html:51
+#| msgid "Confirm & Send"
+msgid "Confirm and Send"
 msgstr "Confirmar y Enviar"
+
+#: cart/templates/cart/detail.html:55
+msgid "Close"
+msgstr ""
+
+#~ msgid "Empty"
+#~ msgstr "Vacio"

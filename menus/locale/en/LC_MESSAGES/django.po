@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-27 21:36-0500\n"
+"POT-Creation-Date: 2020-05-30 11:18-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,63 +82,63 @@ msgstr ""
 msgid "large"
 msgstr ""
 
-#: menus/models.py:13 menus/models.py:65
+#: menus/models.py:14 menus/models.py:72
 msgid "owner"
 msgstr ""
 
-#: menus/models.py:19
+#: menus/models.py:20
 msgid "establishment"
 msgstr ""
 
-#: menus/models.py:21
+#: menus/models.py:22
 msgid "title"
 msgstr ""
 
-#: menus/models.py:22
+#: menus/models.py:24
 msgid "subtitle"
 msgstr ""
 
-#: menus/models.py:23 menus/models.py:45
+#: menus/models.py:25 menus/models.py:52
 msgid "description"
 msgstr ""
 
-#: menus/models.py:24
+#: menus/models.py:26
 msgid "logo"
 msgstr ""
 
-#: menus/models.py:35
+#: menus/models.py:42
 msgid "menu"
 msgstr ""
 
-#: menus/models.py:41
+#: menus/models.py:48
 msgid "category"
 msgstr ""
 
-#: menus/models.py:43 menus/models.py:67
+#: menus/models.py:50 menus/models.py:74
 msgid "name"
 msgstr ""
 
-#: menus/models.py:44
+#: menus/models.py:51
 msgid "ingredients"
 msgstr ""
 
-#: menus/models.py:46
+#: menus/models.py:53
 msgid "photo"
 msgstr ""
 
-#: menus/models.py:54
+#: menus/models.py:61
 msgid "type"
 msgstr ""
 
-#: menus/models.py:68
+#: menus/models.py:75
 msgid "position"
 msgstr ""
 
-#: menus/models.py:79
+#: menus/models.py:86
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:80
+#: menus/models.py:87
 msgid "price"
 msgstr ""
 
@@ -171,13 +171,12 @@ msgstr ""
 msgid "SAVE"
 msgstr ""
 
-#: menus/templates/menus/create.html:7 menus/templates/menus/details.html:7
-#: menus/templates/menus/details2.html:7 menus/templates/menus/details3.html:6
-#: menus/templates/menus/list.html:7
+#: menus/templates/menus/create.html:7 menus/templates/menus/details2.html:7
+#: menus/templates/menus/details3.html:6 menus/templates/menus/list.html:7
 msgid "Menu"
 msgstr ""
 
-#: menus/templates/menus/details3.html:252
+#: menus/templates/menus/details3.html:229
 msgid "Add"
 msgstr ""
 
@@ -189,18 +188,18 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: menus/views.py:113
+#: menus/views.py:119
 msgid "Which size would you like to remove?"
 msgstr ""
 
-#: menus/views.py:120
+#: menus/views.py:130
 msgid "All items on plate must belong to the same menu"
 msgstr ""
 
-#: menus/views.py:121
+#: menus/views.py:131
 msgid "Send your order or clear your plate before adding this item"
 msgstr ""
 
-#: menus/views.py:125
+#: menus/views.py:135
 msgid "How hungry are you?"
 msgstr ""

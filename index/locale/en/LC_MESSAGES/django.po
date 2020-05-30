@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-27 21:36-0500\n"
+"POT-Creation-Date: 2020-05-30 11:18-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: index/helpers/validators.py:8
 msgid "Phone number is too short. It must be between 7-10 digits"
 msgstr ""
@@ -25,40 +26,44 @@ msgstr ""
 msgid "Phone number is too long. It must be between 7-10 digits"
 msgstr ""
 
-#: index/templates/base.html:55 index/templates/index/index.html:7
+#: index/templates/base.html:50 index/templates/index/index.html:7
 msgid "Home"
 msgstr ""
 
-#: index/templates/base.html:59
+#: index/templates/base.html:54
 msgid "Logout"
 msgstr ""
 
-#: index/templates/base.html:61
+#: index/templates/base.html:56
 msgid "Login"
 msgstr ""
 
-#: index/templates/base.html:66
+#: index/templates/base.html:62
 msgid "Publish a menu"
 msgstr ""
 
-#: index/templates/base.html:89
+#: index/templates/base.html:99
 msgid "Your Order"
 msgstr ""
 
-#: index/templates/base.html:110
+#: index/templates/base.html:115
+msgid "Welcome to Digimenú"
+msgstr ""
+
+#: index/templates/base.html:136
+msgid "Send order"
+msgstr ""
+
+#: index/templates/base.html:144
 msgid "Order"
 msgstr ""
 
-#: index/templates/base.html:112
+#: index/templates/base.html:146
 msgid "Product"
 msgstr ""
 
-#: index/templates/base.html:117
+#: index/templates/base.html:151
 msgid "Empty"
-msgstr ""
-
-#: index/templates/base.html:124
-msgid "Send order"
 msgstr ""
 
 #: index/templates/index/index.html:30
