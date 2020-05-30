@@ -65,7 +65,7 @@ def cart_detail(request):
         order += f"{item['quantity']}x{item['product'].item.name}({size}): ${item['total_price']}, "
         if not phone:
             phone = item['product'].item.menu.owner.profile.phone
-    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente: " + order[:-2] + f" Total: {cart.get_total_price()}"
+    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente: " + order[:-2] + f" Total: ${cart.get_total_price()}"
     # print(order)
     wurl = whatsapp_url(order, str(phone))
     # print(cart[0]['product'].item.menu.owner)
