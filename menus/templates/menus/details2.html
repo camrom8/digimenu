@@ -49,7 +49,11 @@
         #category3 p {
         	color: black;
         }
-        input[type="number"]:disabled{
+		.swal-wide{
+			width:850px !important;
+		}
+
+        .form-control:disabled, .form-control[readonly]{
         	background-color:transparent;
         	border: none;
         	font-size: 1.3rem;
@@ -62,11 +66,11 @@
 	<div class="st-container">
 		{% for category in items.keys %}
 			{%if forloop.counter == 1%}
-			<input type="radio" name="radio-set" checked="checked"  id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
-			<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
+				<input type="radio" name="radio-set" checked="checked"  id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
+				<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
 			{%else%}
-			<input type="radio" name="radio-set"   id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
-			<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
+				<input type="radio" name="radio-set"   id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
+				<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
 			{% endif %}
 		{%endfor%}
 		<div class="container">
@@ -124,6 +128,20 @@
 
 {% block scripts %}
 <script>
+	function sendAddsOn () {
+		let url = "{% url 'menu:order' 123 %}".replace(/123/, $("#itemToAdd").text());
+		let form = $("#addsOnForm").serialize()
+		$.ajax({
+			type: "post",
+			url: url,
+			data: form,
+			success: function(data) {
+				inputId = '#product_'+data.price_id;
+				updateQuantity(data.item_id, 1, inputId)
+			}
+		});
+		$('#modalAddsOn').modal('hide');
+	}
 	function showSection(id){
 		if($('#category'+id).is(":hidden")){
 			$('section').slideUp(700);
@@ -131,6 +149,7 @@
 		};
 	};
 	showSection(1);
+
 	function toCart(id, command, itemId=0) {
 		let inputId = '#product_'+id;
 		let qty_update = parseInt(command);
@@ -160,6 +179,7 @@
 					})
 					return true;
 				}
+				// check if there are different sizes
 				if (data.list) {
 					(async () => {
 						const { value: item_id } = await Swal.fire({
@@ -169,24 +189,136 @@
 							showCancelButton: true,
 							inputValidator: (value) => {
 								return new Promise((resolve) => {
-								  if (value) {
+							  	if (value) {
 									resolve()
-								  } else {
+							  	} else {
 									resolve('You need to select an option :)')
-								  }
+							  	}
 							})
 						  }
 						})
 						if (item_id) {
-							updateQuantity(item_id, qty_update, inputId);
+							sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, item_id);
+							$.ajax({
+								type: "post",
+								url: sameItemsUrl,
+								data: {'command': command},
+								success: function(data) {
+									if (data.list) {
+										(async () => {
+											const { value: selected } = await Swal.fire({
+												title: data.msg,
+												input: 'select',
+												inputOptions: data.list,
+												showCancelButton: true,
+												inputValidator: (value) => {
+													return new Promise((resolve) => {
+														if (value) {
+															resolve()
+														} else {
+															resolve('You need to select an option :)')
+														}
+													})
+											  	}
+											})
+											if (selected) {
+												if (selected != "0")
+													updateQuantity(selected, qty_update, inputId)
+												else
+													showAddOns(item_id)
+											}
+										})()
+									}else {
+										console.log(data.id)
+										if ( qty_update === -1) {
+											updateQuantity(data.id, qty_update, inputId)
+										}else{
+											showAddOns(data.id)
+										}
+									}
+								}
+							});
 						}
 					})()
 				}else {
-					updateQuantity(data.id, qty_update, inputId);
+					//check if there are items of same size in cart
+					sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, data.id);
+					$.ajax({
+						type: "post",
+						url: sameItemsUrl,
+						data: {'command': command},
+						success: function(data) {
+							if (data.list) {
+								(async () => {
+									const { value: item_id } = await Swal.fire({
+										title: data.msg,
+										input: 'select',
+										inputOptions: data.list,
+										showCancelButton: true,
+										inputValidator: (value) => {
+											return new Promise((resolve) => {
+											  if (value) {
+												resolve()
+											  } else {
+												resolve('You need to select an option :)')
+											  }
+										})
+									  }
+									})
+									if (item_id) {
+										if (item_id != "0")
+											updateQuantity(item_id, qty_update, inputId)
+										else
+											showAddOns(data.id)
+									}
+								})()
+							}else {
+								if ( qty_update === -1 || data.product_in_cart) {
+								 	updateQuantity(data.id, qty_update, inputId)
+								}else{
+									showAddOns(data.id)
+								}
+							}
+						}
+					});
+					//console.log(sameItems);
+					//showAddOns(data.id)
+					//updateQuantity(data.id, qty_update, inputId);
 				}
 			}
 		});
 	};
+
+	function showAddOns(item_id){
+		AddsOnUrl = "{% url 'menu:adds-on' 123 %}".replace(/123/, item_id);
+			$.ajax({
+				type: "get",
+				url: AddsOnUrl,
+				success: function(data) {
+					let div = document.getElementById('addsOnBody');
+					div.innerHTML = data;
+					if ( data.indexOf("addOnDiv") === -1 ) {
+						sendAddsOn();
+					} else {
+						console.log(data.indexOf("addOnDiv"))
+						$('#modalAddsOn').modal('show');
+					}
+				}
+			});
+	}
+
+	function getSameItems(item_id){
+		sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, item_id);
+		let list;
+			$.ajax({
+				type: "get",
+				url: sameItemsUrl,
+				success: function(data) {
+				   list = data;
+				}
+			});
+		return list;
+	}
 	$('#modalOrder').on('shown.bs.modal', function (e) {
 	  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
 	})
@@ -198,7 +330,8 @@
 			url: url2,
 			data: {'quantity': qty},
 			success: function(data) {
-				$(inputId).val(parseInt($(inputId).val()) + data.qty)
+				console.log(data.qty)
+				$(inputId).val( parseInt( $(inputId).val() ) + data.qty)
 				$('.cart').load(document.URL +  ' .cart');
 				if( $('#modalOrder').hasClass('show')){
 					getOrder()

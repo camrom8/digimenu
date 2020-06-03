@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
@@ -72,7 +73,7 @@ class Category(models.Model):
                               verbose_name=_('owner')
                               )
     name = models.CharField(_('name'), max_length=30)
-    position = models.PositiveSmallIntegerField(_('position'),)
+    position = models.PositiveSmallIntegerField(_('position'), )
 
     class Meta:
         ordering = ['position']
@@ -82,10 +83,42 @@ class Category(models.Model):
 
 
 class Price(models.Model):
+    """Database for size"""
     item = models.ForeignKey('Item', on_delete=models.CASCADE, related_name='prices')
     price = models.DecimalField(_('price_num'), decimal_places=0, max_digits=6)
     price_str = models.CharField(_('price'), max_length=10)
     size = models.CharField(max_length=20, choices=SIZES, default=NONE)
 
     def __str__(self):
-        return f'price for {self.item}'
+        return f'size and price for {self.item}'
+
+
+class ProductInCart(models.Model):
+    client = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    price = models.ForeignKey('Price', on_delete=models.CASCADE, related_name='inCart')
+    total = models.DecimalField(decimal_places=0, max_digits=6, null=True)
+    add_on = models.ManyToManyField('AddsOn', through='Quantity')
+
+    def __str__(self):
+        return self.total
+
+
+class AddsOn(models.Model):
+    product = models.ManyToManyField('Price', related_name='adds_ons')
+    name = models.CharField(max_length=20)
+    price = models.DecimalField(_('price_num'), decimal_places=0, max_digits=6)
+    price_str = models.CharField(_('price'), max_length=10)
+
+    def __str__(self):
+        return self.name
+
+
+class Quantity(models.Model):
+    product = models.ForeignKey('ProductInCart', on_delete=models.CASCADE)
+    addOn = models.ForeignKey('AddsOn', on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField(default=1)
+    price = models.DecimalField(decimal_places=0, max_digits=6, null=True)
+
+    def save(self, *args, **kwargs):
+        self.price = self.quantity * self.addOn.price
+        super(Quantity, self).save(*args, **kwargs)

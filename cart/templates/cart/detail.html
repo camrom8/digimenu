@@ -5,37 +5,47 @@
   <table class="table table-striped shadow rounded" id="theTable">
     <thead>
       <tr class="text-center text-white bg-primary px-0">
-        <th>{% trans 'Product'%}</th>
-        <th>{% trans 'Quantity'%}</th>
-        <th class="px-0">{% trans 'Remove'%}</th>
+        <th colspan="2">{% trans 'Product'%}</th>
         <th class="px-0">{% trans 'Price' %} (u)</th>
+        <th>{% trans 'Quantity'%}</th>
         <th class="px-0">{% trans 'Price'%}</th>
+        <th class="px-0">{% trans 'Remove'%}</th>
       </tr>
     </thead>
     <tbody>
       {% for item in cart %}
         {% with product=item.product %}
+        {% with add_ons=product.add_on.all %}
           <tr class="text-center">
-            <td>{{ product.item.name }}  (<small><strong>{{product.size}}</strong></small>)</td>
+            <td colspan="2">
+                {{ product.price.item }}(<small><strong>{{product.price.size}}</strong></small>)
+                {% for add in add_ons%}
+                <small>{{add}}</small> -
+                {% endfor %}
+            </td>
+              <td class="num">{{ item.price_str }}</td>
             <td>
+
              <div class="d-flex justify-content-between px-1 px-lg-2 mt-1">
                 <div>
                     <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
-                            onclick="toCart({{product.item.id}},-1, {{product.id}})"><i class="fas fa-minus"></i></button>
+                            onclick="toCart({{product.price.item.id}},-1, {{product.id}})"><i class="fas fa-minus"></i></button>
                 </div>
                <div class="text-center px-2 text-dark">
                    <strong>{{ item.quantity }}</strong>
                </div>
                 <div>
                     <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
-                            onclick="toCart({{product.item.id}}, 1, {{product.id}})"><i class="fas fa-plus"></i></button>
+                            onclick="toCart({{product.price.item.id}}, 1, {{product.id}})"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
             </td>
-            <td><a onclick="removeItem({{product.id}})" class="btn btn-sm rounded-circle text-danger"><i class="fas fa-times-circle fa-2x   "></i></a></td>
-            <td class="num">{{ item.price_str }}</td>
             <td class="num">{% to_currency item.total_price %}</td>
+            <td><a onclick="removeItem({{product.id}})" class="btn btn-sm rounded-circle text-danger"><i class="fas fa-times-circle fa-2x"></i></a></td>
+
+
           </tr>
+        {% endwith %}
         {% endwith %}
       {% endfor %}
     </tbody>

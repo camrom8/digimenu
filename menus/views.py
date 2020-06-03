@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.views.generic import CreateView, ListView, TemplateView, DetailView
+from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView
 
 from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
-from menus.models import Menu, Item, Category, Establishment, Price
+from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity
 from django.utils.translation import gettext_lazy as _
 
 
@@ -84,15 +84,15 @@ class MenuDetails(DetailView):
     slug_url_kwarg = 'title_slug'
     slug_field = 'title_slug'
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        cart = Cart(request)
-        for item in cart:
-            if item['product'].item.menu != self.object:
-                cart.clear()
-            break
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+    # def get(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     cart = Cart(request)
+    #     for item in cart:
+    #         if item['product'].item.menu != self.object:
+    #             cart.clear()
+    #         break
+    #     context = self.get_context_data(object=self.object)
+    #     return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
@@ -123,27 +123,14 @@ def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
     keys = request.session['cart'].keys()
-    print(keys)
     if int(command) < 0:
-        prices = [price for price in Price.objects.filter(item__id=item_id, id__in=keys)]
+        sizes_id = [size.id for size in Price.objects.filter(item__id=item_id)]
+        prices = [product.price for product in ProductInCart.objects.filter(price__id__in=sizes_id, id__in=keys)]
         message = _("Which size would you like to remove?")
+        # print(prices)
     else:
-        key_list = list(keys)
-        if key_list:
-            # check that product belongs to the same menu
-            try:
-                menu = Price.objects.get(id=key_list[0])
-            except:
-                cart = Cart(request)
-                cart.clear()
-            if menu.item.menu != Item.objects.get(id=item_id).menu:
-                message = _('All items on plate must belong to the same menu')
-                text = _('Send your order or clear your plate before adding this item')
-                return JsonResponse({'list': -1, 'msg': message, 'text': text})
-
         prices = [price for price in Price.objects.filter(item__id=item_id)]
         message = _("How hungry are you?")
-
     prices_dict = {}
     if len(prices) == 1:
         return JsonResponse({'id': str(prices[0].id)})
@@ -151,3 +138,56 @@ def item_prices_get(request, item_id):
         prices_dict[price.id] = _(price.size) + " " + price.price_str
 
     return JsonResponse({'list': prices_dict, 'msg': message})
+
+
+def get_adds_on(request, item_id):
+    price = Price.objects.get(id=item_id)
+    adds_ons = AddsOn.objects.filter(product__id=item_id)
+    return render(request, "chunks/adds_on.html", {'adds': adds_ons, 'product': price})
+
+
+def item_to_order(request, item_id):
+    add_ons = request.POST.copy()
+    # print(add_ons)
+    add_ons.pop('csrfmiddlewaretoken', None)
+    total = add_ons.pop('grand_total', None)
+    price = Price.objects.get(id=item_id)
+    product_in_cart = ProductInCart(client=request.user, price=price, total=int(total[0]))
+    product_in_cart.save()
+    for add_on, qty in add_ons.items():
+        if int(qty) > 0:
+            add_on_object = AddsOn.objects.get(id=add_on)
+            add, _ = Quantity.objects.get_or_create(product=product_in_cart, addOn=add_on_object)
+            add.quantity = int(qty)
+            add.save()
+    total = 0
+    for add in Quantity.objects.filter(product=product_in_cart):
+        total += add.price
+    product_in_cart.total = total + price.price
+    product_in_cart.save()
+    return JsonResponse({'item_id': product_in_cart.id, 'price_id': price.item.id})
+
+
+@csrf_exempt
+def same_items_in_cart(request, item_id):
+    keys = request.session['cart'].keys()
+    products_in_cart = ProductInCart.objects.filter(price__id=item_id, id__in=keys)
+    if not AddsOn.objects.filter(product__id=item_id) and len(products_in_cart) > 0:
+        # print("here")
+        return JsonResponse({'id': str(products_in_cart[0].id), 'product_in_cart': 1})
+        # if not AddsOn.objects.filter(product__id=item_id):
+        #     print("no adds")
+        #     add_on = False
+    if products_in_cart:
+        products_dict = {}
+        if int(request.POST['command']) > 0:
+            products_dict = {'0': _('new')}
+        for product in products_in_cart:
+            products_dict[product.id] = product.price.size + ': '
+            for quantity in product.quantity_set.all():
+                products_dict[quantity.product.id] += quantity.addOn.name + '(' + str(quantity.quantity) + '), '
+            products_dict[product.id] = products_dict[product.id][:-2]
+        if len(products_dict) == 1:
+            return JsonResponse({'id': str(products_in_cart[0].id)})
+        return JsonResponse({'list': products_dict, 'msg': _('Select a product'), 'id': item_id})
+    return JsonResponse({'id': item_id})

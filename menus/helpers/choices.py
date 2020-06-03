@@ -1,11 +1,11 @@
 from django.utils.translation import gettext as _
 
-NONE = _('U')
-EXTRA_SMALL = _('XS')
-SMALL = _('S')
-MEDIUM = _('M')
-LARGE = _('L')
-EXTRA_LARGE = _('XL')
+NONE = _('Unique')
+EXTRA_SMALL = _('x-Small')
+SMALL = _('Small')
+MEDIUM = _('Medium')
+LARGE = _('Large')
+EXTRA_LARGE = _('x-Large')
 COMBO = _('Meal')
 
 SIZES = [

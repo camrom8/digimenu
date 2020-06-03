@@ -8,6 +8,9 @@ admin.site.register(models.Menu)
 admin.site.register(models.Establishment)
 admin.site.register(models.Category)
 admin.site.register(models.Price)
+admin.site.register(models.AddsOn)
+admin.site.register(models.ProductInCart)
+admin.site.register(models.Quantity)
 
 
 @admin.register(models.Item)

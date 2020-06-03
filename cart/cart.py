@@ -1,7 +1,8 @@
 from decimal import Decimal
 from django.conf import settings
 
-from menus.models import Item, Price
+from menus.helpers.functions import to_currency
+from menus.models import Item, Price, ProductInCart
 
 
 class Cart(object):
@@ -24,10 +25,10 @@ Initialize the cart.
         """
         prices_ids = self.cart.keys()
         # get the product objects and add them to the cart
-        prices = Price.objects.filter(id__in=prices_ids)
+        product = ProductInCart.objects.filter(id__in=prices_ids)
 
         cart = self.cart.copy()
-        for price in prices:
+        for price in product:
             cart[str(price.id)]['product'] = price
 
         for item in cart.values():
@@ -41,21 +42,21 @@ Initialize the cart.
         """
         return sum(item['quantity'] for item in self.cart.values())
 
-    def add(self, price, quantity=1, update_quantity=False):
+    def add(self, item, quantity=1, update_quantity=False):
         """
         Add a product to the cart or update its quantity.
         """
-        price_id = str(price.id)
-        if price_id not in self.cart:
-            self.cart[price_id] = {'quantity': 0,
-                                   'price': str(price.price),
-                                   'size': price.size,
-                                   'price_str': price.price_str,
-                                   }
+        item_id = str(item.id)
+        if item_id not in self.cart:
+            self.cart[item_id] = {'quantity': 0,
+                                  'price': str(item.total),
+                                  'size': item.price.size,
+                                  'price_str': to_currency(item.total),
+                                  }
         if update_quantity:
-            self.cart[price_id]['quantity'] = quantity
+            self.cart[item_id]['quantity'] = quantity
         else:
-            self.cart[price_id]['quantity'] += quantity
+            self.cart[item_id]['quantity'] += quantity
         self.save()
 
     def save(self):
@@ -67,12 +68,12 @@ Initialize the cart.
         Remove a product from the cart.
         """
         product_id = str(product.id)
-        # print('product_id')
-        # print(product_id)
         if product_id in self.cart:
-            # print('in_cart')
             del self.cart[product_id]
             self.save()
+            prod_in_cart = ProductInCart.objects.get(id=product_id)
+            prod_in_cart.delete()
+
 
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
