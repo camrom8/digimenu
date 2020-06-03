@@ -100,7 +100,7 @@ class ProductInCart(models.Model):
     add_on = models.ManyToManyField('AddsOn', through='Quantity')
 
     def __str__(self):
-        return self.total
+        return str(self.total)
 
 
 class AddsOn(models.Model):

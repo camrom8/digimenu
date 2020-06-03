@@ -1,0 +1,60 @@
+<!--    <div class="row mx-3">-->
+<!--        <h2>{{product.item.name}}</h2>-->
+<!--    </div>-->
+<div class="row bg-primary text-white m-2">
+    <div class="col-12">
+        <h4>{{product.item.name}} ({{product.size}})</h4>
+    </div>
+</div>
+<div class="row m-2 bg-light text-primary ">
+    <div class="col-3 text-center my-1 ">
+       Base
+    </div>
+    <div class="col-3  offset-6 text-center" id="priceBase">
+      {{product.price_str}}
+    </div>
+</div>
+<form method="post" id="addsOnForm">{% csrf_token %}
+    {% for add_on in adds %}
+    <p id="priceNum{{add_on.id}}" style="display:none;">{{add_on.price}}</p>
+    <div class="row mx-2 mt-1 text-center border-bottom addOnDiv">
+        <div class="col-3">
+           {{add_on.name}}
+        </div>
+        <div class="col-2">
+           ${{add_on.price}}
+        </div>
+        <div class="col-4">
+             <div class="d-flex justify-content-between px-1">
+                <div>
+                    <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
+                            onclick="changeQty(-1,{{add_on.id}})"><i class="fas fa-minus"></i></button>
+                </div>
+               <div class="text-center px-1 text-dark">
+                    <input type="number" id="qty{{add_on.id}}" class="form-control text-center px-1 pt-0" name="{{add_on.id}}"
+																		   value="0" readonly>
+               </div>
+                <div>
+                    <button class="btn btn-sm rounded-circle text-white bg-primary border" type="button"
+                             onclick="changeQty(1,{{add_on.id}})"><i class="fas fa-plus"></i></button>
+                </div>
+             </div>
+        </div>
+        <div class="col-3 totals mt-1" id="price{{add_on.id}}">
+           $0
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row mx-2 bg-primary text-white text-center">
+        <div class="col-3 offset-9" id="total">
+            {{product.price_str}}
+        </div>
+    </div>
+    <input type="number" id="grandTotal" name="grand_total" value="{{product.price}}" readonly style="display:none;">
+</form>
+<div class="d-flex flex-row-reverse m-3">
+    <div>
+        <button class="btn btn-primary" onclick="sendAddsOn()">Agregar a pedido</button>
+    </div>
+</div>
+<p id="itemToAdd" >{{product.id}}</p>

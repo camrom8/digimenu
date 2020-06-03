@@ -84,15 +84,16 @@ class MenuDetails(DetailView):
     slug_url_kwarg = 'title_slug'
     slug_field = 'title_slug'
 
-    # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     cart = Cart(request)
-    #     for item in cart:
-    #         if item['product'].item.menu != self.object:
-    #             cart.clear()
-    #         break
-    #     context = self.get_context_data(object=self.object)
-    #     return self.render_to_response(context)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        cart = Cart(request)
+        for item in cart:
+            print(item['product'].price.item.menu)
+            if item['product'].price.item.menu != self.get_object():
+                cart.clear()
+                break
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
@@ -185,7 +186,10 @@ def same_items_in_cart(request, item_id):
         for product in products_in_cart:
             products_dict[product.id] = product.price.size + ': '
             for quantity in product.quantity_set.all():
-                products_dict[quantity.product.id] += quantity.addOn.name + '(' + str(quantity.quantity) + '), '
+                if quantity.quantity == 1:
+                    products_dict[quantity.product.id] += quantity.addOn.name[:4] + ".., "
+                else:
+                    products_dict[quantity.product.id] += quantity.addOn.name[:4] + ".." + '(' + str(quantity.quantity) + '), '
             products_dict[product.id] = products_dict[product.id][:-2]
         if len(products_dict) == 1:
             return JsonResponse({'id': str(products_in_cart[0].id)})

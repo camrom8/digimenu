@@ -49,9 +49,6 @@
         #category3 p {
         	color: black;
         }
-		.swal-wide{
-			width:850px !important;
-		}
 
         .form-control:disabled, .form-control[readonly]{
         	background-color:transparent;
@@ -128,6 +125,14 @@
 
 {% block scripts %}
 <script>
+	function showSection(id){
+		if($('#category'+id).is(":hidden")){
+			$('section').slideUp(700);
+			$('#category'+id).slideDown(700);
+		};
+	};
+	showSection(1);
+
 	function sendAddsOn () {
 		let url = "{% url 'menu:order' 123 %}".replace(/123/, $("#itemToAdd").text());
 		let form = $("#addsOnForm").serialize()
@@ -142,13 +147,6 @@
 		});
 		$('#modalAddsOn').modal('hide');
 	}
-	function showSection(id){
-		if($('#category'+id).is(":hidden")){
-			$('section').slideUp(700);
-			$('#category'+id).slideDown(700);
-		};
-	};
-	showSection(1);
 
 	function toCart(id, command, itemId=0) {
 		let inputId = '#product_'+id;
@@ -229,7 +227,6 @@
 											}
 										})()
 									}else {
-										console.log(data.id)
 										if ( qty_update === -1) {
 											updateQuantity(data.id, qty_update, inputId)
 										}else{
@@ -281,9 +278,6 @@
 							}
 						}
 					});
-					//console.log(sameItems);
-					//showAddOns(data.id)
-					//updateQuantity(data.id, qty_update, inputId);
 				}
 			}
 		});
@@ -300,25 +294,12 @@
 					if ( data.indexOf("addOnDiv") === -1 ) {
 						sendAddsOn();
 					} else {
-						console.log(data.indexOf("addOnDiv"))
 						$('#modalAddsOn').modal('show');
 					}
 				}
 			});
 	}
 
-	function getSameItems(item_id){
-		sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, item_id);
-		let list;
-			$.ajax({
-				type: "get",
-				url: sameItemsUrl,
-				success: function(data) {
-				   list = data;
-				}
-			});
-		return list;
-	}
 	$('#modalOrder').on('shown.bs.modal', function (e) {
 	  $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
 	})
@@ -330,7 +311,6 @@
 			url: url2,
 			data: {'quantity': qty},
 			success: function(data) {
-				console.log(data.qty)
 				$(inputId).val( parseInt( $(inputId).val() ) + data.qty)
 				$('.cart').load(document.URL +  ' .cart');
 				if( $('#modalOrder').hasClass('show')){
