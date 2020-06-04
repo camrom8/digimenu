@@ -212,7 +212,7 @@ def item_to_order(request, item_id):
     total_add_ons = 0
 
     price = Price.objects.get(id=item_id)
-    product_in_cart = ProductInCart.objects.create(client=request.user, price=price, total=int(total[0]))
+    product_in_cart = ProductInCart.objects.create(price=price, total=int(total[0]))
 
     add_ons_dict = {add_on: int(value) for add_on, value in add_ons.items() if value != "0"}
 

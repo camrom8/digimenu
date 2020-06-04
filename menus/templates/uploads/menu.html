@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Upload' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block body %}
+<form  method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="row">
+        {{form}}
+    </div>
+    <hr>
+    <div class="row mb-2">
+        <div class="col-8 offset-2">
+        <button class="btn btn-block btn-primary" type="submit">{% trans 'UPLOAD' %}</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

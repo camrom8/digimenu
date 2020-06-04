@@ -95,7 +95,6 @@ class Price(models.Model):
 
 
 class ProductInCart(models.Model):
-    client = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     price = models.ForeignKey('Price', on_delete=models.CASCADE, related_name='inCart')
     total = models.DecimalField(decimal_places=0, max_digits=6, null=True)
     add_on = models.ManyToManyField('AddsOn', through='Quantity')
