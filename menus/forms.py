@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 
 from menus.models import Menu, Item, Category, Establishment, Price
@@ -104,3 +105,5 @@ class CartAddProduct(forms.Form):
                                 widget=forms.HiddenInput)
 
 
+class MenuUploadForm(forms.Form):
+    csv_file = forms.FileField(label=_('csv file'))

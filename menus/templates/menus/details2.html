@@ -151,10 +151,11 @@
 	function toCart(id, command, itemId=0) {
 		let inputId = '#product_'+id;
 		let qty_update = parseInt(command);
+		// when quantity is zero
 		if ($(inputId).val() === "0" && command=== -1)
 				return true;
 
-		// if size is already given (order confirmation)
+		// when product in cart id is given (order confirmation)
 		if (itemId > 0){
 			updateQuantity(itemId, qty_update, inputId)
 			return true;
@@ -182,16 +183,16 @@
 					(async () => {
 						const { value: item_id } = await Swal.fire({
 							title: data.msg,
-							input: 'select',
+							input: 'radio',
 							inputOptions: data.list,
 							showCancelButton: true,
 							inputValidator: (value) => {
 								return new Promise((resolve) => {
-							  	if (value) {
+								if (value) {
 									resolve()
-							  	} else {
-									resolve('You need to select an option :)')
-							  	}
+								} else {
+									resolve('Selecciona un tamaño :)')
+								}
 							})
 						  }
 						})
@@ -202,22 +203,18 @@
 								url: sameItemsUrl,
 								data: {'command': command},
 								success: function(data) {
-									if (data.list) {
+									console.log(data)
+									if (!data.id) {
 										(async () => {
 											const { value: selected } = await Swal.fire({
-												title: data.msg,
-												input: 'select',
-												inputOptions: data.list,
-												showCancelButton: true,
-												inputValidator: (value) => {
-													return new Promise((resolve) => {
-														if (value) {
-															resolve()
-														} else {
-															resolve('You need to select an option :)')
-														}
-													})
-											  	}
+												title: 'Select a product',
+												html: data,
+												focusConfirm: false,
+												preConfirm: () => {
+													let e = document.getElementById("productOptions");
+													let selected = e.options[e.selectedIndex].value;
+													return selected
+												}
 											})
 											if (selected) {
 												if (selected != "0")
@@ -227,7 +224,7 @@
 											}
 										})()
 									}else {
-										if ( qty_update === -1) {
+										if ( qty_update === -1 || data.product_in_cart) {
 											updateQuantity(data.id, qty_update, inputId)
 										}else{
 											showAddOns(data.id)
@@ -245,33 +242,28 @@
 						url: sameItemsUrl,
 						data: {'command': command},
 						success: function(data) {
-							if (data.list) {
-								(async () => {
-									const { value: item_id } = await Swal.fire({
-										title: data.msg,
-										input: 'select',
-										inputOptions: data.list,
-										showCancelButton: true,
-										inputValidator: (value) => {
-											return new Promise((resolve) => {
-											  if (value) {
-												resolve()
-											  } else {
-												resolve('You need to select an option :)')
-											  }
-										})
-									  }
+							if (!data.id) {
+								 (async () => {
+									const { value: selected } = await Swal.fire({
+										title: 'Select a product',
+										html: data,
+										focusConfirm: false,
+										preConfirm: () => {
+											let e = document.getElementById("productOptions");
+											let selected = e.options[e.selectedIndex].value;
+											return selected
+										}
 									})
-									if (item_id) {
-										if (item_id != "0")
-											updateQuantity(item_id, qty_update, inputId)
+									if (selected) {
+										if (selected != "0")
+											updateQuantity(selected, qty_update, inputId)
 										else
-											showAddOns(data.id)
+											showAddOns(item_id)
 									}
 								})()
 							}else {
 								if ( qty_update === -1 || data.product_in_cart) {
-								 	updateQuantity(data.id, qty_update, inputId)
+									updateQuantity(data.id, qty_update, inputId)
 								}else{
 									showAddOns(data.id)
 								}

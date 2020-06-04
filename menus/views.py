@@ -1,12 +1,17 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.urls import reverse_lazy
+import csv
+import io
+import time
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView
 
 from cart.cart import Cart
-from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet
+from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm
 from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity
 from django.utils.translation import gettext_lazy as _
 
@@ -88,8 +93,10 @@ class MenuDetails(DetailView):
         self.object = self.get_object()
         cart = Cart(request)
         for item in cart:
-            print(item['product'].price.item.menu)
             if item['product'].price.item.menu != self.get_object():
+                keys = request.session['cart'].keys()
+                for item in ProductInCart.objects.filter(id__in=keys):
+                    item.delete()
                 cart.clear()
                 break
         context = self.get_context_data(object=self.object)
@@ -124,13 +131,18 @@ def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
     keys = request.session['cart'].keys()
-    if int(command) < 0:
-        sizes_id = [size.id for size in Price.objects.filter(item__id=item_id)]
-        prices = [product.price for product in ProductInCart.objects.filter(price__id__in=sizes_id, id__in=keys)]
+    prices_for_product = Price.objects.filter(item__id=item_id)
+    if command == "-1":
+        size_ids = [size_id for size_id in prices_for_product.values_list('id', flat=True)]
+        prices = [product.price for product in
+                  ProductInCart.objects.filter(price__id__in=size_ids, id__in=keys).select_related('price')]
+        prices_ids = [price.id for price in prices]
+        if len(set(prices_ids)) == 1:
+            print("here")
+            return JsonResponse({'id': prices[0].id})
         message = _("Which size would you like to remove?")
-        # print(prices)
     else:
-        prices = [price for price in Price.objects.filter(item__id=item_id)]
+        prices = prices_for_product
         message = _("How hungry are you?")
     prices_dict = {}
     if len(prices) == 1:
@@ -141,57 +153,129 @@ def item_prices_get(request, item_id):
     return JsonResponse({'list': prices_dict, 'msg': message})
 
 
+@csrf_exempt
 def get_adds_on(request, item_id):
     price = Price.objects.get(id=item_id)
     adds_ons = AddsOn.objects.filter(product__id=item_id)
     return render(request, "chunks/adds_on.html", {'adds': adds_ons, 'product': price})
 
 
-def item_to_order(request, item_id):
-    add_ons = request.POST.copy()
-    # print(add_ons)
-    add_ons.pop('csrfmiddlewaretoken', None)
-    total = add_ons.pop('grand_total', None)
-    price = Price.objects.get(id=item_id)
-    product_in_cart = ProductInCart(client=request.user, price=price, total=int(total[0]))
-    product_in_cart.save()
-    for add_on, qty in add_ons.items():
-        if int(qty) > 0:
-            add_on_object = AddsOn.objects.get(id=add_on)
-            add, _ = Quantity.objects.get_or_create(product=product_in_cart, addOn=add_on_object)
-            add.quantity = int(qty)
-            add.save()
-    total = 0
-    for add in Quantity.objects.filter(product=product_in_cart):
-        total += add.price
-    product_in_cart.total = total + price.price
-    product_in_cart.save()
-    return JsonResponse({'item_id': product_in_cart.id, 'price_id': price.item.id})
-
-
 @csrf_exempt
 def same_items_in_cart(request, item_id):
     keys = request.session['cart'].keys()
-    products_in_cart = ProductInCart.objects.filter(price__id=item_id, id__in=keys)
-    if not AddsOn.objects.filter(product__id=item_id) and len(products_in_cart) > 0:
-        # print("here")
+    products_in_cart = ProductInCart.objects.filter(price__id=item_id, id__in=keys).select_related('price')
+    if not AddsOn.objects.filter(product__id=item_id).exists() and len(products_in_cart) > 0:
         return JsonResponse({'id': str(products_in_cart[0].id), 'product_in_cart': 1})
-        # if not AddsOn.objects.filter(product__id=item_id):
-        #     print("no adds")
-        #     add_on = False
     if products_in_cart:
         products_dict = {}
-        if int(request.POST['command']) > 0:
-            products_dict = {'0': _('new')}
+
+        if request.POST['command'] == "1":
+            products_dict = {'0': [_('new')]}
         for product in products_in_cart:
-            products_dict[product.id] = product.price.size + ': '
-            for quantity in product.quantity_set.all():
-                if quantity.quantity == 1:
-                    products_dict[quantity.product.id] += quantity.addOn.name[:4] + ".., "
+            add_ons = ""
+            for quantity in product.quantity_set.all().select_related('addOn'):
+                qty = quantity.quantity
+                if qty == 1:
+                    add_ons += quantity.addOn.name + "-"
                 else:
-                    products_dict[quantity.product.id] += quantity.addOn.name[:4] + ".." + '(' + str(quantity.quantity) + '), '
-            products_dict[product.id] = products_dict[product.id][:-2]
+                    add_ons += quantity.addOn.name + '(' + str(qty) + ')-'
+            add_ons = add_ons[:-1]
+            if len(add_ons) > 30:
+                adds_list = add_ons.split('-')
+                rows = []
+                row = ''
+                for add in adds_list:
+                    if len(row + add) <= 30:
+                        row += add + ', '
+                    else:
+                        rows.append(row)
+                        row = add + ', '
+                rows.append(row)
+                rows[-1] = rows[-1][:-2]
+                products_dict[product.id] = [product.price.size + ': ' + rows[0]]
+                for row in rows[1:]:
+                    products_dict[product.id].append(row)
+            else:
+                products_dict[product.id] = [product.price.size[:3] + ': ' + add_ons]
         if len(products_dict) == 1:
             return JsonResponse({'id': str(products_in_cart[0].id)})
-        return JsonResponse({'list': products_dict, 'msg': _('Select a product'), 'id': item_id})
+        return render(request, "chunks/select_product.html", {'products': products_dict, 'id': item_id})
+        # return JsonResponse({'list': products_dict, 'msg': _('Select a product'), 'id': item_id})
     return JsonResponse({'id': item_id})
+
+
+@csrf_exempt
+def item_to_order(request, item_id):
+    add_ons = request.POST.copy()
+    add_ons.pop('csrfmiddlewaretoken', None)
+    total = add_ons.pop('grand_total', None)
+    total_add_ons = 0
+
+    price = Price.objects.get(id=item_id)
+    product_in_cart = ProductInCart.objects.create(client=request.user, price=price, total=int(total[0]))
+
+    add_ons_dict = {add_on: int(value) for add_on, value in add_ons.items() if value != "0"}
+
+    for add_id, qty in add_ons_dict.items():
+        add_on = AddsOn.objects.get(id=add_id)
+        added = Quantity.objects.create(product=product_in_cart, addOn=add_on, quantity=qty)
+        total_add_ons += added.price
+    product_in_cart.total = total_add_ons + price.price
+    product_in_cart.save()
+
+    return JsonResponse({'item_id': product_in_cart.id, 'price_id': price.item.id})
+
+
+@login_required
+def menu_upload(request):
+    template = 'uploads/menu.html'
+    if request.method == 'POST':
+        form = MenuUploadForm(request.POST or None, request.FILES or None)
+        print(form.is_valid())
+        if form.is_valid():
+            # get form data
+            csv_file = form.cleaned_data['csv_file']
+            # get user adding properties
+            # get csv data
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'File must be format:  .CVS')
+                print("file error")
+                return redirect(reverse('menu:upload'))
+            data_set = csv_file.read().decode('UTF-8')
+            io_string = io.StringIO(data_set)
+            next(io_string)
+            menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
+            # create property, address, images
+            for column in menu_data:
+                # check if item already exists
+                menu = Menu.objects.get(id=column[1])
+                if not Item.objects.filter(upload_code=column[0], menu=menu):
+                    # create item
+                    column[4] = column[4].replace('-', ',')
+                    category = Category.objects.get(id=column[2])
+                    item, _ = Item.objects.get_or_create(upload_code=column[0], menu=menu, category=category,
+                                                         name=column[3], ingredients=column[4], description=column[5]
+                                                         )
+                    # create price
+                    price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
+                else:
+                    # get item
+                    item = Item.objects.get(upload_code=column[0], menu=menu)
+                    # update item
+                    item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=column[4])
+                    # get price
+                    try:
+                        price = Price.objects.filter(item=item)[:1].get()
+                        price.__dict__.update(price=column[6], price_str=column[7])
+                        price.save()
+                    except:
+                        print(f'item:{item} does not have price assigned')
+                        price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
+                        print(f'price has been assigned to item:{item}')
+                    # update price
+
+                item.save()
+
+            return HttpResponseRedirect(reverse('menu:details', kwargs={'title_slug': menu.title_slug}))
+    form = MenuUploadForm()
+    return render(request, template, {'form': form})

@@ -74,7 +74,6 @@ Initialize the cart.
             prod_in_cart = ProductInCart.objects.get(id=product_id)
             prod_in_cart.delete()
 
-
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 

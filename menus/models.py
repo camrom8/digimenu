@@ -49,9 +49,10 @@ class Item(models.Model):
                                  verbose_name=_('category')
                                  )
     name = models.CharField(_('name'), max_length=30)
-    ingredients = models.CharField(_('ingredients'), max_length=127)
-    description = models.CharField(_('description'), max_length=255)
+    ingredients = models.CharField(_('ingredients'), max_length=127, blank=True)
+    description = models.CharField(_('description'), max_length=255, null=True, blank=True)
     photo = models.ImageField(_('photo'), default="images/default/no_photo.png")
+    upload_code = models.PositiveIntegerField(_('upload code'), default=0, null=True)
 
     def __str__(self):
         return self.name
