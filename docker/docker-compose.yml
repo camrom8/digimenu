@@ -30,6 +30,9 @@ services:
       SECRET_KEY: /run/secrets/secret_key
       EMAIL_HOST_USER: /run/secrets/email_host_user
       EMAIL_HOST_PASSWORD: /run/secrets/email_host_password
+      AWS_ACCESS_KEY_ID: /run/secrets/aws_access_key_id
+      AWS_SECRET_ACCESS_KEY: /run/secrets/aws_secret_access_key
+      AWS_STORAGE_BUCKET_NAME: /run/secrets/aws_storage_bucket_name
     secrets:
       - django_superuser_mail
       - django_superuser_password
@@ -37,6 +40,9 @@ services:
       - secret_key
       - email_host_user
       - email_host_password
+      - aws_access_key_id
+      - aws_secret_access_key
+      - aws_storage_bucket_name
     volumes:
       - digimenu-media-files:/opt/digimenu/media/
       - digimenu-static-files:/opt/digimenu/static/
@@ -79,6 +85,12 @@ secrets:
     file: secrets/email_host_user.txt
   email_host_password:
     file: secrets/email_host_password.txt
+  aws_access_key_id:
+    file: secrets/aws_access_key_id.txt
+  aws_secret_access_key:
+    file: secrets/aws_secret_access_key.txt
+  aws_storage_bucket:
+    file: secrets/aws_storage_bucket_name.txt
 
 
 volumes:
