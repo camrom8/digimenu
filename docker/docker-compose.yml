@@ -89,7 +89,7 @@ secrets:
     file: secrets/aws_access_key_id.txt
   aws_secret_access_key:
     file: secrets/aws_secret_access_key.txt
-  aws_storage_bucket:
+  aws_storage_bucket_name:
     file: secrets/aws_storage_bucket_name.txt
 
 
