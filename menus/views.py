@@ -105,11 +105,11 @@ class MenuDetails(DetailView):
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
-        categories_id = [item.category.id for item in self.object.items.all().distinct('category__name')]
+        categories_id = self.object.items.values_list('category_id', flat=True).distinct('category')
         categories = Category.objects.filter(id__in=categories_id)
         context['items'] = {}
         for category in categories:
-            context['items'][category.name] = [item for item in self.object.items.filter(category=category)]
+            context['items'][category.name] = [item for item in self.object.items.filter(category=category).order_by('name')]
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -138,15 +138,14 @@ def item_prices_get(request, item_id):
                   ProductInCart.objects.filter(price__id__in=size_ids, id__in=keys).select_related('price')]
         prices_ids = [price.id for price in prices]
         if len(set(prices_ids)) == 1:
-            print("here")
             return JsonResponse({'id': prices[0].id})
         message = _("Which size would you like to remove?")
     else:
         prices = prices_for_product
         message = _("How hungry are you?")
-    prices_dict = {}
     if len(prices) == 1:
         return JsonResponse({'id': str(prices[0].id)})
+    prices_dict = {}
     for price in prices:
         prices_dict[price.id] = _(price.size) + " " + price.price_str
 
@@ -164,13 +163,13 @@ def get_adds_on(request, item_id):
 def same_items_in_cart(request, item_id):
     keys = request.session['cart'].keys()
     products_in_cart = ProductInCart.objects.filter(price__id=item_id, id__in=keys).select_related('price')
-    if not AddsOn.objects.filter(product__id=item_id).exists() and len(products_in_cart) > 0:
-        return JsonResponse({'id': str(products_in_cart[0].id), 'product_in_cart': 1})
     if products_in_cart:
+        if not AddsOn.objects.filter(product__id=item_id).exists():
+            return JsonResponse({'id': str(products_in_cart[0].id), 'product_in_cart': 1})
         products_dict = {}
-
         if request.POST['command'] == "1":
             products_dict = {'0': [_('new')]}
+
         for product in products_in_cart:
             add_ons = ""
             for quantity in product.quantity_set.all().select_related('addOn'):
@@ -200,7 +199,6 @@ def same_items_in_cart(request, item_id):
         if len(products_dict) == 1:
             return JsonResponse({'id': str(products_in_cart[0].id)})
         return render(request, "chunks/select_product.html", {'products': products_dict, 'id': item_id})
-        # return JsonResponse({'list': products_dict, 'msg': _('Select a product'), 'id': item_id})
     return JsonResponse({'id': item_id})
 
 
@@ -210,20 +208,16 @@ def item_to_order(request, item_id):
     add_ons.pop('csrfmiddlewaretoken', None)
     total = add_ons.pop('grand_total', None)
     total_add_ons = 0
+    product_in_cart = ProductInCart.objects.create(price_id=item_id, total=int(total[0]))
 
-    price = Price.objects.get(id=item_id)
-    product_in_cart = ProductInCart.objects.create(price=price, total=int(total[0]))
+    if not add_ons:
+        return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
 
     add_ons_dict = {add_on: int(value) for add_on, value in add_ons.items() if value != "0"}
-
     for add_id, qty in add_ons_dict.items():
-        add_on = AddsOn.objects.get(id=add_id)
-        added = Quantity.objects.create(product=product_in_cart, addOn=add_on, quantity=qty)
+        added = Quantity.objects.create(product_id=product_in_cart.id, addOn_id=add_id, quantity=qty)
         total_add_ons += added.price
-    product_in_cart.total = total_add_ons + price.price
-    product_in_cart.save()
-
-    return JsonResponse({'item_id': product_in_cart.id, 'price_id': price.item.id})
+    return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
 
 
 @login_required
