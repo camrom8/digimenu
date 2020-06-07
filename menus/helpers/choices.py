@@ -21,8 +21,17 @@ SIZES = [
 SLIDES = "menus/details.html"
 TABS = "menus/details2.html"
 FULL = "menus/details3.html"
+XLARGE = "menus/details4.html"
+XLARGE2 = "menus/details5.html"
+XLARGE3 = "menus/details6.html"
+XLARGE4 = "menus/details7.html"
+
 TEMPLATES = [
     (SLIDES, _('Small')),
     (TABS, _('Medium')),
     (FULL, _('large')),
+    (XLARGE, _('X-large')),
+    (XLARGE2, _('X-large 2')),
+    (XLARGE3, _('Los_chachos')),
+    (XLARGE4, _('Don_pedrito')),
 ]

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+    <style>
+        /* For Firefox */
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+        .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        	background-color:white;
+        	border: solid 1px #151e3f;
+        	font-size: 1rem;
+        }
+        /* Webkit browsers like Safari and Chrome */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        hr {
+            background-color: #151e3f;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-row justify-content-center pt-1">
+    <div>
+        {% if menu.logo.url %}
+        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="150" width="150">
+        {% endif%}
+    </div>
+    <div class="d-none d-md-flex pt-4 align-middle align-items-stretch">
+        <h2>{{menu.title}} {{menu.subtitle}}</h2>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="accordion col-12 col-md-8" id="accordionMenu">
+        {% for category, item in items.items %}
+            <div class="card">
+                <div class="card-header bg-gradient-primary" id="heading{{forloop.counter}}">
+                  <h2 class="mb-0 ">
+                    <button class="btn btn-link btn-block text-left text-white" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                        {{category}} <span class="float-right"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
+                      <div class="card-body  pr-1  pt-2 pr-md-3">
+                        {% for item in item %}
+                            {% with prices=item.prices.all %}
+                            {% if item.photo.url != "/media/images/default/no_photo.png" %}
+                               <div class="row mt-2 px-2 border-bottom">
+                                   <div class="col-12  col-md-6 col-lg-6 px-1 pl-md-2 mb-0 text-left">
+                                        {{item.name}}
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-10 px-1 pl-md-2 text-left">
+                                        <small>{{item.ingredients}}</small>
+                                    </div>
+                                    <div class="col-4 col-md-3 py-1">
+                                        <img src="{{item.photo.url}}" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-3 col-md-2 offset-md-3 col-lg-3 pt-4 px-1 px-md-1 text-center">
+                                        <h6>{{prices.0.price_str}}</h6>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-3 pt-4 px-1 px-md-3 px-lg-1">
+                                        <div class="itemQty input-group input-group-xs px-1 px-lg-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-xs bg-primary text-white px-2" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                            </div>
+                                                <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
+                                                       value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-xs bg-primary text-white px-2" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                               </div>
+                            {% else %}
+                               <div class="row mt-2 px-2 border-bottom">
+                                    <div class="col-5 px-1 col-md-6 col-lg-6 pl-md-2  text-left">
+                                        <p>{{item.name}}</p>
+                                    </div>
+                                    <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
+                                        <h6>{{prices.0.price_str}}</h6>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-3 px-lg-1">
+                                        <div class="itemQty input-group input-group-xs px-1 px-lg-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-xs bg-primary text-white px-2" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                            </div>
+                                                <input type="number" id="product_{{item.id}}" class="form-control text-center px-2" name="quantity"
+                                                       value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-xs bg-primary text-white px-2" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8 pl-4 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 text-left">
+                                        <small>{{item.ingredients}}</small>
+                                    </div>
+                               </div>
+                            {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                      </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row col-12 col-md-4 pr-0 my-4 mt-md-0 px-1 text-center shadow">
+        {% for items in items.values %}
+            {% if forloop.counter < 3 %}
+                {% for item in items %}
+                    {% if forloop.counter == 2 %}
+                    <div class="col-6 col-md-12 my-1">
+                        {% if item.photo.url %}
+                        <img src="{{item.photo.url}}" class="img-fluid rounded">
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

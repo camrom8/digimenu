@@ -6,16 +6,29 @@ from menus import models
 
 admin.site.register(models.Menu)
 admin.site.register(models.Establishment)
-admin.site.register(models.Category)
-admin.site.register(models.Price)
-admin.site.register(models.AddsOn)
 admin.site.register(models.ProductInCart)
 admin.site.register(models.Quantity)
 
 
+@admin.register(models.AddsOn)
+class AddsOnAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price_str', 'price')
+    list_editable = ('price_str', 'price')
+
+@admin.register(models.Price)
+class PriceAdmin(admin.ModelAdmin):
+    list_display = ('item', 'size', 'price_str', 'price')
+    list_editable = ('price_str', 'price')
+
+
 @admin.register(models.Item)
-class ContactAdmin(admin.ModelAdmin):
+class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'menu', 'photo')
+
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'menu', 'position')
 
 
 class SessionAdmin(admin.ModelAdmin):

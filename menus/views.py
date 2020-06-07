@@ -109,7 +109,8 @@ class MenuDetails(DetailView):
         categories = Category.objects.filter(id__in=categories_id)
         context['items'] = {}
         for category in categories:
-            context['items'][category.name] = [item for item in self.object.items.filter(category=category).order_by('name')]
+            context['items'][category.name] = \
+                [item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')]
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -241,14 +242,16 @@ def menu_upload(request):
             menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
             # create property, address, images
             for column in menu_data:
+                ingredients = column[4].replace('-', ',')
+                if len(ingredients) < 3:
+                    ingredients = ''
                 # check if item already exists
                 menu = Menu.objects.get(id=column[1])
                 if not Item.objects.filter(upload_code=column[0], menu=menu):
                     # create item
-                    column[4] = column[4].replace('-', ',')
                     category = Category.objects.get(id=column[2])
                     item, _ = Item.objects.get_or_create(upload_code=column[0], menu=menu, category=category,
-                                                         name=column[3], ingredients=column[4], description=column[5]
+                                                         name=column[3], ingredients=ingredients, description=column[5]
                                                          )
                     # create price
                     price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
@@ -256,7 +259,7 @@ def menu_upload(request):
                     # get item
                     item = Item.objects.get(upload_code=column[0], menu=menu)
                     # update item
-                    item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=column[4])
+                    item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=ingredients)
                     # get price
                     try:
                         price = Price.objects.filter(item=item)[:1].get()

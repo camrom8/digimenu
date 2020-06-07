@@ -32,6 +32,13 @@
     <script src="{% static 'sweetalert2-9.10.12/sweetalert2.all.min.js' %}"></script>
     <!--    GOOGLE FONTS LOBSTER-->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+     <style>
+    .welcome {
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 90% 90%;
+    }
+    </style>
     {% block styles %}
     {% endblock %}
 </head>
@@ -112,16 +119,23 @@
       </div>
     </div>
     <div class="modal fade" id="modalWelcome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header bg-primary">
-            <h3 class="modal-title text-white font-weight-bold" id="modalWelcomeTitle">{% trans 'Welcome to Digimenú' %}</h3>
-            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <div class="modal-header bg-light text-primary welcome">
+            <h3 class="modal-title font-weight-bold" id="modalWelcomeTitle">
+                <span class="align-middle"><img src="{% static 'images/default/logo_only.png' %}" width="40"></span>
+                {% trans '¡Hi! Welcome to Digimenú' %} Colombia
+            </h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class=" lead modal-body px-0" id="modalBody2">
-                Pide tu comida favorita de forma facil y rapida!
+          <div class="modal-body px-3 text-white bg-primary" id="modalBody2">
+              {% if menu.title %}
+              {% trans 'Making your food ordering experience easier at' %}: <strong>{{menu.title}}</strong>
+              {% else %}
+              {% trans 'We hope making your food ordering experience easier' %}
+              {% endif %}
           </div>
         </div>
       </div>
@@ -151,7 +165,7 @@
                     </a>
 
                     {% else %}
-                    <span class="fas fa-utensils"> {% trans 'Empty' %}</span>
+                    <span class="fas fa-utensils"></span><span> {% trans 'Empty' %}</span>
                     {% endif %}
                 </button>
             </div>
@@ -159,6 +173,10 @@
         {% endwith %}
     </div>
     <script>
+        window.onload = function() {
+          $("#modalWelcome").modal('show')
+        };
+
         function getOrder() {
             $('#modalOrder').modal('show');
             $.ajax({
@@ -221,6 +239,220 @@
             let val = usformat.replace(/[,]/g,'.');
             let currency = val.replace(/[US]/g,'');
             return currency
+        }
+            	function sendAddsOn () {
+            let url = "{% url 'menu:order' 123 %}".replace(/123/, $("#itemToAdd").text());
+            let form = $("#addsOnForm").serialize()
+            $.ajax({
+                type: "post",
+                url: url,
+                data: form,
+                success: function(data) {
+                    inputId = '#product_'+data.price_id;
+                    updateQuantity(data.item_id, 1, inputId)
+                }
+            });
+            $('#modalAddsOn').modal('hide');
+        }
+        function toCart(id, command, itemId=0) {
+            let inputId = '#product_'+id;
+            //console.log($(inputId).val())
+            let qty_update = parseInt(command);
+            // when quantity is zero
+            if ($(inputId).val() === "0" && qty_update=== -1)
+                    return true;
+
+            // when product in cart id is given (order confirmation)
+            if (itemId > 0){
+                updateQuantity(itemId, qty_update, inputId)
+                return true;
+            }
+
+            let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+
+            //get all sizes of the product in the db
+            //or in the order and if it is more than one, show modal to choose.
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {'command': command},
+                success: function(data) {
+                    if (data.list == -1) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: data.msg,
+                          text: data.text,
+                        })
+                        return true;
+                    }
+                    //console.log("got sizes:")
+                    //console.log(data.list + "sizes")
+                    //console.log(data.id + "1size")
+                    // check if there are different sizes
+                    if (data.list) {
+                        (async () => {
+                            const { value: item_id } = await Swal.fire({
+                                title: data.msg,
+                                input: 'radio',
+                                inputOptions: data.list,
+                                showCancelButton: true,
+                                confirmButtonColor: '#151e3f',
+                                cancelButtonColor: '#ffc929',
+                                inputValidator: (value) => {
+                                    return new Promise((resolve) => {
+                                    if (value) {
+                                        resolve()
+                                    } else {
+                                        resolve("{% trans 'Select a size' %}")
+                                    }
+                                })
+                              }
+                            })
+                            if (item_id) {
+                                //console.log("selected size" + item_id)
+                                sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, item_id);
+                                $.ajax({
+                                    type: "post",
+                                    url: sameItemsUrl,
+                                    data: {'command': command},
+                                    success: function(data) {
+                                       // console.log(data.id + ": only one found")
+                                        if (!data.id) {
+                                            (async () => {
+                                                const { value: selected } = await Swal.fire({
+                                                    title: "{% trans 'Select a product' %}",
+                                                    html: data,
+                                                    focusConfirm: false,
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#151e3f',
+                                                    cancelButtonColor: '#ffc929',
+                                                    preConfirm: () => {
+                                                        let e = document.getElementById("productOptions");
+                                                        let selected = e.options[e.selectedIndex].value;
+                                                        return selected
+                                                    }
+                                                })
+                                                if (selected) {
+                                                    //console.log('many found and selected' + selected)
+                                                    if (selected != "0")
+                                                        updateQuantity(selected, qty_update, inputId)
+                                                    else
+                                                        showAddOns(item_id)
+                                                }
+                                            })()
+                                        }else {
+                                            if ( qty_update === -1 || data.product_in_cart) {
+                                                //console.log("subtract product or product in cart does not have adds on" + data.id)
+                                                updateQuantity(data.id, qty_update, inputId)
+                                            }else{
+                                                //console.log("product has add-ons send to display them" + data.id)
+                                                showAddOns(data.id)
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        })()
+                    }else {
+                        //console.log("only 1 size")
+                        //console.log("check if there are items of same size in cart")
+                        //check if there are items of same size in cart
+                        sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, data.id);
+                        $.ajax({
+                            type: "post",
+                            url: sameItemsUrl,
+                            data: {'command': command},
+                            success: function(data) {
+                                //console.log(data.id + " just this")
+                                if (!data.id) {
+                                     (async () => {
+                                        const { value: selected } = await Swal.fire({
+                                            title: "{% trans 'Select a product' %}",
+                                            html: data,
+                                            focusConfirm: false,
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#151e3f',
+                                            cancelButtonColor: '#ffc929',
+                                            preConfirm: () => {
+                                                let item_id = document.getElementById("itemId");
+                                                let e = document.getElementById("productOptions");
+                                                let option = e.options[e.selectedIndex].value;
+                                                return [option, item_id.value]
+                                            }
+                                        })
+                                        if (selected) {
+                                            //console.log('many found and selected' + selected[0])
+                                            if (selected[0] != "0")
+                                                updateQuantity(selected[0], qty_update, inputId)
+                                            else
+                                                showAddOns(selected[1])
+                                        }
+                                    })()
+                                }else {
+                                    if ( qty_update === -1 || data.product_in_cart) {
+                                        //console.log("subtract product or product in cart does not have adds on" + data.id)
+                                        updateQuantity(data.id, qty_update, inputId)
+                                    }else{
+                                        //console.log("product has add-ons send to display them" + data.id)
+                                        showAddOns(data.id)
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        };
+     	function showAddOns(item_id){
+            AddsOnUrl = "{% url 'menu:adds-on' 123 %}".replace(/123/, item_id);
+                $.ajax({
+                    type: "get",
+                    url: AddsOnUrl,
+                    success: function(data) {
+                        let div = document.getElementById('addsOnBody');
+                        div.innerHTML = data;
+                        if ( data.indexOf("addOnDiv") === -1 ) {
+                            sendAddsOn();
+                        } else {
+                            $('#modalAddsOn').modal('show');
+                        }
+                    }
+                });
+        }
+        $('#modalOrder').on('shown.bs.modal', function (e) {
+          $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+        })
+
+        function updateQuantity(itemId, qty, inputId){
+            let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, itemId);
+            $.ajax({
+                type: "post",
+                url: url2,
+                data: {'quantity': qty},
+                success: function(data) {
+                    $(inputId).val( parseInt( $(inputId).val() ) + data.qty)
+                    $('.cart').load(document.URL +  ' .cart');
+                    if( $('#modalOrder').hasClass('show')){
+                        getOrder()
+                    }
+                }
+            });
+        }
+        function removeItem(id){
+            let url_base = "{% url 'cart:cart_remove' 1 %}";
+            let url = url_base.replace(1,id);
+            $.ajax({
+                type: "get",
+                url: url,
+                success: function(data) {
+                    let inputId = '#product_'+data.id;
+                    $(inputId).val(0)
+                    $('.cart').load(document.URL +  ' .cart');
+                    if( $('#modalOrder').hasClass('show')){
+                        getOrder()
+                    }
+                }
+            });
         }
     </script>
 

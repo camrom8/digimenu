@@ -20,7 +20,7 @@ class Menu(models.Model):
                                       related_name='establishments',
                                       verbose_name=_('establishment')
                                       )
-    title = models.CharField(_('title'), max_length=20, unique=True)
+    title = models.CharField(_('title'), max_length=40, unique=True)
     title_slug = models.SlugField(unique=True)
     subtitle = models.CharField(_('subtitle'), max_length=50)
     description = models.TextField(_('description'), max_length=500)
@@ -73,11 +73,17 @@ class Category(models.Model):
                               related_name='categories',
                               verbose_name=_('owner')
                               )
+    menu = models.ForeignKey("Menu",
+                              on_delete=models.CASCADE,
+                              related_name='categories',
+                              verbose_name=_('Menu'),
+                              null=True
+                              )
     name = models.CharField(_('name'), max_length=30)
     position = models.PositiveSmallIntegerField(_('position'), )
 
     class Meta:
-        ordering = ['position']
+        ordering = ['menu', 'position']
 
     def __str__(self):
         return self.name

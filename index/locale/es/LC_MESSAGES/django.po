@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-03 20:50-0500\n"
-"PO-Revision-Date: 2020-06-03 20:52-0456\n"
+"POT-Creation-Date: 2020-06-07 13:23-0500\n"
+"PO-Revision-Date: 2020-06-07 18:15-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -52,24 +52,48 @@ msgid "Additions"
 msgstr "Adicionales"
 
 #: index/templates/base.html:118
-msgid "Welcome to Digimenú"
-msgstr ""
+#| msgid "Welcome to Digimenú"
+msgid "¡Hi! Welcome to Digimenú"
+msgstr "¡Hola! Bienvenid@ a Digimenú"
 
-#: index/templates/base.html:139
+#: index/templates/base.html:125
+#| msgid ""
+#| "¡Hi! Welcome to Digimenú Colombia. Making your food ordering experience "
+#| "easier at"
+msgid "Making your food ordering experience easier at"
+msgstr ""
+"Esperamos facilitar tu experiencia de compra digital en el restaurante"
+
+#: index/templates/base.html:127
+#| msgid ""
+#| "¡Hi! Welcome to Digimenú Colombia. We hope making your food ordering "
+#| "experience easier"
+msgid "We hope making your food ordering experience easier"
+msgstr "Esperamos facilitar tu experiencia de compra digital"
+
+#: index/templates/base.html:143
 msgid "Send order"
 msgstr "Enviar pedido"
 
-#: index/templates/base.html:147
+#: index/templates/base.html:151
 msgid "Order"
 msgstr "Pedido"
 
-#: index/templates/base.html:149
+#: index/templates/base.html:153
 msgid "Product"
 msgstr "Producto"
 
-#: index/templates/base.html:154
+#: index/templates/base.html:158
 msgid "Empty"
-msgstr "Vació"
+msgstr "Vacio"
+
+#: index/templates/base.html:296
+msgid "Select a size"
+msgstr "Seleccione un tamaño"
+
+#: index/templates/base.html:313 index/templates/base.html:360
+msgid "Select a product"
+msgstr "Seleccione un producto"
 
 #: index/templates/index/index.html:30
 msgid "Sale"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-03 20:50-0500\n"
+"POT-Creation-Date: 2020-06-07 13:23-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,12 +39,12 @@ msgid "x-Small"
 msgstr ""
 
 #: menus/helpers/choices.py:5 menus/helpers/choices.py:14
-#: menus/helpers/choices.py:25
+#: menus/helpers/choices.py:29
 msgid "Small"
 msgstr ""
 
 #: menus/helpers/choices.py:6 menus/helpers/choices.py:15
-#: menus/helpers/choices.py:26
+#: menus/helpers/choices.py:30
 msgid "Medium"
 msgstr ""
 
@@ -72,8 +72,20 @@ msgstr ""
 msgid "Extra large"
 msgstr ""
 
-#: menus/helpers/choices.py:27
+#: menus/helpers/choices.py:31
 msgid "large"
+msgstr ""
+
+#: menus/helpers/choices.py:32
+msgid "X-large"
+msgstr ""
+
+#: menus/helpers/choices.py:33
+msgid "X-large 2"
+msgstr ""
+
+#: menus/helpers/choices.py:34
+msgid "X-large 3"
 msgstr ""
 
 #: menus/models.py:15 menus/models.py:74
@@ -108,7 +120,7 @@ msgstr ""
 msgid "category"
 msgstr ""
 
-#: menus/models.py:51 menus/models.py:76
+#: menus/models.py:51 menus/models.py:82
 msgid "name"
 msgstr ""
 
@@ -128,15 +140,21 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-#: menus/models.py:77
+#: menus/models.py:79 menus/templates/menus/create.html:7
+#: menus/templates/menus/details4.html:7 menus/templates/menus/details5.html:7
+#: menus/templates/menus/details6.html:7 menus/templates/menus/list.html:7
+msgid "Menu"
+msgstr ""
+
+#: menus/models.py:83
 msgid "position"
 msgstr ""
 
-#: menus/models.py:89 menus/models.py:110
+#: menus/models.py:95 menus/models.py:115
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:90 menus/models.py:111
+#: menus/models.py:96 menus/models.py:116
 msgid "price"
 msgstr ""
 
@@ -169,10 +187,6 @@ msgstr ""
 msgid "SAVE"
 msgstr ""
 
-#: menus/templates/menus/create.html:7 menus/templates/menus/list.html:7
-msgid "Menu"
-msgstr ""
-
 #: menus/templates/menus/list.html:38
 msgid "See Menu"
 msgstr ""
@@ -189,14 +203,14 @@ msgstr ""
 msgid "UPLOAD"
 msgstr ""
 
-#: menus/views.py:139
+#: menus/views.py:143
 msgid "Which size would you like to remove?"
 msgstr ""
 
-#: menus/views.py:142
+#: menus/views.py:146
 msgid "How hungry are you?"
 msgstr ""
 
-#: menus/views.py:192
+#: menus/views.py:172
 msgid "new"
 msgstr ""
