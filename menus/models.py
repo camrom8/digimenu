@@ -86,7 +86,7 @@ class Category(models.Model):
         ordering = ['menu', 'position']
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {str(self.menu)}'
 
 
 class Price(models.Model):
