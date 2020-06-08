@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 13:23-0500\n"
+"POT-Creation-Date: 2020-06-07 20:18-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,63 +26,63 @@ msgstr ""
 msgid "Phone number is too long. It must be between 7-10 digits"
 msgstr ""
 
-#: index/templates/base.html:50 index/templates/index/index.html:7
+#: index/templates/base.html:57 index/templates/index/index.html:7
 msgid "Home"
 msgstr ""
 
-#: index/templates/base.html:54
+#: index/templates/base.html:61
 msgid "Logout"
 msgstr ""
 
-#: index/templates/base.html:56
+#: index/templates/base.html:63
 msgid "Login"
 msgstr ""
 
-#: index/templates/base.html:62
+#: index/templates/base.html:69
 msgid "Publish a menu"
 msgstr ""
 
-#: index/templates/base.html:87
+#: index/templates/base.html:94
 msgid "Your Order"
 msgstr ""
 
-#: index/templates/base.html:102
+#: index/templates/base.html:109
 msgid "Additions"
 msgstr ""
 
-#: index/templates/base.html:118
+#: index/templates/base.html:127
 msgid "¡Hi! Welcome to Digimenú"
 msgstr ""
 
-#: index/templates/base.html:125
+#: index/templates/base.html:135
 msgid "Making your food ordering experience easier at"
 msgstr ""
 
-#: index/templates/base.html:127
+#: index/templates/base.html:137
 msgid "We hope making your food ordering experience easier"
 msgstr ""
 
-#: index/templates/base.html:143
+#: index/templates/base.html:153
 msgid "Send order"
 msgstr ""
 
-#: index/templates/base.html:151
+#: index/templates/base.html:161
 msgid "Order"
 msgstr ""
 
-#: index/templates/base.html:153
+#: index/templates/base.html:163
 msgid "Product"
 msgstr ""
 
-#: index/templates/base.html:158
+#: index/templates/base.html:168
 msgid "Empty"
 msgstr ""
 
-#: index/templates/base.html:296
+#: index/templates/base.html:306
 msgid "Select a size"
 msgstr ""
 
-#: index/templates/base.html:313 index/templates/base.html:360
+#: index/templates/base.html:323 index/templates/base.html:370
 msgid "Select a product"
 msgstr ""
 

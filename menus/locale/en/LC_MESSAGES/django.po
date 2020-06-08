@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 13:23-0500\n"
+"POT-Creation-Date: 2020-06-07 20:18-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,12 +39,12 @@ msgid "x-Small"
 msgstr ""
 
 #: menus/helpers/choices.py:5 menus/helpers/choices.py:14
-#: menus/helpers/choices.py:29
+#: menus/helpers/choices.py:30
 msgid "Small"
 msgstr ""
 
 #: menus/helpers/choices.py:6 menus/helpers/choices.py:15
-#: menus/helpers/choices.py:30
+#: menus/helpers/choices.py:31
 msgid "Medium"
 msgstr ""
 
@@ -72,20 +72,24 @@ msgstr ""
 msgid "Extra large"
 msgstr ""
 
-#: menus/helpers/choices.py:31
+#: menus/helpers/choices.py:32
 msgid "large"
 msgstr ""
 
-#: menus/helpers/choices.py:32
+#: menus/helpers/choices.py:33
 msgid "X-large"
 msgstr ""
 
-#: menus/helpers/choices.py:33
+#: menus/helpers/choices.py:34
 msgid "X-large 2"
 msgstr ""
 
-#: menus/helpers/choices.py:34
-msgid "X-large 3"
+#: menus/helpers/choices.py:35
+msgid "Los_chachos"
+msgstr ""
+
+#: menus/helpers/choices.py:36
+msgid "Don_pedrito"
 msgstr ""
 
 #: menus/models.py:15 menus/models.py:74
@@ -142,7 +146,8 @@ msgstr ""
 
 #: menus/models.py:79 menus/templates/menus/create.html:7
 #: menus/templates/menus/details4.html:7 menus/templates/menus/details5.html:7
-#: menus/templates/menus/details6.html:7 menus/templates/menus/list.html:7
+#: menus/templates/menus/details6.html:7 menus/templates/menus/details7.html:7
+#: menus/templates/menus/list.html:7
 msgid "Menu"
 msgstr ""
 

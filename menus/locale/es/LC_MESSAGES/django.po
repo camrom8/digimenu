@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 13:23-0500\n"
+"POT-Creation-Date: 2020-06-07 20:18-0500\n"
 "PO-Revision-Date: 2020-06-03 20:56-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,12 +40,12 @@ msgid "x-Small"
 msgstr "mini"
 
 #: menus/helpers/choices.py:5 menus/helpers/choices.py:14
-#: menus/helpers/choices.py:29
+#: menus/helpers/choices.py:30
 msgid "Small"
 msgstr "Pequeño"
 
 #: menus/helpers/choices.py:6 menus/helpers/choices.py:15
-#: menus/helpers/choices.py:30
+#: menus/helpers/choices.py:31
 msgid "Medium"
 msgstr "Mediano"
 
@@ -63,7 +63,7 @@ msgstr "Combo"
 
 #: menus/helpers/choices.py:12
 msgid "Only"
-msgstr "unico"
+msgstr ""
 
 #: menus/helpers/choices.py:13
 msgid "Extra small"
@@ -73,27 +73,29 @@ msgstr "Extra pequeño"
 msgid "Extra large"
 msgstr "Extra Grande"
 
-#: menus/helpers/choices.py:31
-msgid "large"
-msgstr "Grande"
-
 #: menus/helpers/choices.py:32
-#, fuzzy
-#| msgid "large"
-msgid "X-large"
+msgid "large"
 msgstr "Grande"
 
 #: menus/helpers/choices.py:33
 #, fuzzy
 #| msgid "large"
-msgid "X-large 2"
+msgid "X-large"
 msgstr "Grande"
 
 #: menus/helpers/choices.py:34
 #, fuzzy
 #| msgid "large"
-msgid "X-large 3"
+msgid "X-large 2"
 msgstr "Grande"
+
+#: menus/helpers/choices.py:35
+msgid "Los_chachos"
+msgstr ""
+
+#: menus/helpers/choices.py:36
+msgid "Don_pedrito"
+msgstr ""
 
 #: menus/models.py:15 menus/models.py:74
 msgid "owner"
@@ -149,7 +151,8 @@ msgstr "tipo"
 
 #: menus/models.py:79 menus/templates/menus/create.html:7
 #: menus/templates/menus/details4.html:7 menus/templates/menus/details5.html:7
-#: menus/templates/menus/details6.html:7 menus/templates/menus/list.html:7
+#: menus/templates/menus/details6.html:7 menus/templates/menus/details7.html:7
+#: menus/templates/menus/list.html:7
 msgid "Menu"
 msgstr "Menú"
 
@@ -221,6 +224,11 @@ msgstr "Que tanta hambre tienes?"
 #: menus/views.py:172
 msgid "new"
 msgstr "nuevo"
+
+#, fuzzy
+#~| msgid "large"
+#~ msgid "X-large 3"
+#~ msgstr "Grande"
 
 #~ msgid "Add"
 #~ msgstr "agregar"
