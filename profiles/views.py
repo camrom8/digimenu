@@ -12,6 +12,7 @@ from .models import Profile
 class CreateUser(CreateView):
     form_class = UserForm
     template_name = "profiles/create.html"
+    success_url = reverse_lazy('index:home')
 
 
 class ProfileUpdate(UpdateView):

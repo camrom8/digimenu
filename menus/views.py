@@ -260,6 +260,7 @@ def menu_upload(request):
                     item = Item.objects.get(upload_code=column[0], menu=menu)
                     # update item
                     item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=ingredients)
+                    item.save()
                     # get price
                     try:
                         price = Price.objects.filter(item=item)[:1].get()
