@@ -128,6 +128,14 @@
     </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
+<script>
+    $(".collapse").each(function (){
+        $(this).on('shown.bs.collapse', function () {
+            $('html,body').animate({
+                scrollTop: $(this).offset().top-76
+            }, 'slow');
+        })
+    })
+</script>
 {% endblock %}
