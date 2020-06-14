@@ -42,7 +42,7 @@ Initialize the cart.
         """
         return sum(item['quantity'] for item in self.cart.values())
 
-    def add(self, item, quantity=1, update_quantity=False):
+    def add(self, item, quantity=1):
         """
         Add a product to the cart or update its quantity.
         """
@@ -53,10 +53,7 @@ Initialize the cart.
                                   'size': item.price.size,
                                   'price_str': to_currency(item.total),
                                   }
-        if update_quantity:
-            self.cart[item_id]['quantity'] = quantity
-        else:
-            self.cart[item_id]['quantity'] += quantity
+        self.cart[item_id]['quantity'] += quantity
         self.save()
 
     def save(self):

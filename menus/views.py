@@ -157,6 +157,8 @@ def item_prices_get(request, item_id):
 def get_adds_on(request, item_id):
     price = Price.objects.get(id=item_id)
     adds_ons = AddsOn.objects.filter(product__id=item_id)
+    if price.choice:
+        return render(request, "chunks/selection.html", {'adds': adds_ons, 'product': price})
     return render(request, "chunks/adds_on.html", {'adds': adds_ons, 'product': price})
 
 
@@ -206,18 +208,23 @@ def same_items_in_cart(request, item_id):
 @csrf_exempt
 def item_to_order(request, item_id):
     add_ons = request.POST.copy()
-    add_ons.pop('csrfmiddlewaretoken', None)
+    # total_add_ons = 0
     total = add_ons.pop('grand_total', None)
-    total_add_ons = 0
     product_in_cart = ProductInCart.objects.create(price_id=item_id, total=int(total[0]))
+
+    selection = add_ons.pop('selection', None)
+    if selection:
+        Quantity.objects.create(product_id=product_in_cart.id, addOn_id=int(selection[0]), quantity=1)
+        return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
 
     if not add_ons:
         return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
 
+    add_ons.pop('csrfmiddlewaretoken', None)
     add_ons_dict = {add_on: int(value) for add_on, value in add_ons.items() if value != "0"}
     for add_id, qty in add_ons_dict.items():
-        added = Quantity.objects.create(product_id=product_in_cart.id, addOn_id=add_id, quantity=qty)
-        total_add_ons += added.price
+        Quantity.objects.create(product_id=product_in_cart.id, addOn_id=add_id, quantity=qty)
+        # total_add_ons += added.price
     return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
 
 

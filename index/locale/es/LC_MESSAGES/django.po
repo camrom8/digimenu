@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 20:18-0500\n"
+"POT-Creation-Date: 2020-06-14 11:11-0500\n"
 "PO-Revision-Date: 2020-06-07 18:15-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,8 @@ msgstr ""
 msgid "Phone number is too long. It must be between 7-10 digits"
 msgstr ""
 
-#: index/templates/base.html:57 index/templates/index/index.html:7
+#: index/templates/base.html:57 index/templates/index/home.html:7
+#: index/templates/index/index.html:7
 msgid "Home"
 msgstr "Inicio"
 
@@ -47,43 +48,39 @@ msgstr "Publicar un menu"
 msgid "Your Order"
 msgstr "Tu Pedido"
 
-#: index/templates/base.html:109
-msgid "Additions"
-msgstr "Adicionales"
-
-#: index/templates/base.html:127
+#: index/templates/base.html:118
 msgid "¡Hi! Welcome to Digimenú"
 msgstr "¡Hola! Bienvenid@ a Digimenú"
 
-#: index/templates/base.html:135
+#: index/templates/base.html:126
 msgid "Making your food ordering experience easier at"
 msgstr "Esperamos facilitar tu experiencia de compra digital en el restaurante"
 
-#: index/templates/base.html:137
+#: index/templates/base.html:128
 msgid "We hope making your food ordering experience easier"
 msgstr "Esperamos facilitar tu experiencia de compra digital"
 
-#: index/templates/base.html:153
+#: index/templates/base.html:144
 msgid "Send order"
 msgstr "Enviar pedido"
 
-#: index/templates/base.html:161
+#: index/templates/base.html:152
 msgid "Order"
 msgstr "Pedido"
 
-#: index/templates/base.html:163
+#: index/templates/base.html:154
 msgid "Product"
 msgstr "Producto"
 
-#: index/templates/base.html:168
+#: index/templates/base.html:159
 msgid "Empty"
 msgstr "Vacio"
 
-#: index/templates/base.html:306
+#: index/templates/base.html:297
 msgid "Select a size"
 msgstr "Seleccione un tamaño"
 
-#: index/templates/base.html:323 index/templates/base.html:370
+#: index/templates/base.html:314 index/templates/base.html:361
 msgid "Select a product"
 msgstr "Seleccione un producto"
 
@@ -98,3 +95,6 @@ msgstr ""
 #: index/templates/index/index.html:50
 msgid "New"
 msgstr "Nuevo"
+
+#~ msgid "Additions"
+#~ msgstr "Adicionales"

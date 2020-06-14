@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+    Digimenú
+{% endblock %}
+
+{% block styles %}
+ <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'smoothTransition1.0/css/style2.css' %}" />
+    <style>
+        /* For Firefox */
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        /* Webkit browsers like Safari and Chrome */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        #category1 {
+        	color:  #000;
+        }
+        #category1 button{
+        	color: yellow;
+        }
+        #category2 {
+        	color:  #000;
+        }
+        #category2 button{
+        	color: yellow;
+        }
+
+        h5{
+        	font-family: 'Oswald', sans-serif;
+        }
+
+        body {
+             background-image: url('{% static "images/default/bg-fabrica.jpg"%}');
+              background-repeat: no-repeat;
+			  background-attachment: fixed;
+			  background-size: cover;
+        }
+
+        .form-control:disabled, .form-control[readonly]{
+        	font-family: 'Oswald', sans-serif;
+        	background-color:transparent;
+        	border: none;
+        	font-size: 1.3rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!--        {{request.session.cart}}-->
+<div class="container">
+	<div class="st-container">
+		{% for category in items.keys %}
+			{%if forloop.counter == 1%}
+				<input type="radio" name="radio-set" checked="checked"  id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
+				<a class="in-{{forloop.counter}}" href="#st-panel-1">{{category}}</a>
+			{%else%}
+				<input type="radio" name="radio-set"  id="st-control-{{forloop.counter}}" onclick="showSection({{forloop.counter}})"/>
+				<a class="in-{{forloop.counter}} " href="#st-panel-1">{{category}}</a>
+			{% endif %}
+		{%endfor%}
+		<div class="container">
+			{% for category, item in items.items %}
+			{% if forloop.counter == 1 %}
+			<div class="text-center mt-1">
+				<img src="{{item.0.menu.logo.url}}" width="230" height="230">
+			</div>
+			{% endif %}
+			<section id="category{{forloop.counter}}" class="row mt-4 pt-5 bg-light" style="display:none;">
+				<div class="row col-12 col-lg-4 col-md-4 mb-2 pr-0">
+					<div class="col-6 col-md-12 pr-1">
+					<img src="{{item.0.photo.url}}" class="img-fluid border rounded">
+					</div>
+					<div class="col-6 col-md-12 pr-1">
+					<img src="{{item.1.photo.url}}" class="img-fluid border rounded">
+					</div>
+				</div>
+				<div class="row col-12 col-lg-8 col-md-8 pl-4 pr-0">
+				{% for item in item %}
+					{% with prices=item.prices.all %}
+						<div class="col-12 col-sm-6 col-lg-6 p-1 pl-md-5">
+							<h4>{{item.name}}</h4>
+						</div>
+						<div class="d-block d-sm-none col-12 py-0 pr-1">
+							<h5 class="text-dark">{{item.ingredients}}</h5>
+						</div>
+						<div class="col-7 col-sm-3 col-lg-3 py-1 px-3 p-md-1 text-left item">
+							<h5><strong>{{prices.0.price_str}}</strong></h5>
+						</div>
+						<div class="col-5 col-sm-3 col-lg-3 p-1 item">
+							<div class="d-flex justify-content-between">
+								<div>
+									<button class="btn btn-sm rounded-circle border bg-dark" type="button"
+											onclick="toCart({{item.id}}, -1, 0)"><i class="fas fa-minus"></i></button>
+								</div>
+								<div class="text-center px-0">
+									<input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-4" name="quantity"
+																	   value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+								</div>
+								<div>
+									<button class="btn btn-sm rounded-circle border bg-dark" type="button"
+											onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus align-middle"></i></button>
+								</div>
+							</div>
+						</div>
+						<div class="d-none d-sm-block col-12 col-md-9 px-1 py-0 pl-md-5">
+							<h5 class="text-dark">{{item.ingredients}}</h5>
+						</div>
+					{% endwith %}
+				{% endfor %}
+				</div>
+<!--				</div>-->
+			</section>
+			{% endfor %}
+		</div><!-- // st-scroll -->
+	</div><!-- // st-container -->
+	{% csrf_token %}
+{% endblock %}
+</div>
+{% block scripts %}
+<script>
+	function showSection(id){
+		if($('#category'+id).is(":hidden")){
+			$('section').slideUp(700);
+			$('#category'+id).slideDown(700);
+		};
+	};
+	showSection(1);
+	$("#st-control-1").trigger('click');
+</script>
+{% endblock %}

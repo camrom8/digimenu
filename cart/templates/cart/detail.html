@@ -18,12 +18,12 @@
         {% with add_ons=product.add_on.all %}
           <tr class="text-center">
             <td colspan="2">
-                {{ product.price.item }}
+                {{ product.price.item.name }}
                 {% if product.price.size != "Unique" %}
                     (<small><strong>{% trans product.price.size %}</strong></small>)
                 {% endif %}
                 {% for add in add_ons%}
-                <small>{{add}}</small> -
+                <small>{{add}}</small>,
                 {% endfor %}
             </td>
               <td class="num">{{ item.price_str }}</td>

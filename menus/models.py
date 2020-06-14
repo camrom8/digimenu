@@ -55,7 +55,7 @@ class Item(models.Model):
     upload_code = models.PositiveIntegerField(_('upload code'), default=0, null=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.menu}'
 
 
 class Establishment(models.Model):
@@ -95,9 +95,10 @@ class Price(models.Model):
     price = models.DecimalField(_('price_num'), decimal_places=0, max_digits=6)
     price_str = models.CharField(_('price'), max_length=10)
     size = models.CharField(max_length=20, choices=SIZES, default=NONE)
+    choice = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'size and price for {self.item}'
+        return f'{self.item.menu}: size and price for {self.item} '
 
 
 class ProductInCart(models.Model):

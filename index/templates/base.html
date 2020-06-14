@@ -104,17 +104,8 @@
     </div>
     <div class="modal fade" id="modalAddsOn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header bg-secondary">
-            <h3 class="modal-title text-primary font-weight-bold" id="modalAddsOnTitle">{% trans 'Additions'%}</h3>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-          <div class="modal-body px-0 px-md-1" id="addsOnBody">
+        <div class="modal-content" id="addsOnBody">
             ...
-          </div>
         </div>
       </div>
     </div>
@@ -240,7 +231,7 @@
             let currency = val.replace(/[US]/g,'');
             return currency
         }
-            	function sendAddsOn () {
+        function sendAddsOn () {
             let url = "{% url 'menu:order' 123 %}".replace(/123/, $("#itemToAdd").text());
             let form = $("#addsOnForm").serialize()
             $.ajax({
@@ -458,10 +449,16 @@
 
     {% block scripts %}
     {% endblock %}
-    <footer>
-        <div class="col-md-12 text-center bg-primary text-white ">
-            <p>Made with love by My2Menu</p>
+        <div class="row px-3 mt-3 mb-5">
+        <div class="col-md-5 bg-gradient-dark text-white px-4 pt-2">
+            <h4>Digimenú Colombia</h4>
+            <h6>correo electrónico: digimenucolombia@gmail.com</h6>
+            <h6>Teléfono: 316 212 8561</h6>
         </div>
-    </footer>
+        <div class="col-md-7 text-center bg-gradient-primary text-white lead px-4 pt-2">
+            <h6><i class="fab fa-facebook-square"></i> Facebook: @DigimenuColombia</h6>
+            <h6> <i class="fab fa-linkedin-in"></i> Instagram: @digimenu_colombia</h6>
+        </div>
+        </div>
 </body>
 </html>

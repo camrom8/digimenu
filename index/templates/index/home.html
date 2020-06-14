@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Home' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+{% block body %}
+<div class="row text-primary mt-2">
+    <div class="col-12 text-center">
+        <h2 class="text-center"><i class="fas fa-angle-double-right"></i> La alternativa de menús 100% digital para tu negocio <i class="fas fa-angle-double-left"></i></h2>
+    </div>
+</div>
+<hr>
+<div class="row px-3">
+    <div class="offset-1 col-10 px-0 col-md-4 offset-md-0 my-2 px-md-2 px-lg-3">
+        <a data-toggle="collapse" href="#collapseFirst" role="button" class="bg-dark">
+            <div class="card p-1 bg-light border-secondary shadow-sm" id="firstCard">
+                <span class=" position-absolute lead font-weight-bolder text-primary float-left p-2">¿Quiénes somos?</span>
+                <img src="{% static 'images/default/logo.png' %}" class="card-img-top" alt="...">
+            </div>
+        </a>
+    </div>
+    <div class="offset-1 col-10 px-0 col-md-4 offset-md-0 my-2 px-md-2 px-lg-3" id="secondCard">
+        <a data-toggle="collapse" href="#collapseSecond" role="button">
+            <div class="card p-1 bg-light border-secondary shadow-sm">
+                <span class=" position-absolute lead font-weight-bolder text-primary float-left p-2">¿Cómo funciona?</span>
+                <img src="{% static 'images/default/phone.png' %}" class="card-img-top" alt="...">
+            </div>
+        </a>
+    </div>
+    <div class="offset-1 col-10 px-0 col-md-4 offset-md-0 my-2 px-md-2 px-lg-3" id="thirdCard">
+        <a data-toggle="collapse" href="#collapseThird" role="button" class="disabled">
+            <div class="card p-1 bg-light border-secondary shadow-sm">
+                <span class=" position-absolute lead font-weight-bolder text-primary float-left p-2">Beneficios de Digimenú</span>
+                <img src="{% static 'images/default/stars.png' %}" class="card-img-top" alt="...">
+            </div>
+        </a>
+    </div>
+</div>
+<div class="row collapse m-2" id="collapseFirst">
+      <div class="col-12 col-md-4 bg-primary text-white text-center rounded-left p-3">
+          <h3>¿Quiénes somos?</h3>
+      </div>
+      <div class="col-12 col-md-8 bg-secondary rounded-right p-3 lead">
+        Somos la alternativa de menús 100% digitales que facilitan la venta de tus productos de forma remota, mejorando la experiencia de tus clientes y tu servicio hacia ellos.
+      </div>
+</div>
+<div class="row collapse m-2" id="collapseSecond">
+      <div class="col-12 col-md-4 bg-primary text-white text-center rounded-left p-3">
+          <h3>¿Cómo funciona?</h3>
+          ¡Ten Digimenú Colombia en 5 pasos!
+      </div>
+      <div class="col-12 col-md-8 bg-secondary rounded-right p-3 lead">
+          <ol>
+              <li>Selecciona el tamaño de tu menú: Mini, súper o maxi</li>
+              <li>Envíanos la información de tu menú</li>
+              <li>Recibe la propuesta de tu Digimenú y apruébala</li>
+              <li>Recibe tu link y código QR personalizado</li>
+              <li>Empieza a promover tus productos de una forma  100% digital y remota</li>
+          </ol>
+      </div>
+</div>
+<div class="row collapse m-2" id="collapseThird">
+      <div class="col-12 col-md-4 bg-primary text-white text-center rounded-left p-3">
+          <h3>Beneficios de Digimenú</h3>
+          ¿Cómo beneficia a mi negocio?
+      </div>
+      <div class="col-12 col-md-8 bg-secondary rounded-right p-3 lead">
+          <ul>
+              <li>Promueve la gestión digital de tu negocio</li>
+              <li>Facilita el proceso de compra a tus clientes</li>
+              <li>Reduce los tiempos de respuesta a tus clientes</li>
+              <li>Mejora la imagen de tu negocio</li>
+              <li>Reduce la transmisión de bacterias con menús físicos</li>
+          </ul>
+      </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$("#collapseFirst").on('show.bs.collapse', function () {
+    $("#collapseSecond").collapse('hide');
+    $("#collapseThird").collapse('hide');
+    $("#firstCard").removeClass('border-secondary');
+    $("#firstCard").addClass('border-primary');
+});
+$("#collapseFirst").on('shown.bs.collapse', function () {
+    $('html,body').animate({
+        scrollTop: $('#collapseFirst').offset().top
+    }, 'slow');
+});
+$("#collapseSecond").on('show.bs.collapse', function () {
+    $("#collapseFirst").collapse('hide');
+    $("#collapseThird").collapse('hide');
+});
+$("#collapseSecond").on('shown.bs.collapse', function () {
+    $('html,body').animate({
+        scrollTop: $('#collapseSecond').offset().top
+    }, 'slow');
+});
+$("#collapseThird").on('show.bs.collapse', function () {
+    $("#collapseFirst").collapse('hide');
+    $("#collapseSecond").collapse('hide');
+});
+$("#collapseThird").on('shown.bs.collapse', function () {
+    $('html,body').animate({
+        scrollTop: $('#collapseThird').offset().top
+    }, 'slow');
+});
+</script>
+{% endblock %}

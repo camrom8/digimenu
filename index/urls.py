@@ -4,5 +4,5 @@ from . import views
 app_name = 'index'
 
 urlpatterns = [
-    path('', views.Index.as_view(), name='home'),
+    path('', views.HomePage.as_view(), name='home'),
 ]

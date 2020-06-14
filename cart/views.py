@@ -8,29 +8,28 @@ from menus.models import Item, Price, ProductInCart
 from .cart import Cart
 from menus.forms import CartAddProduct
 from django.utils.translation import gettext_lazy as _
-
+from time import time
 
 @csrf_exempt
 @require_POST
 def cart_add(request, item_id):
     cart = Cart(request)
-    item = get_object_or_404(ProductInCart, id=item_id)
+    item = ProductInCart.objects.get(id=item_id)
     quantity = int(request.POST['quantity'])
     qty_current = 0
-    cart_current = request.session['cart'].copy()
-    item_size = cart_current.pop(str(item_id), False)
-    if item_size:
-        qty_current = item_size['quantity']
+    try:
+        qty_current = request.session['cart'][str(item_id)]['quantity']
+    except KeyError:
+        pass
     if quantity == -1 and qty_current <= 1:
         cart.remove(item)
         return JsonResponse({'qty': -qty_current})
     cart.add(item=item,
              quantity=quantity,
-             update_quantity=False,
              )
-    cart.save()
     return JsonResponse({'qty': quantity})
     # return JsonResponse({'error': 'there was an error'})
+
 
 
 @csrf_exempt

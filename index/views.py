@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import TemplateView
+
 from .forms import SearchBarForm
 
 
@@ -9,3 +11,7 @@ class Index(View):
         """render home page"""
         form = SearchBarForm()
         return render(request, "index/index.html", {'page': 'home', 'form': form})
+
+
+class HomePage(TemplateView):
+    template_name = "index/home.html"

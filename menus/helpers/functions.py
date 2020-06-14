@@ -1,6 +1,6 @@
 import urllib
 from django.utils.translation import gettext as _
-
+from time import time
 
 def whatsapp_url(order, phone):
     """Create whatsapp url with order"""
@@ -14,11 +14,8 @@ def whatsapp_url(order, phone):
 def to_currency(price=0):
     """returns the current url with the prefix"""
     price_str = str(price)
-    price_len = len(price_str)
-    price_currency = ""
-    for i in range(price_len):
-        if not (i) % 3:
-            price_currency = "." + price_currency
-        price_currency = price_str[price_len - 1- i] + price_currency
-    price_currency = "$" + price_currency[:-1]
+    if len(price_str) > 3:
+        price_currency = '$' + price_str[:-3] + '.' + price_str[-3:]
+    else:
+        price_currency = '$' + price_str
     return price_currency
