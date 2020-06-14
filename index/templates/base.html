@@ -246,6 +246,19 @@
             $('#modalAddsOn').modal('hide');
         }
         function toCart(id, command, itemId=0) {
+        let timerInterval
+        Swal.fire({
+          timer: 800,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        })
             let inputId = '#product_'+id;
             //console.log($(inputId).val())
             let qty_update = parseInt(command);
