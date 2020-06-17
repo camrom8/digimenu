@@ -11,7 +11,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView
 
 from cart.cart import Cart
-from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm
+from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm, \
+    SizeUploadForm
 from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity
 from django.utils.translation import gettext_lazy as _
 
@@ -250,7 +251,7 @@ def menu_upload(request):
             # create property, address, images
             for column in menu_data:
                 ingredients = column[4].replace('-', ',')
-                if len(ingredients) < 3:
+                if len(ingredients) < 2:
                     ingredients = ''
                 # check if item already exists
                 menu = Menu.objects.get(id=column[1])
@@ -261,7 +262,7 @@ def menu_upload(request):
                                                          name=column[3], ingredients=ingredients, description=column[5]
                                                          )
                     # create price
-                    price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
+                    # price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
                 else:
                     # get item
                     item = Item.objects.get(upload_code=column[0], menu=menu)
@@ -269,18 +270,55 @@ def menu_upload(request):
                     item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=ingredients)
                     item.save()
                     # get price
-                    try:
-                        price = Price.objects.filter(item=item)[:1].get()
-                        price.__dict__.update(price=column[6], price_str=column[7])
-                        price.save()
-                    except:
-                        print(f'item:{item} does not have price assigned')
-                        price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
-                        print(f'price has been assigned to item:{item}')
+                    # try:
+                    #     price = Price.objects.filter(item=item)[:1].get()
+                    #     price.__dict__.update(price=column[6], price_str=column[7])
+                    #     price.save()
+                    # except:
+                    #     print(f'item:{item} does not have price assigned')
+                    #     price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
+                    #     print(f'price has been assigned to item:{item}')
                     # update price
 
                 item.save()
+            return HttpResponseRedirect(reverse('menu:upload-size'))
+    form = MenuUploadForm()
+    return render(request, template, {'form': form})
 
-            return HttpResponseRedirect(reverse('menu:details', kwargs={'title_slug': menu.title_slug}))
+
+
+@login_required
+def size_upload(request):
+    template = 'uploads/size.html'
+    if request.method == 'POST':
+        form = SizeUploadForm(request.POST or None, request.FILES or None)
+        print(form.is_valid())
+        if form.is_valid():
+            # get form data
+            csv_file = form.cleaned_data['csv_file']
+            # get csv data
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'File must be format:  .CVS')
+                print("file error")
+                return redirect(reverse('menu:upload-size'))
+            data_set = csv_file.read().decode('UTF-8')
+            io_string = io.StringIO(data_set)
+            next(io_string)
+            menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
+            # create property, address, images
+            for column in menu_data:
+                # check if item already exists
+                item = Item.objects.get(upload_code=column[0])
+                size_exists = Price.objects.filter(item=item, size=column[1]).exists()
+                if not size_exists:
+                    # create price
+                    price = Price.objects.create(item=item, size=column[1], price=column[2], price_str=column[3])
+                else:
+                    # update item
+                    size = Price.objects.get(item=item, size=column[1])
+                    size.__dict__.update(price=column[2], price_str=column[3])
+                    size.save()
+                item.save()
+            return HttpResponseRedirect(reverse('menu:details', kwargs={'title_slug': item.menu.title_slug}))
     form = MenuUploadForm()
     return render(request, template, {'form': form})

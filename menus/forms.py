@@ -107,3 +107,7 @@ class CartAddProduct(forms.Form):
 
 class MenuUploadForm(forms.Form):
     csv_file = forms.FileField(label=_('csv file'))
+
+
+class SizeUploadForm(forms.Form):
+    csv_file = forms.FileField(label=_('csv file'))
