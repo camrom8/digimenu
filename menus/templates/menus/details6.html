@@ -85,7 +85,7 @@
                             {% with prices=item.prices.all %}
                                <div class="row mt-2 px-2 border-bottom dish">
                                     <div class="col-5 pl-3 pr-0 col-md-6 col-lg-6 pl-md-2 text-left">
-                                        <p><strong>{{item.name}}</strong></p>
+                                        <h5><strong>{{item.name}}</strong></h5>
                                     </div>
                                     <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
                                         <h6><strong>{{prices.0.price_str}}</strong></h6>
@@ -133,7 +133,7 @@
     $(".collapse").each(function (){
         $(this).on('shown.bs.collapse', function () {
             $('html,body').animate({
-                scrollTop: $(this).offset().top-76
+                scrollTop: $(this).offset().top-80
             }, 'slow');
         })
     })

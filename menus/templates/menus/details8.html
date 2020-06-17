@@ -8,48 +8,58 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Neuton&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
         -moz-appearance:textfield;
     }
+
     .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
-        background-color: #43464E;
-        border: solid 1px #ffc000;
-        font-size: 1rem;
+        background-color: #fff;
+        border: solid 1px #c90300;
+        font-size: 1.2rem;
+        color: #000;
     }
+
     /* Webkit browsers like Safari and Chrome */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
+
     hr {
-        background-color: #151e3f;
+        background-color: red !important;
     }
+
     .card-header > button{
-        font-family: 'Yellowtail', cursive;
+        font-family: 'Satisfy';
         font-size: 2.5rem !important;
+        color: #fff !important;
     }
+
     .input-group-prepend > button, .input-group-append > button{
-        background-color: #fff;
-        border: solid 1px #ffc000;
+        border: solid 1px #c90300;
     }
+
     .card-header{
-        background-image: linear-gradient(#BB0115,#88010f);
+        background-image: linear-gradient(#c90300, #960200);
     }
+
     .card-body{
-        background-color: #43464E;
+        background-color: #fbffc6;
     }
 
     .dish{
-        font-family: 'Rosario', sans-serif;
-        color: white;
+        font-family: 'Neuton', serif;
+        color: #c00000;
     }
-
+    .ingredients{
+        color: black;
+    }
 </style>
 {% endblock %}
 
@@ -69,8 +79,8 @@
     <div class="accordion col-12 col-md-7 mb-4" id="accordionMenu">
         {% for category, item in items.items %}
             <div class="card">
-                <div class="card-header {% if forloop.counter|divisibleby:2 %}pair{% endif %}" id="heading{{forloop.counter}}">
-                    <button class="btn btn-link btn-block text-center text-white" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                <div class="card-header" id="heading{{forloop.counter}}">
+                    <button class="btn btn-link btn-block text-center" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
                         {{category}} <span class="float-right"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
@@ -90,21 +100,21 @@
                                         <h5><strong>{{item.name}}</strong></h5>
                                     </div>
                                     <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
-                                        <h5><strong>{{prices.0.price_str}}</strong></h5>
+                                        <h5>{{prices.0.price_str}}</h5>
                                     </div>
                                     <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2 ">
                                         <div class="itemQty input-group input-group-xs px-1 px-lg-2">
                                             <div class="input-group-prepend">
-                                                <button class="btn btn-xs px-2" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                                <button class="btn btn-xs px-2 bg-dark text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
                                             </div>
-                                                <input type="number" id="product_{{item.id}}" class="form-control text-center px-2 pb-2 text-white" name="quantity" style="font-size: 1.2rem;"
+                                                <input type="number" id="product_{{item.id}}" class="form-control text-center px-2 pb-2" name="quantity"
                                                        value="{% quantity_in_cart request.session.cart item.id %}" disabled>
                                             <div class="input-group-append">
-                                                <button class="btn btn-xs px-2" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                                <button class="btn btn-xs px-2 bg-dark text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-8 pl-3 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 mb-2 text-left text-secondary">
+                                    <div class="col-8 pl-3 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 mb-2 text-left ingredients">
                                         {{item.ingredients}}
                                     </div>
                                </div>
