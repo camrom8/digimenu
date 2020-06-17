@@ -37,7 +37,7 @@
 
     .card-header > button{
         font-family: 'Satisfy';
-        font-size: 2.5rem !important;
+        font-size: 2rem !important;
         color: #fff !important;
     }
 
@@ -130,9 +130,11 @@
             {% if forloop.counter <= 3 %}
                 {% for item in items %}
                     {% if forloop.counter == 1 %}
+                    {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
                     <div class="col-12 mx-0 col-md-12 my-1 px-0 ">
                         <img src="{{item.photo.url}}" class="img-fluid rounded">
                     </div>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
