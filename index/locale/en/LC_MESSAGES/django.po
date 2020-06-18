@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-14 11:11-0500\n"
+"POT-Creation-Date: 2020-06-17 19:07-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,12 +75,26 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: index/templates/base.html:297
+#: index/templates/base.html:305 index/templates/base.html:336
+#: index/templates/base.html:384
+msgid "Cancel"
+msgstr ""
+
+#: index/templates/base.html:311
 msgid "Select a size"
 msgstr ""
 
-#: index/templates/base.html:314 index/templates/base.html:361
-msgid "Select a product"
+#: index/templates/base.html:328
+msgid ""
+"You can duplicate a combination already on your order or create a new one"
+msgstr ""
+
+#: index/templates/base.html:330
+msgid "Ingredients and Add-ons"
+msgstr ""
+
+#: index/templates/base.html:378
+msgid "Select a product to remove"
 msgstr ""
 
 #: index/templates/index/index.html:30

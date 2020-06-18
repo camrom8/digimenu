@@ -60,6 +60,10 @@
     .ingredients{
         color: black;
     }
+    .dish > span{
+        position: relative;
+        top: -5px !important;
+    }
 </style>
 {% endblock %}
 
@@ -100,13 +104,13 @@
                                         <h5><strong>{{item.name}}</strong></h5>
                                     </div>
                                     <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
-                                        {% if "Pizzas" in category %}
-                                            <h5>desde: {{prices.0.price_str}}</h5>
+                                        {% if prices|length > 1%}
+                                        <h5><small>Desde </small>{{prices.0.price_str}}</h5>
                                         {% else %}
                                         <h5>{{prices.0.price_str}}</h5>
                                         {% endif %}
                                     </div>
-                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2 ">
+                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2">
                                         <div class="itemQty input-group input-group-xs px-1 px-lg-2">
                                             <div class="input-group-prepend">
                                                 <button class="btn btn-xs px-2 bg-dark text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
@@ -114,13 +118,16 @@
                                                 <input type="number" id="product_{{item.id}}" class="form-control text-center px-2 pb-2" name="quantity"
                                                        value="{% quantity_in_cart request.session.cart item.id %}" disabled>
                                             <div class="input-group-append">
-                                                <button class="btn btn-xs px-2 bg-dark text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus" title="click para escoger tamaño"></i></button>
+                                                <button class="btn btn-xs px-2 bg-dark text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-8 pl-3 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 mb-2 text-left ingredients">
                                         {{item.ingredients}}
                                     </div>
+                                    {% if prices|length > 1%}
+                                    <span class="float-right float-top pl-2 pl-md-3"><small>*Ver tamaños: Pulsa <i class="fas fa-plus text-white bg-dark"></i></small></span>
+                                    {% endif %}
                                </div>
                             {% endwith %}
                         {% endfor %}

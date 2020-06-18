@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-14 11:11-0500\n"
-"PO-Revision-Date: 2020-06-07 18:15-0456\n"
+"POT-Creation-Date: 2020-06-17 19:07-0500\n"
+"PO-Revision-Date: 2020-06-17 19:11-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -54,7 +54,8 @@ msgstr "¡Hola! Bienvenid@ a Digimenú"
 
 #: index/templates/base.html:126
 msgid "Making your food ordering experience easier at"
-msgstr "Esperamos facilitar tu experiencia de compra digital en el restaurante"
+msgstr ""
+"Esperamos facilitar tu experiencia de compra digital en el restaurante"
 
 #: index/templates/base.html:128
 msgid "We hope making your food ordering experience easier"
@@ -74,15 +75,31 @@ msgstr "Producto"
 
 #: index/templates/base.html:159
 msgid "Empty"
-msgstr "Vacio"
+msgstr "Vacío"
 
-#: index/templates/base.html:297
+#: index/templates/base.html:305 index/templates/base.html:336
+#: index/templates/base.html:384
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: index/templates/base.html:311
 msgid "Select a size"
 msgstr "Seleccione un tamaño"
 
-#: index/templates/base.html:314 index/templates/base.html:361
-msgid "Select a product"
-msgstr "Seleccione un producto"
+#: index/templates/base.html:328
+#| msgid "You can duplicate one already on your order or add a new one"
+msgid ""
+"You can duplicate a combination already on your order or create a new one"
+msgstr "Puedes duplicar una selección que ya agregaste o crear una nueva"
+
+#: index/templates/base.html:330
+msgid "Ingredients and Add-ons"
+msgstr "Ingredientes y Adicionales"
+
+#: index/templates/base.html:378
+#| msgid "Select a product"
+msgid "Select a product to remove"
+msgstr "Seleccione el producto a remover"
 
 #: index/templates/index/index.html:30
 msgid "Sale"
@@ -94,7 +111,10 @@ msgstr ""
 
 #: index/templates/index/index.html:50
 msgid "New"
-msgstr "Nuevo"
+msgstr "Nueva"
+
+#~ msgid "Select an option"
+#~ msgstr "Seleccione una opción"
 
 #~ msgid "Additions"
 #~ msgstr "Adicionales"
