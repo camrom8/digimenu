@@ -12,29 +12,23 @@
 <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
 {% endblock %}
 {% block body %}
-<div>
-    <!--    hidden input for form-->
-    <form id="searchForm" method="post" hidden>{% csrf_token %}
-        {{form.business_type}}
-        {{form.property_type}}
-        {{form.property_condition}}
+<div>    <!--    hidden input for form-->
+    <form id="searchForm" method="post">{% csrf_token %}
         {{form.city}}
-        {{form.state}}
-        {{form.locality}}
+        {{form.establishments}}
     </form>
 </div>
-
-<!--<div class="input-group col-lg-12  col-xl-10 offset-xl-1  col-md-12  col-sm-12 my-5">-->
-<!--    <div class="col-xm-12 col-sm-4 col-lg-3 mx-0 px-0">-->
-<!--        <button id="butBusiness" class="btn btn-outline-secondary btn-lg btn-block dropdown-toggle down-in-group1" type="button"-->
-<!--                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Sale' %}-->
-<!--        </button>-->
-<!--        <div class="dropdown-menu col-sm-12 text-center">-->
-<!--            {% for choice in form.business_type.field.choices%}-->
-<!--            <a class="dropdown-item" onclick="selectBusinessType('{{choice.0}}')">{{choice.1}}</a>-->
-<!--            {% endfor %}-->
-<!--        </div>-->
-<!--    </div>-->
+<div class="input-group col-lg-12  col-xl-10 offset-xl-1  col-md-12  col-sm-12 my-5">
+    <div class="col-xm-12 col-sm-4 col-lg-3 mx-0 px-0">
+        <button id="butEstablishment" class="btn btn-outline-primary btn-lg btn-block dropdown-toggle down-in-group1" type="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{form.establishments}}}
+        </button>
+        <div class="dropdown-menu col-sm-12 text-center">
+            {% for choice in form.establishments.field.choices%}
+            <a class="dropdown-item" onclick="selectEstablishment('{{choice.0}}')">{{choice.1}}</a>
+            {% endfor %}
+        </div>
+    </div>
 <!--    <div class="col-xm-12 col-sm-4 col-lg-3 mx-0 px-0">-->
 <!--        <button id="butProperty" class="btn btn-outline-secondary btn-lg  btn-block dropdown-toggle down-in-group2" type="button"-->
 <!--                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Apartment' %}-->
@@ -55,12 +49,12 @@
 <!--            {% endfor %}-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    <input type="text" class="form-control input-in-group form-control-lg px-1" id="autocomplete"  placeholder=""-->
-<!--           aria-label="input with three button addons" aria-describedby="button-addon3">-->
-<!--    <div class="input-group-append">-->
-<!--        <button id="submitButton" type="button" class="btn btn-primary button-in-group"><i class="fas fa-search"></i></button>-->
-<!--    </div>-->
-<!--</div>-->
+    <input type="text" class="form-control input-in-group form-control-lg px-1" id="autocomplete"  placeholder=""
+           aria-label="input with three button addons" aria-describedby="button-addon3">
+    <div class="input-group-append">
+        <button id="submitButton" type="button" class="btn btn-primary button-in-group"><i class="fas fa-search"></i></button>
+    </div>
+</div>
 {% endblock %}
 {% block scripts %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4Gol1U3BbHLkWzeJb5kbggvFAPVKZRAA&libraries=places&region=CO"></script>
@@ -69,6 +63,31 @@
     $("#submitButton").click( function() {
         $("#searchForm").submit();
     });
+    function geoLocate() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getPosition, noLocation);
+      }
+    }
+    function noLocation(err){
+        alert("not found");
+        console.warn('ERROR(' + err.code + '): ' + err.message);
+    }
+    function getPosition(position){
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        var latlng = {lat: parseFloat(lat), lng: parseFloat(lon)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+        if (status === 'OK') {
+              if (results[0]) {
+                alert(results[0].formatted_address);
+              } else {
+                window.alert('No results found');
+              }
+            } else {
+              window.alert('Geocoder failed due to: ' + status);
+            }
+          });
+    }
 
     function initAutocomplete() {
       // Create the autocomplete object, restricting the search predictions to
@@ -76,6 +95,7 @@
       let addressIn = document.getElementById('autocomplete');
       autocomplete = new google.maps.places.Autocomplete(
         addressIn, {types: ['(cities)'], componentRestrictions: {country: 'co'}}
+        //addressIn, {types: ['(cities)'], bounds: defaultBounds, strictBounds: true,}
       );
 
       // Avoid paying for data that you don't need by restricting the set of
@@ -92,44 +112,27 @@
       var place = autocomplete.getPlace();
 
       // fields to be populated
-      let locality = document.getElementById('id_locality');
+      //let locality = document.getElementById('id_locality');
       let city = document.getElementById('id_city');
-      let state = document.getElementById('id_state');
+      //let state = document.getElementById('id_state');
 
       for (var i = 0; i < place.address_components.length; i++) {
         var addressType = place.address_components[i].types[0];
-        if (addressType === "locality"){
-            locality.value = place.address_components[i].long_name ;
-         }
         if (addressType === "administrative_area_level_2"){
             city.value = place.address_components[i].long_name;
+            break;
          }
-        if (addressType === "administrative_area_level_1"){
-            state.value = place.address_components[i].long_name;
-         }
-      }
-      if (locality.value === city.value){
-        locality.value = "";
       }
     }
 
-    function selectBusinessType(choice){
-        $('#id_business_type option[value="' + choice +'"]').prop("selected", true);
-        document.getElementById('butBusiness').innerHTML = $('#id_business_type option:selected').html();
+    function selectEstablishment(choice){
+        $('#id_establishments option[value="' + choice +'"]').prop("selected", true);
+        document.getElementById('butEstablishment').innerHTML = $('#id_establishments option:selected').html();
     };
-
-    function selectPropertyType(choice){
-        $('#id_property_type option[value="' + choice +'"]').prop("selected", true);
-        document.getElementById('butProperty').innerHTML = $('#id_property_type option:selected').html();
-    };
-
-    function selectCondition(choice){
-        $('#id_property_condition option[value="' + choice +'"]').prop("selected", true);
-        document.getElementById('butCondition').innerHTML = $('#id_property_condition option:selected').html();
-    };
-
+    selectEstablishment()
     // start google maps autocomplete
     initAutocomplete()
+    geoLocate()
 </script>
 
 {% endblock %}

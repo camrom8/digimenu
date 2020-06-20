@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 19:07-0500\n"
+"POT-Creation-Date: 2020-06-19 19:27-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Margarita"
 msgstr ""
 
-#: menus/models.py:15 menus/models.py:74
+#: menus/models.py:15 menus/models.py:75
 msgid "owner"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgstr ""
 msgid "subtitle"
 msgstr ""
 
-#: menus/models.py:26 menus/models.py:53
+#: menus/models.py:26 menus/models.py:54
 msgid "description"
 msgstr ""
 
@@ -136,50 +136,50 @@ msgstr ""
 msgid "logo"
 msgstr ""
 
-#: menus/models.py:43
+#: menus/models.py:44
 msgid "menu"
 msgstr ""
 
-#: menus/models.py:49
+#: menus/models.py:50
 msgid "category"
 msgstr ""
 
-#: menus/models.py:51 menus/models.py:82
+#: menus/models.py:52 menus/models.py:83
 msgid "name"
 msgstr ""
 
-#: menus/models.py:52
+#: menus/models.py:53
 msgid "ingredients"
 msgstr ""
 
-#: menus/models.py:54
+#: menus/models.py:55
 msgid "photo"
 msgstr ""
 
-#: menus/models.py:55
+#: menus/models.py:56
 msgid "upload code"
 msgstr ""
 
-#: menus/models.py:63
+#: menus/models.py:64
 msgid "type"
 msgstr ""
 
-#: menus/models.py:79 menus/templates/menus/create.html:7
+#: menus/models.py:80 menus/templates/menus/create.html:7
 #: menus/templates/menus/details4.html:7 menus/templates/menus/details5.html:7
 #: menus/templates/menus/details6.html:7 menus/templates/menus/details7.html:7
 #: menus/templates/menus/details8.html:7 menus/templates/menus/list.html:7
 msgid "Menu"
 msgstr ""
 
-#: menus/models.py:83
+#: menus/models.py:84
 msgid "position"
 msgstr ""
 
-#: menus/models.py:95 menus/models.py:116
+#: menus/models.py:96 menus/models.py:117
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:96 menus/models.py:117
+#: menus/models.py:97 menus/models.py:118
 msgid "price"
 msgstr ""
 

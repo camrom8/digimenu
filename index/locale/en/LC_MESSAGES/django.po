@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 19:07-0500\n"
+"POT-Creation-Date: 2020-06-19 19:27-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,8 +75,8 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: index/templates/base.html:305 index/templates/base.html:336
-#: index/templates/base.html:384
+#: index/templates/base.html:305 index/templates/base.html:335
+#: index/templates/base.html:392
 msgid "Cancel"
 msgstr ""
 
@@ -84,27 +84,27 @@ msgstr ""
 msgid "Select a size"
 msgstr ""
 
-#: index/templates/base.html:328
+#: index/templates/base.html:327 index/templates/base.html:379
 msgid ""
 "You can duplicate a combination already on your order or create a new one"
 msgstr ""
 
-#: index/templates/base.html:330
+#: index/templates/base.html:329 index/templates/base.html:380
 msgid "Ingredients and Add-ons"
 msgstr ""
 
-#: index/templates/base.html:378
-msgid "Select a product to remove"
+#: index/templates/base.html:382
+msgid "You have more than 1 product with different ingredients"
 msgstr ""
 
-#: index/templates/index/index.html:30
-msgid "Sale"
+#: index/templates/base.html:383
+msgid "Select product to remove"
 msgstr ""
 
-#: index/templates/index/index.html:40
+#: index/templates/index/index.html:34
 msgid "Apartment"
 msgstr ""
 
-#: index/templates/index/index.html:50
+#: index/templates/index/index.html:44
 msgid "New"
 msgstr ""

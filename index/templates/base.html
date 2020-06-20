@@ -323,7 +323,6 @@
                                     success: function(data) {
                                        // console.log(data.id + ": only one found")
                                         if (!data.id) {
-
                                             (async () => {
                                                 let texty = "{% trans 'You can duplicate a combination already on your order or create a new one' %}"
                                                 const { value: selected } = await Swal.fire({
@@ -374,9 +373,18 @@
                                 //console.log(data.id + " just this")
                                 if (!data.id) {
                                      (async () => {
+                                        let texty = ""
+                                        let titly = ""
+                                        if ( qty_update != -1){
+                                            texty = "{% trans 'You can duplicate a combination already on your order or create a new one' %}"
+                                            titly = "{% trans 'Ingredients and Add-ons' %}"
+                                        }else{
+                                            texty = "{% trans 'You have more than 1 product with different ingredients' %}"
+                                            titly = "{% trans 'Select product to remove' %}"
+                                        }
                                         const { value: selected } = await Swal.fire({
-                                            title: "{% trans 'Select a product to remove' %}",
-                                            html: data,
+                                            title: titly,
+                                            html: texty.concat(data),
                                             focusConfirm: false,
                                             showCancelButton: true,
                                             confirmButtonColor: '#151e3f',
