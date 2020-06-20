@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-19 19:27-0500\n"
-"PO-Revision-Date: 2020-06-19 19:28-0456\n"
+"PO-Revision-Date: 2020-06-19 19:34-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -100,7 +100,6 @@ msgid "You have more than 1 product with different ingredients"
 msgstr "Has agregado el mismo producto con diferentes ingredients"
 
 #: index/templates/base.html:383
-#, fuzzy
 #| msgid "Select a product to remove"
 msgid "Select product to remove"
 msgstr "Seleccione el producto a remover"
