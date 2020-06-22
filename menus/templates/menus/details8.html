@@ -68,11 +68,17 @@
 {% endblock %}
 
 {% block body %}
-<div class="d-flex flex-row justify-content-center pt-1">
-    <div>
+<div class="d-flex flex-row justify-content-between pt-2">
+    <div class="px-2">
         {% if menu.logo.url %}
-        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="150" width="150">
+        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="200" width="200">
         {% endif%}
+    </div>
+    <div class="bg-light px-2 rounded">
+        <p><i class="fa fa-phone-square"></i> 322-840-2889 / 321-403-6587</p>
+        <p class="m-0"><i class="fa fa-map-marker"></i> Calle 25 # 42-48</p>
+        <p class="m-0">Local 20</p>
+        <p class="m-0">C.C La Querencia</p>
     </div>
 <!--    <div class="d-none d-md-flex pt-4 align-middle align-items-stretch">-->
 <!--        <h2>{{menu.title}} {{menu.subtitle}}</h2>-->
