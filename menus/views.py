@@ -160,6 +160,8 @@ def get_adds_on(request, item_id):
     adds_ons = AddsOn.objects.filter(product__id=item_id)
     if price.choice:
         return render(request, "chunks/selection.html", {'adds': adds_ons, 'product': price})
+    if price.half:
+        return render(request, "chunks/halves.html", {'adds': adds_ons, 'product': price})
     return render(request, "chunks/adds_on.html", {'adds': adds_ons, 'product': price})
 
 
@@ -199,7 +201,7 @@ def same_items_in_cart(request, item_id):
                 for row in rows[1:]:
                     products_dict[product.id].append(row)
             else:
-                products_dict[product.id] = [product.price.size[:3] + ': ' + add_ons]
+                products_dict[product.id] = [product.price.item.name + ' ' + product.price.size[:3] + ' + ' + add_ons]
         if len(products_dict) == 1:
             return JsonResponse({'id': str(products_in_cart[0].id)})
         return render(request, "chunks/select_product.html", {'products': products_dict, 'id': item_id})
@@ -214,6 +216,7 @@ def item_to_order(request, item_id):
     product_in_cart = ProductInCart.objects.create(price_id=item_id, total=int(total[0]))
 
     selection = add_ons.pop('selection', None)
+    print(selection)
     if selection:
         Quantity.objects.create(product_id=product_in_cart.id, addOn_id=int(selection[0]), quantity=1)
         return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})

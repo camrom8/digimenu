@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 19:27-0500\n"
+"POT-Creation-Date: 2020-07-10 12:47-0500\n"
 "PO-Revision-Date: 2020-06-19 19:34-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,8 +54,7 @@ msgstr "¡Hola! Bienvenid@ a Digimenú"
 
 #: index/templates/base.html:126
 msgid "Making your food ordering experience easier at"
-msgstr ""
-"Esperamos facilitar tu experiencia de compra digital en el restaurante"
+msgstr "Esperamos facilitar tu experiencia de compra digital en el restaurante"
 
 #: index/templates/base.html:128
 msgid "We hope making your food ordering experience easier"
@@ -100,7 +99,6 @@ msgid "You have more than 1 product with different ingredients"
 msgstr "Has agregado el mismo producto con diferentes ingredients"
 
 #: index/templates/base.html:383
-#| msgid "Select a product to remove"
 msgid "Select product to remove"
 msgstr "Seleccione el producto a remover"
 

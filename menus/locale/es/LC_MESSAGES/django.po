@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 19:27-0500\n"
-"PO-Revision-Date: 2020-06-17 19:21-0456\n"
+"POT-Creation-Date: 2020-07-10 12:47-0500\n"
+"PO-Revision-Date: 2020-07-10 12:48-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -176,11 +176,11 @@ msgstr "Menú"
 msgid "position"
 msgstr "posición"
 
-#: menus/models.py:96 menus/models.py:117
+#: menus/models.py:96 menus/models.py:118
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:97 menus/models.py:118
+#: menus/models.py:97 menus/models.py:119
 msgid "price"
 msgstr "precio"
 
@@ -191,6 +191,15 @@ msgstr "Adicionales"
 #: menus/templates/chunks/category_create.html:7
 msgid "Category"
 msgstr "Categoría"
+
+#: menus/templates/chunks/halves.html:3
+msgid "half and half?"
+msgstr "Mitad y mitad?"
+
+#: menus/templates/chunks/halves.html:11
+#| msgid "You can have 2 different flavours. Please select one option"
+msgid "You can have 2 different flavours"
+msgstr "Puedes combinar 2 sabores diferentes!"
 
 #: menus/templates/chunks/item_create.html:7
 msgid "Item"
@@ -257,14 +266,16 @@ msgstr "Cual tamaño quieres remover?"
 msgid "How hungry are you?"
 msgstr "Que tanta hambre tienes?"
 
-#: menus/views.py:175
+#: menus/views.py:177
 msgid "new"
 msgstr "nueva"
 
+#~ msgid "complete"
+#~ msgstr "Completa"
+
 #~ msgid ""
 #~ "You can duplicate a combination already on your order or create a new one"
-#~ msgstr ""
-#~ "Puedes duplicar una selección que agregaste antes, o crear una nueva"
+#~ msgstr "Puedes duplicar una selección que agregaste antes, o crear una nueva"
 
 #, fuzzy
 #~ msgid "X-large 3"

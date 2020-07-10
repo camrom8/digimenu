@@ -471,7 +471,17 @@
                 }
             });
         }
-    </script>
+        function getTotalCost(price, basePrice) {
+            let idProd = $('input[name="selection"]:checked').val();
+            let newTotal = $('#cost'+idProd).text()
+            $('#total').text(newTotal);
+            if (price > basePrice){
+                $('#grandTotalHalf').val(price);
+            }else{
+                $('#grandTotalHalf').val(basePrice);
+            }
+        }
+            </script>
 
     {% block scripts %}
     {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 19:27-0500\n"
+"POT-Creation-Date: 2020-07-10 12:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,11 +175,11 @@ msgstr ""
 msgid "position"
 msgstr ""
 
-#: menus/models.py:96 menus/models.py:117
+#: menus/models.py:96 menus/models.py:118
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:97 menus/models.py:118
+#: menus/models.py:97 menus/models.py:119
 msgid "price"
 msgstr ""
 
@@ -189,6 +189,14 @@ msgstr ""
 
 #: menus/templates/chunks/category_create.html:7
 msgid "Category"
+msgstr ""
+
+#: menus/templates/chunks/halves.html:3
+msgid "half and half?"
+msgstr ""
+
+#: menus/templates/chunks/halves.html:11
+msgid "You can have 2 different flavours"
 msgstr ""
 
 #: menus/templates/chunks/item_create.html:7
@@ -256,6 +264,6 @@ msgstr ""
 msgid "How hungry are you?"
 msgstr ""
 
-#: menus/views.py:175
+#: menus/views.py:177
 msgid "new"
 msgstr ""
