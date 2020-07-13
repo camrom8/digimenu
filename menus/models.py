@@ -26,7 +26,10 @@ class Menu(models.Model):
     description = models.TextField(_('description'), max_length=500)
     logo = models.ImageField(_('logo'), default="images/default/no_photo.png")
     template = models.CharField(max_length=20, choices=TEMPLATES, default=NONE)
-    city = models.CharField(max_length=60, null=True, blank=True)
+    city = models.CharField(max_length=127, null=True, blank=True)
+    address = models.CharField(max_length=127, null=True, blank=True)
+    lat = models.FloatField(default=0.0)
+    lng = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.title

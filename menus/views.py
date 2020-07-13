@@ -29,6 +29,17 @@ class MenuList(ListView):
     """View for displaying all menus"""
     model = Menu
     template_name = "menus/list.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        city = self.kwargs['city']
+        category = self.request.GET.get('category')
+        if city:
+            if category:
+                return qs.filter(city=city, establishment=category)
+            return qs.filter(city=city)
+        return qs
 
 
 class ItemCreate(CreateView):
