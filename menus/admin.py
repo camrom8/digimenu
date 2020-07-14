@@ -18,8 +18,8 @@ class AddsOnAdmin(admin.ModelAdmin):
 
 @admin.register(models.Price)
 class PriceAdmin(admin.ModelAdmin):
-    list_display = ('item', 'size', 'price_str', 'price')
-    list_editable = ('price_str', 'price')
+    list_display = ('item', 'size', 'price_str', 'price', 'choice', 'half')
+    list_editable = ('price_str', 'price', 'choice', 'half')
 
 
 @admin.register(models.Item)

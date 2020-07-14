@@ -1,17 +1,9 @@
-{% extends 'base.html' %}
-
 {% load i18n %}
 {% load static %}
-
-{% block title %}
-{% trans 'Menu' %}
-{% endblock %}
-
-{% block styles %}
-{% endblock %}
-
-{% block body %}
     <hr>
+    <div class="row" >
+        <p class="lead" id="titleResult">{% trans 'Restaurants'%} {% trans 'of' %} <strong>category</strong>  {% trans 'in' %} city  </p>
+    </div>
     <div class="row">
         {% for menu in object_list %}
         <div class="col-12 col-md-6 mt-3 px-4 h-100 ">
@@ -95,8 +87,3 @@
             </span>
         </div>
     {% endif %}
-
-{% endblock %}
-
-{% block scripts %}
-{% endblock %}

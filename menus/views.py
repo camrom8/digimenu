@@ -1,9 +1,10 @@
 import csv
 import io
 import time
+import unidecode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
@@ -36,9 +37,12 @@ class MenuList(ListView):
         city = self.kwargs['city']
         category = self.request.GET.get('category')
         if city:
+            capitalized_city = city.capitalize()
+            unaccented_city = unidecode.unidecode(city)
+            city_list = [city, capitalized_city, unaccented_city]
             if category:
-                return qs.filter(city=city, establishment=category)
-            return qs.filter(city=city)
+                return qs.filter(city__in=city_list, establishment=category)
+            return qs.filter(city__in=city_list)
         return qs
 
 
@@ -334,5 +338,38 @@ def size_upload(request):
                     size.save()
                 item.save()
             return HttpResponseRedirect(reverse('menu:details', kwargs={'title_slug': item.menu.title_slug}))
+    form = MenuUploadForm()
+    return render(request, template, {'form': form})
+
+
+@login_required
+def add_ons_upload(request):
+    template = 'uploads/add_ons.html'
+    if request.method == 'POST':
+        form = SizeUploadForm(request.POST or None, request.FILES or None)
+        print(form.is_valid())
+        if form.is_valid():
+            # get form data
+            csv_file = form.cleaned_data['csv_file']
+            # get csv data
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'File must be format:  .CVS')
+                print("file error")
+                return redirect(reverse('menu:upload-add_ons'))
+            data_set = csv_file.read().decode('UTF-8')
+            io_string = io.StringIO(data_set)
+            next(io_string)
+            menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
+            # create property, address, images
+            for column in menu_data:
+                # check if item already exists
+                codes_list = column[4].split("-")
+                items_list = Item.objects.filter(upload_code__in=codes_list)
+                products_id = Price.objects.filter(item__in=items_list, size=column[3]).values_list('id', flat=True)
+                add_on = AddsOn.objects.create(name=column[0], price=column[1], price_str=column[2])
+                for product_id in products_id:
+                    add_on.product.add(product_id)
+                add_on.save()
+            return HttpResponse("Add ons added! all Done")
     form = MenuUploadForm()
     return render(request, template, {'form': form})

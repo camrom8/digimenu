@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans 'Upload' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12 text-center">
+        <h2>{% trans 'Add Ons Upload' %}</h2>
+    </div>
+</div>
+<form  method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="row px-3">
+        {{form}}
+    </div>
+    <hr>
+    <div class="row mb-2">
+        <div class="col-8 offset-2">
+        <button class="btn btn-block btn-primary" type="submit">{% trans 'UPLOAD ADD ONS' %}</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
