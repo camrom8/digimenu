@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+<link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@300&display=swap" rel="stylesheet">
+<style>
+    /* For Firefox */
+    input[type='number'] {
+        -moz-appearance:textfield;
+    }
+
+    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        background-color: #fff;
+        border: solid 1px #000;
+        font-size: 1.2rem;
+        color: #000;
+    }
+
+    /* Webkit browsers like Safari and Chrome */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    hr {
+        background-color: #a0705e !important;
+    }
+
+    .card-header > button{
+        font-family: 'Germania One', cursive;
+        font-size: 2rem !important;
+        color: #613924 !important;
+    }
+
+    .input-group-prepend > button, .input-group-append > button{
+        border: solid 1px #613924;
+        background-color: #be7650;
+    }
+
+    .card-header{
+        background-image: linear-gradient(#EAE2A9, #eadda9);
+        text-transform: uppercase;
+    }
+
+    .card-body{
+        background-color: #FFFFFF;
+    }
+
+    .dish{
+        font-family: 'Aleo', serif;
+        weight:
+        color: #613924;
+    }
+    .ingredients{
+        font-family: 'Aleo', serif;
+        color: #;
+    }
+    .dish > span{
+        position: relative;
+        top: -5px !important;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-row justify-content-center pt-2">
+    <div class="px-2">
+        {% if menu.logo.url %}
+        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="200" width="200">
+        {% endif%}
+    </div>
+<!--    <div class="bg-light px-2 rounded">-->
+<!--        <p><i class="fa fa-phone-square"></i> 322-840-2889 / 321-403-6587</p>-->
+<!--        <p class="m-0"><i class="fa fa-map-marker"></i> Calle 25 # 42-48</p>-->
+<!--        <p class="m-0">Local 20</p>-->
+<!--        <p class="m-0">C.C La Querencia</p>-->
+<!--    </div>-->
+<!--    <div class="d-none d-md-flex pt-4 align-middle align-items-stretch">-->
+<!--        <h2>{{menu.title}} {{menu.subtitle}}</h2>-->
+<!--    </div>-->
+</div>
+<hr>
+<div class="row">
+    <div class="accordion col-12 col-md-7 mb-4" id="accordionMenu">
+        {% for category, item in items.items %}
+            <div class="card">
+                <div class="card-header" id="heading{{forloop.counter}}">
+                    <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                        {{category}} <span class="float-right"><span class="float-right" style="font-size:11px; right:20px; position: relative;"><small>abrir</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    </button>
+
+                </div>
+                <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
+                      <div class="card-body px-2 pt-2 pr-md-3 pb-1">
+                        {% for item in item %}
+                            {% if forloop.counter == 1 %}
+                            {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
+                            <div class="row mx-0 my-1 mb-3 px-1 d-sm-block d-md-none">
+                                <img src="{{item.photo.url}}" class="img-fluid rounded">
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                            {% with prices=item.prices.all %}
+                               <div class="row mt-2 px-2 border-bottom dish">
+                                    <div class="col-5 pl-3 pr-0 col-md-6 col-lg-6 pl-md-2 text-left">
+                                        <h5><strong>{{item.name}}</strong></h5>
+                                    </div>
+                                    <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
+                                        {% if prices|length > 1%}
+                                        <h5><small>Desde </small>{{prices.0.price_str}}</h5>
+                                        {% else %}
+                                        <h5>{{prices.0.price_str}}</h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2">
+                                        <div class="itemQty input-group input-group-xs px-1 px-lg-2">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-xs px-2  text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                            </div>
+                                                <input type="number" id="product_{{item.id}}" class="form-control text-center px-2 pb-2" name="quantity"
+                                                       value="{% quantity_in_cart request.session.cart item.id %}" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-xs px-2 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8 pl-3 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 mb-2 text-left ingredients">
+                                        {{item.ingredients}}
+                                    </div>
+                                    {% if prices|length > 1%}
+                                    <span class="float-right float-top pl-2 pl-md-3" ><small>*Ver tamaños: <i class="fas fa-plus text-white" style="background-color:#be7650;"></i></small></span>
+                                    {% endif %}
+                               </div>
+                            {% endwith %}
+                        {% endfor %}
+                      </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row mx-3 mx-md-0 px-1 col-md-5 d-none d-md-block text-center shadow">
+        {% for items in items.values %}
+            {% if forloop.counter <= 3 %}
+                {% for item in items %}
+                    {% if forloop.counter == 1 %}
+                    {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
+                    <div class="col-12 mx-0 col-md-12 my-1 px-0 ">
+                        <img src="{{item.photo.url}}" class="img-fluid rounded">
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(".collapse").each(function (){
+        $(this).on('shown.bs.collapse', function () {
+            $('html,body').animate({
+                scrollTop: $(this).offset().top-80
+            }, 'slow');
+        })
+    })
+</script>
+{% endblock %}

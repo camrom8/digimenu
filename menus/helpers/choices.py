@@ -10,6 +10,9 @@ COMBO = _('Meal')
 PERSONAL = _('Personal')
 MEDIANA = _('Mediana')
 FAMILIAR = _('Familiar')
+SHOT = _('Shot')
+MEDIA = _('Media')
+BOTELLA = _('Botella')
 SIZES = [
     (NONE, _('Only')),
     (EXTRA_SMALL, _('Extra small')),
@@ -21,6 +24,9 @@ SIZES = [
     (PERSONAL, _('Personal')),
     (MEDIANA, _('Mediana')),
     (FAMILIAR, _('Familiar')),
+    (SHOT, _('Shot')),
+    (SHOT, _('Media')),
+    (BOTELLA, _('Botella')),
 ]
 
 SLIDES = "menus/details.html"
@@ -44,5 +50,5 @@ TEMPLATES = [
     (XLARGE3, _('Los_chachos')),
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
-    (XLARGE6, _('new_style')),
+    (XLARGE6, _('Portico')),
 ]
