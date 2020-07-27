@@ -58,7 +58,10 @@ def cart_detail(request):
         add_ons_str = add_ons_str[:-2]
         size = _(item['size'])
         size_short = size[:3]
-        order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "
+        if size_short in ['Onl', 'Sol', 'Uni', 'sol', 'uni', 'Onl']:
+            order += f"{item['quantity']}x{product_name} {add_ons_str}: ${item['total_price']}, "
+        else:
+            order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "
         if not phone:
             phone = item['product'].price.item.menu.owner.profile.phone
     order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente: " + order[:-2] + f" Total: ${cart.get_total_price()}"
