@@ -57,8 +57,8 @@ def cart_detail(request):
             add_ons_str += add_on + ", "
         add_ons_str = add_ons_str[:-2]
         size = _(item['size'])
-        size_short = size[:3]
-        if size_short in ['Onl', 'Sol', 'Uni', 'sol', 'uni', 'Onl']:
+        size_short = size[:4]
+        if size_short in ['Only', 'Solo', 'Uniq', 'solo', 'uniq', 'Only']:
             order += f"{item['quantity']}x{product_name} {add_ons_str}: ${item['total_price']}, "
         else:
             order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "

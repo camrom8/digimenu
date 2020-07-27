@@ -44,7 +44,10 @@
         border: solid 1px #613924;
         background-color: #be7650;
     }
-
+    .addButton > button{
+            border: solid 1px #613924;
+            background-color: #be7650;
+    }
     .card-header{
         background-image: linear-gradient(#EAE2A9, #eadda9);
         text-transform: uppercase;
@@ -111,12 +114,12 @@
                                     </div>
                                     <div class="col-3 col-md-2 col-lg-3 px-1 px-md-1 text-center">
                                         {% if prices|length > 1%}
-                                        <h5><small>Desde </small>{{prices.0.price_str}}</h5>
+                                        <h6><small>Desde </small>{{prices.0.price_str}}</h6>
                                         {% else %}
-                                        <h5>{{prices.0.price_str}}</h5>
+                                        <h6>{{prices.0.price_str}}</h6>
                                         {% endif %}
                                     </div>
-                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2">
+                                    <div class="col-4 col-md-4 col-lg-3 px-1 px-md-2 addRemoveButtons">
                                         <div class="itemQty input-group input-group-xs px-1 px-lg-2">
                                             <div class="input-group-prepend">
                                                 <button class="btn btn-xs px-2  text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
@@ -127,12 +130,16 @@
                                                 <button class="btn btn-xs px-2 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                             </div>
                                         </div>
+                                        <div class="addButton px-0" style="display:none;">
+                                           <button class="btn btn-sm btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><strong>Agregar</strong> <i class="fas fa-plus"></i></button>
+                                        </div>
                                     </div>
+
                                     <div class="col-8 pl-3 pl-md-2 col-md-8 col-lg-9 px-1 px-md-1 mb-2 text-left ingredients">
                                         {{item.ingredients}}
                                     </div>
                                     {% if prices|length > 1%}
-                                    <span class="float-right float-top pl-2 pl-md-3" ><small>*Ver tamaños: <i class="fas fa-plus text-white" style="background-color:#be7650;"></i></small></span>
+                                        <span class="float-right float-top pl-2 pl-md-3 seeSizes"><small>*Ver tamaños: <i class="fas fa-plus text-white" style="background-color:#be7650;"></i></small></span>
                                     {% endif %}
                                </div>
                             {% endwith %}
@@ -169,5 +176,20 @@
             }, 'slow');
         })
     })
+    function checkQty (){
+        $(".addRemoveButtons :input[type=number]").each( function () {
+            if ($(this).val() < 1){
+               $(this).parent().next().show();
+               $(this).parent().hide();
+               $(this).parent().parent().parent().find('span').hide();
+            } else {
+               $(this).parent().next().hide();
+               $(this).parent().show();
+               $(this).parent().parent().parent().find('span').show();
+
+            }
+        });
+    }
+    checkQty();
 </script>
 {% endblock %}

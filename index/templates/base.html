@@ -449,6 +449,11 @@
                 success: function(data) {
                     $(inputId).val( parseInt( $(inputId).val() ) + data.qty)
                     $('.cart').load(document.URL +  ' .cart');
+                    try {
+                      checkQty();
+                    } catch (error) {
+                      console.error(error);
+                    }
                     if( $('#modalOrder').hasClass('show')){
                         getOrder()
                     }
