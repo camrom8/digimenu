@@ -102,6 +102,9 @@ class Price(models.Model):
     choice = models.BooleanField(default=False)
     half = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['price']
+
     def __str__(self):
         return f'{self.item.menu}: {self.item}, {self.size}'
 

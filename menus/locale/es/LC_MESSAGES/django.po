@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-13 10:16-0500\n"
-"PO-Revision-Date: 2020-07-13 10:17-0456\n"
+"PO-Revision-Date: 2020-07-27 10:00-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: menus/helpers/choices.py:3
 msgid "Unique"
-msgstr "Único"
+msgstr "Solo"
 
 #: menus/helpers/choices.py:4
 msgid "x-Small"

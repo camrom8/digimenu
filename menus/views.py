@@ -148,7 +148,7 @@ def item_prices_get(request, item_id):
     """get all the prices for a item """
     command = request.POST['command']
     keys = request.session['cart'].keys()
-    prices_for_product = Price.objects.filter(item__id=item_id)
+    prices_for_product = Price.objects.filter(item__id=item_id).order_by('price')
     if command == "-1":
         size_ids = [size_id for size_id in prices_for_product.values_list('id', flat=True)]
         prices = [product.price for product in
@@ -163,8 +163,11 @@ def item_prices_get(request, item_id):
     if len(prices) == 1:
         return JsonResponse({'id': str(prices[0].id)})
     prices_dict = {}
-    for price in prices:
-        prices_dict[price.id] = _(price.size) + " " + price.price_str
+    print(prices[0])
+    for index in range(0, len(prices)):
+        print(prices[index].id)
+        print(prices[index].size)
+        prices_dict[prices[index].id] = _(prices[index].size) + " " + prices[index].price_str
 
     return JsonResponse({'list': prices_dict, 'msg': message})
 
