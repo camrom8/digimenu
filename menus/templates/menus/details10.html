@@ -110,7 +110,7 @@
 <!--                            {% endif %}-->
 <!--                            {% endif %}-->
                             {% with prices=item.prices.all %}
-                                {% if item.photo.url != "/media/images/default/no_photo.png" %}
+                                {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
                                    <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
                                            <img src="{{item.photo.url}}" class="img-fluid rounded">
