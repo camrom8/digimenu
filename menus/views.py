@@ -163,11 +163,8 @@ def item_prices_get(request, item_id):
     if len(prices) == 1:
         return JsonResponse({'id': str(prices[0].id)})
     prices_dict = {}
-    print(prices[0])
-    for index in range(0, len(prices)):
-        print(prices[index].id)
-        print(prices[index].size)
-        prices_dict[prices[index].id] = _(prices[index].size) + " " + prices[index].price_str
+    for price in prices:
+        prices_dict[price.id] = _(price.size) + " " + price.price_str
 
     return JsonResponse({'list': prices_dict, 'msg': message})
 
@@ -215,11 +212,13 @@ def same_items_in_cart(request, item_id):
                         row = add + ', '
                 rows.append(row)
                 rows[-1] = rows[-1][:-2]
-                products_dict[product.id] = [product.price.size + ': ' + rows[0]]
+                size = _(product.price.size)
+                products_dict[product.id] = [size + ': ' + rows[0]]
                 for row in rows[1:]:
                     products_dict[product.id].append(row)
             else:
-                products_dict[product.id] = [product.price.item.name + ' ' + product.price.size[:3] + ' + ' + add_ons]
+                size = _(product.price.size)
+                products_dict[product.id] = [product.price.item.name + ' ' + size[:3] + ' + ' + add_ons]
         if len(products_dict) == 1:
             return JsonResponse({'id': str(products_in_cart[0].id)})
         return render(request, "chunks/select_product.html", {'products': products_dict, 'id': item_id})
@@ -234,7 +233,6 @@ def item_to_order(request, item_id):
     product_in_cart = ProductInCart.objects.create(price_id=item_id, total=int(total[0]))
 
     selection = add_ons.pop('selection', None)
-    print(selection)
     if selection:
         Quantity.objects.create(product_id=product_in_cart.id, addOn_id=int(selection[0]), quantity=1)
         return JsonResponse({'item_id': product_in_cart.id, 'price_id': product_in_cart.price.item_id})
@@ -282,24 +280,12 @@ def menu_upload(request):
                     item, _ = Item.objects.get_or_create(upload_code=column[0], menu=menu, category=category,
                                                          name=column[3], ingredients=ingredients, description=column[5]
                                                          )
-                    # create price
-                    # price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
                 else:
                     # get item
                     item = Item.objects.get(upload_code=column[0], menu=menu)
                     # update item
                     item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=ingredients)
                     item.save()
-                    # get price
-                    # try:
-                    #     price = Price.objects.filter(item=item)[:1].get()
-                    #     price.__dict__.update(price=column[6], price_str=column[7])
-                    #     price.save()
-                    # except:
-                    #     print(f'item:{item} does not have price assigned')
-                    #     price, _ = Price.objects.get_or_create(item=item, price=column[6], price_str=column[7])
-                    #     print(f'price has been assigned to item:{item}')
-                    # update price
 
                 item.save()
             return HttpResponseRedirect(reverse('menu:upload-size'))

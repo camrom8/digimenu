@@ -39,6 +39,7 @@ XLARGE3 = "menus/details6.html"
 XLARGE4 = "menus/details7.html"
 XLARGE5 = "menus/details8.html"
 XLARGE6 = "menus/details9.html"
+STANDARD = "menus/details10.html"
 
 TEMPLATES = [
     (SLIDES, _('Small')),
@@ -51,4 +52,5 @@ TEMPLATES = [
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
     (XLARGE6, _('Portico')),
+    (STANDARD, _('Standard')),
 ]
