@@ -370,7 +370,6 @@ def size_upload(request):
     template = 'uploads/size.html'
     if request.method == 'POST':
         form = SizeUploadForm(request.POST or None, request.FILES or None)
-        print(form.is_valid())
         if form.is_valid():
             # get form data
             csv_file = form.cleaned_data['csv_file']
