@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Login' %}
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        {% for menu in object_list %}
+        <div class="col-12 col-md-6 mt-3 px-4 h-100 ">
+        <div class="row border bg-light ">
+                <div class="col-12 px-0 position-absolute d-flex justify-content-end" style="right:0px; top:-5px; z-index:100;">
+                    <span class="badge badge-pill badge-secondary">{{menu.city}}</span>
+                </div>
+                <div class="col-3 col-lg-3 px-0">
+                    <img class="img-fluid" src="{{menu.logo.url}}" alt="Card image cap">
+                <div class="col-12 px-0 position-absolute d-flex justify-content-start" style="bottom:2px; left:2px; z-index:100;">
+                    <span class="badge badge-primary"><small>{{menu.establishment}}</small></span>
+                </div>
+                </div>
+                <div class="col-9 col-lg-6 px-0">
+<!--                    <div class="col-12 bg-primary px-0 border-bottom position-absolute d-flex justify-content-between">-->
+<!--                         <p class="text-white mb-0 px-3">{{menu.establishment}}</p>-->
+<!--                    </div>-->
+                    <div class="col-12 pl-0 pr-2 pt-2">
+                        <h4 class="card-title text-primary my-0 pl-3">{{menu.title}}</h4>
+                        <p class="text-primary my-0 pl-3"><small>{{menu.subtitle}}</small></p>
+                        <a class="text-primary pl-3 my-0" href="https://maps.google.com/?q={{menu.lat}}, {{menu.lng}} ">
+                            {% trans 'Address' %}: <u>{{menu.address}} <i class="fa fa-map-marker" aria-hidden="true"></i> </u>
+                        </a>
+                        <p class="text-primary pl-3 my-0">{% trans 'Phone' %} {{menu.owner.profile.phone}}</p>
+                    </div>
+                </div>
+                <div class="row col-12 col-lg-3 mb-1 mt-md-4 pr-0 px-md-1">
+                    <div class="col-4 col-lg-12 px-1 pt-1 text-center">
+                        <a href="{% url 'menu:edit' menu.title_slug %}" type="button" class="btn btn-sm btn-block btn-secondary">
+                                <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                    <div class="col-4 col-lg-12 px-1 pt-1 text-center">
+                        <a href="{% url 'menu:details' menu.title_slug %}" class="btn btn-sm btn-block btn-primary">{% trans 'See Menu'%}</a>
+                    </div>
+                    <div class="col-4 col-lg-12 px-1 pt-1 text-center">
+                        <a type="button" class="btn btn-block btn-sm btn-outline-secondary" title="ver horario de atencion" data-toggle="modal" data-target="#Modal{{menu.id}}">
+                            {% trans 'Hours' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="Modal{{menu.id}}" tabindex="-1"
+             role="dialog" aria-labelledby="ModalMenu{{menu.id}}" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-secondary">
+                  <h5 class="modal-title"><strong>{{menu.title}}</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {{menu.description}}
+              </div>
+              <div class="modal-footer p-1">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    <hr>
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-primary">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-primary">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block scripts %}
+{% endblock %}
