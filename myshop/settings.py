@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shop',
     'cart',
-    'orders',
     'index',
     'menus',
     'profiles',
@@ -167,10 +166,13 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'index/static/scss')
 
 # key for storing cart info.
 CART_SESSION_ID = 'cart'
-
+# session age
+SESSION_COOKIE_AGE = 3600
 # ***** email settings *****
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+

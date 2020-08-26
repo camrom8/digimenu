@@ -111,3 +111,4 @@ class MenuUploadForm(forms.Form):
 
 class SizeUploadForm(forms.Form):
     csv_file = forms.FileField(label=_('csv file'))
+

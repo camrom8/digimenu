@@ -8,19 +8,12 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
         -moz-appearance:textfield;
-    }
-
-    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
-        background-color: #fff;
-        border: solid 1px #000;
-        font-size: 1.2rem;
-        color: #000;
     }
 
     /* Webkit browsers like Safari and Chrome */
@@ -30,29 +23,49 @@
         margin: 0;
     }
 
+    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        background-color: #fff;
+        border: solid 1px #e0cd80; //changes
+        font-size: 2.2rem !important;
+        color: #000;
+    }
+
     hr {
-        background-color: #a0705e !important;
+        background-color: black !important; //changes
     }
 
     .card-header > button{
-        font-family: 'Germania One', cursive;
-        font-size: 2rem !important;
-        color: #613924 !important;
+        font-family: 'Niconne';
+        font-size: 2.7rem !important;
+        color: black !important;
     }
 
     .input-group-prepend > button, .input-group-append > button{
-        border: solid 1px #613924;
-        //background-color: #be7650;
-        background-image: linear-gradient(#613924, #9e6945);
+        border: solid 1px #000000;
+        background-image: linear-gradient(#000000, #000000);
+        color: #e0cd80;
+        border: solid 1px #e0cd80; //changes
     }
+    .input-group-prepend > button:hover, .input-group-append > button:hover{
+        color: white;
+    }
+
+
+
     .addButton > button{
-            border: solid 1px #613924;
-            background-image: linear-gradient(#613924, #9e6945);
-            font-family: 'Germania One', cursive;
+            background-image: linear-gradient(#000000, #000000);
+            color: #e0cd80;
     }
+    .addButton > button:hover{
+            background-image: linear-gradient(#000000, #000000);
+            color: white;
+    }
+
     .card-header{
-        background-image: linear-gradient(#EAE2A9, #b3883c);
-        text-transform: uppercase;
+        background-image: linear-gradient(#EAE2A9, #e0cd80);
+    }
+    .card-header:hover{
+        background-image: linear-gradient(#e0cd80, #e0cd80);
     }
 
     .card-body{
@@ -60,86 +73,101 @@
     }
 
     .dish{
-        font-family: 'Aleo', serif;
-        weight:
-        color: #613924;
+        font-family: 'aleo', serif;
+        color: #00000;
     }
     .ingredients{
-        font-family: 'Aleo', serif;
-        color: #5a5a5a;
+        color: black;
     }
     .dish > span{
         position: relative;
         top: -5px !important;
     }
+    .dropBut {
+        font-size:1.5rem;
+        right:32px;
+        top:-7px;
+        position: relative;
+    }
+
+    .info {
+        background-color: black;
+        color: #e0c580;
+        font-weight: 700;
+    }
+    .info > p > a {
+        color:white !important;
+    }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="d-flex flex-row justify-content-between pt-2">
-    <div class="px-2">
+<div class="d-flex flex-row justify-content-between align-items-center pt-2">
+    <div class="px-1">
         {% if menu.logo.url %}
-        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="200" width="200">
+        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="300" width="450">
         {% endif%}
     </div>
-    <div class="bg-light px-2 rounded">
+    <div class="px-1 rounded info">
         <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2"></i> <a href="tel:+573104782643">310-478-2643</a></p>
-        <p class="my-1"><i class="fa fa-map-marker"></i> Cra 42 # 21-23</p>
-        <p class="my-1">C.C La Querencia</p>
+        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573012583308"> 301-258-3308 (llamar)</a></p>
+        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Calle 16 A # 12-28 Santa Anita (ver en google maps)</a></p>
+        {% if map_url2 %}
+            <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
+        {% endif %}
     </div>
 </div>
 <hr>
 <div class="row">
-    <div class="accordion col-12 col-md-7" id="accordionMenu">
+    <div class="accordion col-12 col-md-7 px-1 px-sm-2 px-md-3" id="accordionMenu">
         {% for category, item in items.items %}
             <div class="card">
-                <div class="card-header px-1" id="heading{{forloop.counter}}">
-                    <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
-                        {{category}} <span class="float-right"><span class="float-right" style="font-size:12px; right:24px; position: relative;"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                <div class="card-header p-1" id="heading{{forloop.counter}}">
+                    <button class="btn btn-link btn-block text-center" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                        {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
                 <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
                       <div class="card-body px-2 pt-2 pr-md-3 pb-1">
                         {% for item in item %}
-<!--                            {% if forloop.counter == 1 %}-->
-<!--                            {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}-->
-<!--                            <div class="row mx-0 my-1 mb-3 px-1 d-sm-block d-md-none">-->
-<!--                                <img src="{{item.photo.url}}" class="img-fluid rounded">-->
-<!--                            </div>-->
-<!--                            {% endif %}-->
-<!--                            {% endif %}-->
                             {% with prices=item.prices.all %}
-                                {% if item.photo.url != "/media/images/default/no_photo.png" %}
-                                   <div class="row my-1 p-1 border-bottom dish">
+                                {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
+                                    {%if category == 'Paellas' %}
+                                      <div class="d-flex justify-content-center">
+                                            <div class="col-12 m-2 px-3 text-center rounded info">
+                                              <p class="my-0">solo sobre pedidos</p>
+                                          </div>
+                                      </div>
+                                    {% endif %}
+                                    <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
                                            <img src="{{item.photo.url}}" class="img-fluid rounded">
                                        </div>
                                        <div class="col-7 col-md-7 col-lg-7 text-left px-1">
                                            <div class="d-flex justify-content-start mb-2">
-                                               <h6><strong>{{item.name}}</strong></h6>
+                                               <h4><strong>{{item.name}}</strong></h4>
                                            </div>
-                                           <div class="d-flex justify-content-around">
+                                           <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center px-1 text-left">
                                                     {% if prices|length > 1%}
                                                     <h5><small>Desde </small>{{prices.0.price_str}}</h5>
                                                     {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
+                                                    <h4>{{prices.0.price_str}}</h4>
                                                     {% endif %}
                                                 </div>
                                                 <div class="px-1 addRemoveButtons">
                                                     <div class="itemQty input-group input-group-xs px-1 px-lg-2">
                                                         <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                                            <button class="btn btn-xs px-1 px-sm-2 px-sm-3" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
                                                         </div>
                                                             <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px;">
+                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px; min-width:16px; font-size:1.2rem;">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                                            <button class="btn btn-xs px-1 px-sm-2 px-sm-3" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                                         </div>
                                                     </div>
-                                                    <div class="addButton px-0" style="display:none;">
-                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
+                                                    <div class="addButton px-1" style="display:none;">
+                                                       <button class="btn btn-block px-1" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%}Ver tamaños{% else %}<strong>Agregar </strong> <i class="fas fa-plus"></i>{% endif %}</button>
                                                     </div>
                                                 </div>
                                            </div>
@@ -152,31 +180,38 @@
                                             </div>
                                    </div>
                                 {% else %}
+                                    {%if category == 'Paellas' %}
+                                      <div class="d-flex justify-content-center">
+                                          <div class="col-12 ml-3 mr-2 px-3 text-center rounded info">
+                                              <p class="my-0">solo sobre pedidos</p>
+                                          </div>
+                                      </div>
+                                    {% endif %}
                                     <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
-                                            <h6><strong>{{item.name}}</strong></h6>
+                                            <h5><strong>{{item.name}}</strong></h5>
                                        </div>
                                        <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-around">
+                                           <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center px-1 text-left">
                                                     {% if prices|length > 1%}
                                                     <h5><small>Desde </small>{{prices.0.price_str}}</h5>
                                                     {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
+                                                    <h4>{{prices.0.price_str}}</h4>
                                                     {% endif %}
                                                 </div>
                                                 <div class="px-1 addRemoveButtons">
                                                     <div class="itemQty input-group input-group-xs px-1 px-lg-2">
                                                         <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                                            <button class="btn btn-xs px-1 px-sm-2px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
                                                         </div>
                                                             <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px;">
+                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px; min-width:16px; font-size:1.2rem;">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                                            <button class="btn btn-xs px-1 px-sm-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                                         </div>
                                                     </div>
-                                                    <div class="addButton px-0" style="display:none;">
+                                                    <div class="addButton px-1" style="display:none;">
                                                        <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
                                                     </div>
                                                 </div>
@@ -184,7 +219,7 @@
                                        </div>
                                            <div class="col-12 px-3 text-left ingredients">
                                             {{item.ingredients}}
-                                            </div>
+                                           </div>
                                    </div>
                                 {% endif %}
                             {% endwith %}

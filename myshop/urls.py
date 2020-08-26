@@ -21,6 +21,7 @@ from django.urls import path, include
 
 urlpatterns = i18n_patterns(
     path('', include('index.urls', namespace="index")),
+    path('account/', include('account.urls', namespace='account')),
     path('menu/', include('menus.urls', namespace='menu')),
     path('profile/', include('profiles.urls', namespace='profile')),
     path('cart/', include('cart.urls', namespace='cart')),

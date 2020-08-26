@@ -15,3 +15,7 @@ class Index(View):
 
 class HomePage(TemplateView):
     template_name = "index/home.html"
+
+
+class TestPage(TemplateView):
+    template_name = "test.html"

@@ -15,6 +15,8 @@ urlpatterns = [
     path('<slug:title_slug>/', views.MenuDetails.as_view(), name='details'),
     path('create/', views.MenuCreate.as_view(), name='create'),
     path('item_create/', views.ItemCreate.as_view(), name='item-create'),
+    path('item_update/<int:pk>', views.ItemUpdate.as_view(), name='item-update'),
     path('category_create/', views.CategoryCreate.as_view(), name='category-create'),
     path('establishment_create/', views.EstablishmentCreate.as_view(), name='establishment-create'),
+    path('<slug:title_slug>/edit', views.MenuEditDetails.as_view(), name='edit'),
 ]

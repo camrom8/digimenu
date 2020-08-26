@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView
+from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView, UpdateView
 
 from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm, \
@@ -80,6 +80,40 @@ class ItemCreate(CreateView):
         return kwargs
 
 
+class ItemUpdate(UpdateView):
+    """View to create Item"""
+    model = Item
+    form_class = ItemForm
+    template_name = "chunks/item_create.html"
+    success_url = reverse_lazy('menu:edit')
+
+    def form_valid(self, form):
+        """valid the other 2 forms, location and property details"""
+        context = self.get_context_data()
+        prices = context['price']
+        if prices.is_valid():
+            item = form.save()
+            prices.instance = item
+            prices.save()
+            return super(ItemCreate, self).form_valid(form)
+        return super(ItemCreate, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        """Add price inline form"""
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['price'] = ItemPriceFormSet(self.request.POST)
+        else:
+            context['price'] = ItemPriceFormSet()
+
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super(ItemCreate, self).get_form_kwargs()
+        kwargs['owner'] = self.request.user
+        return kwargs
+
+
 class CategoryCreate(CreateView):
     """View to create Category"""
     model = Category
@@ -107,6 +141,12 @@ class MenuDetails(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        map_url2 = ""
+        if "iPhone" in request.META['HTTP_USER_AGENT']:
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
+            map_url2 = f'href="http://maps.apple.com/maps?saddr=Current%20Location&daddr={str(self.object.lat)},{str(self.object.lng)}'
+        else:
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
         cart = Cart(request)
         for item in cart:
             if item['product'].price.item.menu != self.get_object():
@@ -116,6 +156,16 @@ class MenuDetails(DetailView):
                 cart.clear()
                 break
         context = self.get_context_data(object=self.object)
+        map_url2 = ""
+        if "iPhone" in request.META['HTTP_USER_AGENT'] or "iPad" in request.META['HTTP_USER_AGENT'] :
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
+            map_url2 = f'href="http://maps.apple.com/maps?saddr=Current%20Location&daddr={str(self.object.lat)},{str(self.object.lng)}'
+        else:
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
+
+        context['map_url'] = map_url
+        if map_url2:
+            context['map_url2'] = map_url2
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -143,6 +193,25 @@ class MenuDetails(DetailView):
         )
 
 
+class MenuEditDetails(DetailView):
+    """View Menu with items"""
+    model = Menu
+    template_name = "menus/edit.html"
+    slug_url_kwarg = 'title_slug'
+    slug_field = 'title_slug'
+
+    def get_context_data(self, **kwargs):
+        """get categories in the context data"""
+        context = super().get_context_data(**kwargs)
+        categories_id = self.object.items.values_list('category_id', flat=True).distinct('category')
+        categories = Category.objects.filter(id__in=categories_id)
+        context['items'] = {}
+        for category in categories:
+            context['items'][category.name] = \
+                [item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')]
+        return context
+
+
 @csrf_exempt
 def item_prices_get(request, item_id):
     """get all the prices for a item """
@@ -159,7 +228,7 @@ def item_prices_get(request, item_id):
         message = _("Which size would you like to remove?")
     else:
         prices = prices_for_product
-        message = _("How hungry are you?")
+        message = _("Select an option")
     if len(prices) == 1:
         return JsonResponse({'id': str(prices[0].id)})
     prices_dict = {}
@@ -171,6 +240,7 @@ def item_prices_get(request, item_id):
 
 @csrf_exempt
 def get_adds_on(request, item_id):
+    """Check if product has addons or choices"""
     price = Price.objects.get(id=item_id)
     adds_ons = AddsOn.objects.filter(product__id=item_id)
     if price.choice:
@@ -182,6 +252,7 @@ def get_adds_on(request, item_id):
 
 @csrf_exempt
 def same_items_in_cart(request, item_id):
+    """Check if the same product is already in cart and return the list"""
     keys = request.session['cart'].keys()
     products_in_cart = ProductInCart.objects.filter(price__id=item_id, id__in=keys).select_related('price')
     if products_in_cart:
@@ -227,6 +298,7 @@ def same_items_in_cart(request, item_id):
 
 @csrf_exempt
 def item_to_order(request, item_id):
+    """add item to order"""
     add_ons = request.POST.copy()
     # total_add_ons = 0
     total = add_ons.pop('grand_total', None)
@@ -269,6 +341,8 @@ def menu_upload(request):
             menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
             # create property, address, images
             for column in menu_data:
+                print(len(column))
+                print(column[0], column[1], column[2], column[3], column[4], column[5], )
                 ingredients = column[4].replace('-', ',')
                 if len(ingredients) < 2:
                     ingredients = ''
@@ -284,14 +358,14 @@ def menu_upload(request):
                     # get item
                     item = Item.objects.get(upload_code=column[0], menu=menu)
                     # update item
-                    item.__dict__.update(menu__id=column[1], category=column[2], name=column[3], ingredients=ingredients)
+                    item.__dict__.update(menu__id=column[1], category=column[2], name=column[3],
+                                         ingredients=ingredients)
                     item.save()
 
                 item.save()
             return HttpResponseRedirect(reverse('menu:upload-size'))
     form = MenuUploadForm()
     return render(request, template, {'form': form})
-
 
 
 @login_required

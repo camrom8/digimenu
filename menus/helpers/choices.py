@@ -13,6 +13,9 @@ FAMILIAR = _('Familiar')
 SHOT = _('Shot')
 MEDIA = _('Media')
 BOTELLA = _('Botella')
+T30CM = _('30cm')
+T50CM = _('50cm')
+
 SIZES = [
     (NONE, _('Only')),
     (EXTRA_SMALL, _('Extra small')),
@@ -26,9 +29,9 @@ SIZES = [
     (FAMILIAR, _('Familiar')),
     (SHOT, _('Shot')),
     (SHOT, _('Media')),
-    (BOTELLA, _('Botella')),
+    (T50CM, _('50cm')),
+    (T30CM, _('30cm')),
 ]
-
 SLIDES = "menus/details.html"
 TABS = "menus/details2.html"
 TABSb = "menus/details2b.html"
@@ -40,6 +43,8 @@ XLARGE4 = "menus/details7.html"
 XLARGE5 = "menus/details8.html"
 XLARGE6 = "menus/details9.html"
 STANDARD = "menus/details10.html"
+STANDARD2 = "menus/details11.html"
+STANDARD3 = "menus/details12.html"
 
 TEMPLATES = [
     (SLIDES, _('Small')),
@@ -52,5 +57,7 @@ TEMPLATES = [
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
     (XLARGE6, _('Portico')),
-    (STANDARD, _('Standard')),
+    (STANDARD, _('Margarita_2')),
+    (STANDARD2, _('Portico_2')),
+    (STANDARD3, _('Cielo_bistro')),
 ]

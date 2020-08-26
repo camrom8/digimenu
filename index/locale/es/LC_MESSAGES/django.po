@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 10:16-0500\n"
-"PO-Revision-Date: 2020-06-19 19:34-0456\n"
+"POT-Creation-Date: 2020-08-26 15:22-0500\n"
+"PO-Revision-Date: 2020-08-17 16:26-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -76,37 +76,37 @@ msgstr "Producto"
 msgid "Empty"
 msgstr "Vacío"
 
-#: index/templates/base.html:305 index/templates/base.html:335
-#: index/templates/base.html:392
+#: index/templates/base.html:346 index/templates/base.html:376
+#: index/templates/base.html:433
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: index/templates/base.html:311
+#: index/templates/base.html:352
 msgid "Select a size"
-msgstr "Seleccione un tamaño"
+msgstr "Selecciona un tamaño"
 
-#: index/templates/base.html:327 index/templates/base.html:379
+#: index/templates/base.html:368 index/templates/base.html:420
 msgid ""
 "You can duplicate a combination already on your order or create a new one"
 msgstr "Puedes duplicar una selección que ya agregaste o crear una nueva"
 
-#: index/templates/base.html:329 index/templates/base.html:380
+#: index/templates/base.html:370 index/templates/base.html:421
 msgid "Ingredients and Add-ons"
 msgstr "Ingredientes y Adicionales"
 
-#: index/templates/base.html:382
+#: index/templates/base.html:423
 msgid "You have more than 1 product with different ingredients"
 msgstr "Has agregado el mismo producto con diferentes ingredients"
 
-#: index/templates/base.html:383
+#: index/templates/base.html:424
 msgid "Select product to remove"
-msgstr "Seleccione el producto a remover"
+msgstr "Selecciona el producto a remover"
 
-#: index/templates/index/index.html:34
+#: index/templates/index/index.html:38
 msgid "Apartment"
 msgstr ""
 
-#: index/templates/index/index.html:44
+#: index/templates/index/index.html:48
 msgid "New"
 msgstr "Nueva"
 

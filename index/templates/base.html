@@ -57,11 +57,11 @@
 <!--                    <a class="nav-link" href="#">{% trans 'Home' %}</a>-->
 <!--                </li>-->
 <!--                <li class="nav-item {% if page == 'login' %} active {% endif %}">-->
-<!--                    {% if user.is_authenticated %}-->
-<!--                        <a class="nav-link" href="#">{% trans 'Logout' %}</a>-->
-<!--                    {% else %}-->
-<!--                        <a class="nav-link" href="#">{% trans 'Login' %}</a>-->
-<!--                    {% endif %}-->
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="#">{% trans 'Logout' %}</a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'account:login' %}">{% trans 'Login' %}</a>
+                    {% endif %}
 <!--                </li>-->
                 <li class="nav-item mx-1 mt-0 mt-sm-2 mt-md-1">
                     <a href="https://api.whatsapp.com/send?phone=573162128561&text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20Digimen%C3%BA%20Colombia%20para%20mi%20restaurante,%20ni%20nombre%20es%20"
@@ -87,7 +87,7 @@
         </div>
     </nav>
     <!-- Modal -->
-    <div class="modal fade" id="modalOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade px-0" id="modalOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header bg-secondary">
@@ -109,7 +109,7 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="modalWelcome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade px-0" id="modalWelcome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header bg-light text-primary welcome">
@@ -163,10 +163,20 @@
         </div>
         {% endwith %}
     </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js">
+    </script>
     <script>
-        window.onload = function() {
-          $("#modalWelcome").modal('show')
-        };
+        // create cookies for each page to show welcome message only once
+         $(document).ready(function() {
+             if ($.cookie('pop') == null) {
+                 $("#modalWelcome").modal('show')
+                 let path = window.location.pathname;
+                 let date = new Date();
+                 let minutes = 20;
+                 date.setTime(date.getTime() + (minutes * 60 * 1000));
+                 $.cookie("pop", "welcome", { path: path, expires: date });
+             }
+         });
 
         function getOrder() {
             $('#modalOrder').modal('show');
@@ -176,6 +186,37 @@
                 success: function(data) {
                     let div = document.getElementById('modalBody');
                     div.innerHTML = data;
+                }
+            });
+        };
+        function getDeliveryForm() {
+            $('#modalOrder').modal('show');
+            $.ajax({
+                type: "get",
+                url: "{% url 'cart:cart_delivery' %}",
+                success: function(data) {
+                    let div = document.getElementById('modalBody');
+                    div.innerHTML = data;
+                }
+            });
+        };
+        function sendOrderByWhatsapp() {
+            let form = $('#deliveryForm').serialize();
+            console.log(form);
+            $.ajax({
+                type: "post",
+                url: "{% url 'cart:cart_delivery' %}",
+                data: form, // serializes the form's elements.
+                success: function(data) {
+                    console.log(data.wupMsg);
+                    var win = window.open(data.wupMsg, '_blank');
+                    if (win) {
+                        //Browser has allowed it to be opened
+                        win.focus();
+                    } else {
+                        //Browser has blocked it
+                        alert('Please allow popups for this website');
+                    }
                 }
             });
         };

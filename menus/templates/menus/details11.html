@@ -8,19 +8,12 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Neuton&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
         -moz-appearance:textfield;
-    }
-
-    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
-        background-color: #fff;
-        border: solid 1px #000;
-        font-size: 1.2rem;
-        color: #000;
     }
 
     /* Webkit browsers like Safari and Chrome */
@@ -30,47 +23,57 @@
         margin: 0;
     }
 
+    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        background-color: #fff;
+        border: solid 1px #c90300; //changes
+        font-size: 2.2rem !important;
+        color: #000;
+    }
+
     hr {
-        background-color: #a0705e !important;
+        background-color: red !important; //changes
     }
 
     .card-header > button{
-        font-family: 'Germania One', cursive;
+        font-family: 'Satisfy';
         font-size: 2rem !important;
-        color: #613924 !important;
+        color: #fff !important;
     }
 
     .input-group-prepend > button, .input-group-append > button{
         border: solid 1px #613924;
-        //background-color: #be7650;
-        background-image: linear-gradient(#613924, #9e6945);
+        background-image: linear-gradient(#808080, #5a5a5a);
     }
+
+
     .addButton > button{
-            border: solid 1px #613924;
-            background-image: linear-gradient(#613924, #9e6945);
-            font-family: 'Germania One', cursive;
+            background-image: linear-gradient(#808080, #5a5a5a);
     }
+
     .card-header{
-        background-image: linear-gradient(#EAE2A9, #b3883c);
-        text-transform: uppercase;
+        background-image: linear-gradient(#c90300, #960200);
     }
 
     .card-body{
-        background-color: #FFFFFF;
+        background-color: #fbffc6;
     }
 
     .dish{
-        font-family: 'Aleo', serif;
-        weight:
-        color: #613924;
+        font-family: 'Neuton', serif;
+        color: #c00000;
     }
     .ingredients{
-        font-family: 'Aleo', serif;
-        color: #5a5a5a;
+        color: black;
     }
     .dish > span{
         position: relative;
         top: -5px !important;
+    }
+    .dropBut {
+        font-size:14px;
+        right:28px;
+        top:-7px;
+        position: relative;
     }
 </style>
 {% endblock %}
@@ -84,9 +87,11 @@
     </div>
     <div class="bg-light px-2 rounded">
         <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2"></i> <a href="tel:+573104782643">310-478-2643</a></p>
-        <p class="my-1"><i class="fa fa-map-marker"></i> Cra 42 # 21-23</p>
-        <p class="my-1">C.C La Querencia</p>
+        <p><i class="fa fa-phone-square mt-2"></i> <a href="tel:+573228402889 "> 322-840-2889</a></p>
+        <p><i class="fa fa-phone-square mt-2"></i> <a href="tel:+573214036587 "> 321-403-6587</a></p>
+        <p class="my-1"><i class="fa fa-map-marker"></i> Calle 25 # 42-48</p>
+        <p class="my-0 pl-3">Local 20</p>
+        <p class="my-1 pl-3">C.C La Querencia</p>
     </div>
 </div>
 <hr>
@@ -96,35 +101,28 @@
             <div class="card">
                 <div class="card-header px-1" id="heading{{forloop.counter}}">
                     <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
-                        {{category}} <span class="float-right"><span class="float-right" style="font-size:12px; right:24px; position: relative;"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
                 <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
                       <div class="card-body px-2 pt-2 pr-md-3 pb-1">
                         {% for item in item %}
-<!--                            {% if forloop.counter == 1 %}-->
-<!--                            {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}-->
-<!--                            <div class="row mx-0 my-1 mb-3 px-1 d-sm-block d-md-none">-->
-<!--                                <img src="{{item.photo.url}}" class="img-fluid rounded">-->
-<!--                            </div>-->
-<!--                            {% endif %}-->
-<!--                            {% endif %}-->
                             {% with prices=item.prices.all %}
-                                {% if item.photo.url != "/media/images/default/no_photo.png" %}
+                                {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
                                    <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
                                            <img src="{{item.photo.url}}" class="img-fluid rounded">
                                        </div>
                                        <div class="col-7 col-md-7 col-lg-7 text-left px-1">
                                            <div class="d-flex justify-content-start mb-2">
-                                               <h6><strong>{{item.name}}</strong></h6>
+                                               <h4><strong>{{item.name}}</strong></h4>
                                            </div>
-                                           <div class="d-flex justify-content-around">
+                                           <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center px-1 text-left">
                                                     {% if prices|length > 1%}
                                                     <h5><small>Desde </small>{{prices.0.price_str}}</h5>
                                                     {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
+                                                    <h4>{{prices.0.price_str}}</h4>
                                                     {% endif %}
                                                 </div>
                                                 <div class="px-1 addRemoveButtons">
@@ -133,13 +131,13 @@
                                                             <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
                                                         </div>
                                                             <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px;">
+                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px; font-size:1.2rem;">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                                         </div>
                                                     </div>
-                                                    <div class="addButton px-0" style="display:none;">
-                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
+                                                    <div class="addButton px-1" style="display:none;">
+                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%}Ver tamaños{% else %}<strong>Agregar </strong> <i class="fas fa-plus"></i>{% endif %}</button>
                                                     </div>
                                                 </div>
                                            </div>
@@ -154,15 +152,15 @@
                                 {% else %}
                                     <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
-                                            <h6><strong>{{item.name}}</strong></h6>
+                                            <h5><strong>{{item.name}}</strong></h5>
                                        </div>
                                        <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-around">
+                                           <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center px-1 text-left">
                                                     {% if prices|length > 1%}
                                                     <h5><small>Desde </small>{{prices.0.price_str}}</h5>
                                                     {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
+                                                    <h4>{{prices.0.price_str}}</h4>
                                                     {% endif %}
                                                 </div>
                                                 <div class="px-1 addRemoveButtons">
@@ -176,7 +174,7 @@
                                                             <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
                                                         </div>
                                                     </div>
-                                                    <div class="addButton px-0" style="display:none;">
+                                                    <div class="addButton px-1" style="display:none;">
                                                        <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
                                                     </div>
                                                 </div>
@@ -184,7 +182,7 @@
                                        </div>
                                            <div class="col-12 px-3 text-left ingredients">
                                             {{item.ingredients}}
-                                            </div>
+                                           </div>
                                    </div>
                                 {% endif %}
                             {% endwith %}
