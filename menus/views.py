@@ -325,7 +325,6 @@ def menu_upload(request):
     template = 'uploads/menu.html'
     if request.method == 'POST':
         form = MenuUploadForm(request.POST or None, request.FILES or None)
-        print(form.is_valid())
         if form.is_valid():
             # get form data
             csv_file = form.cleaned_data['csv_file']
@@ -341,8 +340,6 @@ def menu_upload(request):
             menu_data = csv.reader(io_string, delimiter=",", quotechar="|")
             # create property, address, images
             for column in menu_data:
-                print(len(column))
-                print(column[0], column[1], column[2], column[3], column[4], column[5], )
                 ingredients = column[4].replace('-', ',')
                 if len(ingredients) < 2:
                     ingredients = ''
