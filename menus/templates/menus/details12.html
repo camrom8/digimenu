@@ -132,7 +132,7 @@
                       <div class="card-body px-2 pt-2 pr-md-3 pb-1">
                         {% for item in item %}
                             {% with prices=item.prices.all %}
-                                {% if not item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
+                                {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
                                     {%if category == 'Paellas' %}
                                       <div class="d-flex justify-content-center">
                                             <div class="col-12 m-2 px-3 text-center bg-light rounded info">
