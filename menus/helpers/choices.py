@@ -57,7 +57,7 @@ TEMPLATES = [
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
     (XLARGE6, _('Portico')),
-    (STANDARD, _('Margarita_2')),
-    (STANDARD2, _('Portico_2')),
+    (STANDARD, _('Portico_2')),
+    (STANDARD2, _('Margarita_2')),
     (STANDARD3, _('Cielo_bistro')),
 ]

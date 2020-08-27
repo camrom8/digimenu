@@ -91,11 +91,11 @@
 </div>
 <hr>
 <div class="row">
-    <div class="accordion col-12 col-md-7" id="accordionMenu">
+    <div class="accordion col-12 col-md-7 px-1 px-sm-2 px-md-3" id="accordionMenu">
         {% for category, item in items.items %}
             <div class="card">
-                <div class="card-header px-1" id="heading{{forloop.counter}}">
-                    <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                <div class="card-header p-1" id="heading{{forloop.counter}}">
+                    <button class="btn btn-link btn-block text-center text-uppercase px-1" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
                         {{category}} <span class="float-right"><span class="float-right" style="font-size:12px; right:24px; position: relative;"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
