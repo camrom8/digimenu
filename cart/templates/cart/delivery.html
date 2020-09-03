@@ -6,35 +6,46 @@
 <form id="deliveryForm"  method="post">{% csrf_token %}
     <div class="row">
         <div class="col-12 col-md-7">
-                <div>
-                    {{form.errors}}
-                    {{form.name.label}}
-                    {{form.name}}
-                    {{form.comments.errors}}
+            {{form.non_field_errors}}
+            <div class="form-group">
+                {{form.name.label}}
+                {{form.name}}
+                {{form.name.errors}}
+            </div>
+            <div class="form-group">
+                {{form.address.label}}
+                {{form.address}}
+                {{form.comments.errors}}
+            </div>
+            <div class="form-group">
+                {{form.comments.label}}
+                {{form.comments}}
+                {{form.comments.errors}}
+            </div>
+            <div class="form-group">
+                {{form.pickup.label}}
+            </div>
+            <div class="d-flex justify-content-between" data-toggle="buttons">
+                {% for choice in form.pickup%}
+                <div class="col-6 px-1">
+                    <label class="btn btn-sm btn-block btn-outline-primary p-1 pt-2 my-0 text-uppercase">
+                    {{choice}}{{choice.label}}
+                    </label>
                 </div>
-                <div>
-                    {{form.address.label}}
-                    {{form.address}}
-                    {{form.comments.errors}}
-                </div>
-                <div>
-                    {{form.pickup.label}}
-                    {{form.pickup}}
-                    <p class="px-3"><small>*{%trans 'leave unselected for delivery' %}</small></p>
-                    {{form.comments.errors}}
-                </div>
-                <div>
-                    {{form.comments.label}}
-                    {{form.comments}}
-                    {{form.comments.errors}}
-                </div>
+                {% endfor %}
+            </div>
+            {{form.pickup.errors}}
+            <div class="form-group bg-light mt-3">
+                {{form.tip.label}}
+                {{form.tip}}
+                {{form.tip.errors}}
+            </div>
         </div>
     </div>
-    <hr>
 </form>
-            <div class="col-12">
-        <a type="button" class="btn btn-block btn-success" onclick="sendOrderByWhatsapp()">
-            {%trans 'Send' %} <i class="fab fa-whatsapp fa-2x"></i>
+    <div class="col-12 mt-3">
+        <a type="button" class="btn btn-block btn-success text-white" onclick="sendOrderByWhatsapp()">
+            <h5>{%trans 'Send' %} <i class="fab fa-whatsapp"></i></h5>
         </a>
     </div>
 </div>

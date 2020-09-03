@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from menus.helpers.functions import whatsapp_url
+from menus.helpers.functions import whatsapp_url, to_currency
 from menus.models import Item, Price, ProductInCart
 from .cart import Cart
 from menus.forms import CartAddProduct
@@ -73,7 +73,7 @@ def cart_detail(request):
                                                                                       :-2] + f" Total: ${cart.get_total_price()}"
     # print(order)
     wurl = whatsapp_url(order, str(phone))
-    print(wurl)
+    # print(wurl)
     return render(request, 'cart/detail.html', {'cart': cart, 'wurl': wurl})
 
 
@@ -90,17 +90,18 @@ class DeliveryDetails(View):
             name = ""
             address = ""
             comments = ""
+            tips = ""
+            pickup = form.cleaned_data["pickup"]
             phone = 0
+            tip = int(form.cleaned_data["tip"])
             if form.cleaned_data["name"]:
                 name = f'Nombre: {form.cleaned_data["name"]}\n'
             if form.cleaned_data["address"]:
                 address = f'Dirección: {form.cleaned_data["address"]}\n'
             if form.cleaned_data["comments"]:
                 comments = f'comentarios: {form.cleaned_data["comments"]}\n'
-            if form.cleaned_data["pickup"]:
-                pickup = 'RECOGE'
-            else:
-                pickup = 'DOMICILIO'
+            if tip:
+                tips = f'propina: {to_currency(tip)}\n'
             for item in cart:
                 try:
                     product_name = item['product'].price.item.name
@@ -121,12 +122,11 @@ class DeliveryDetails(View):
                     order += f"{item['quantity']}x{product_name}({size_short}): ${item['total_price']},\n"
                 if not phone:
                     phone = item['product'].price.item.menu.owner.profile.phone
-            order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente:\n" + \
-                    order[:-2] + "\n" + f" Total: ${cart.get_total_price()}\n"
-            details = name + address + comments + pickup
-            # print(order)
+            order = "¡Hola! He hecho mi pedido por Digimenú y es el siguiente:\n" + \
+                    order[:-2] + "\n"
+            total = f"Total: {to_currency(cart.get_total_price() + tip)}\n"
+            details = name + address + comments + tips + pickup + "\n" + total
             wurl = whatsapp_url(order + details, str(phone))
             return HttpResponse(json.dumps({'wupMsg': wurl}), content_type='application/json')
         else:
-            form = DetailsForm()
             return render(request, 'cart/delivery.html', {'form': form})

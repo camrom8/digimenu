@@ -196,7 +196,11 @@
                 url: "{% url 'cart:cart_delivery' %}",
                 success: function(data) {
                     let div = document.getElementById('modalBody');
+                    let modalTitle = document.getElementById('modalOrderTitle');
+                    let title = "{% trans 'Delivery' %}";
+                    modalTitle.innerText = title;
                     div.innerHTML = data;
+                    $("input[type=radio]").hide();
                 }
             });
         };
@@ -208,14 +212,24 @@
                 url: "{% url 'cart:cart_delivery' %}",
                 data: form, // serializes the form's elements.
                 success: function(data) {
+                    if (data.wupMsg){
                     console.log(data.wupMsg);
-                    var win = window.open(data.wupMsg, '_blank');
-                    if (win) {
-                        //Browser has allowed it to be opened
-                        win.focus();
+                        var win = window.open(data.wupMsg, '_blank');
+                        if (win) {
+                            //Browser has allowed it to be opened
+                            win.focus();
+                        } else {
+                            //Browser has blocked it
+                            alert('Please allow popups for this website');
+                        }
                     } else {
-                        //Browser has blocked it
-                        alert('Please allow popups for this website');
+                        console.log(data)
+                        let div = document.getElementById('modalBody');
+                        let modalTitle = document.getElementById('modalOrderTitle');
+                        let title = "{% trans 'Delivery' %}";
+                        modalTitle.innerText = title;
+                        div.innerHTML = data;
+                        $("input[type=radio]").hide();
                     }
                 }
             });
@@ -527,7 +541,17 @@
                 $('#grandTotalHalf').val(basePrice);
             }
         }
-            </script>
+
+        $("input[type=radio]").hide(); // hide property types
+        $('[data-toggle="buttons"] .btn').on('click', function () {
+            // toggle button style
+            $(this).toggleClass('btn-outline-primary btn-primary');
+            // toggle checkbox
+            let chk = $(this).find('[type=radio]');
+            let chk_current = chk.prop('checked');
+            chk.prop('checked',!chk_current);
+	    });
+    </script>
 
     {% block scripts %}
     {% endblock %}

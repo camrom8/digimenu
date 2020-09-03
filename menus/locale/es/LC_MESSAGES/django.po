@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-26 15:22-0500\n"
-"PO-Revision-Date: 2020-07-27 10:00-0456\n"
+"POT-Creation-Date: 2020-09-03 10:41-0500\n"
+"PO-Revision-Date: 2020-08-27 08:50-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -78,10 +78,8 @@ msgid "Shot"
 msgstr ""
 
 #: menus/helpers/choices.py:14 menus/helpers/choices.py:31
-#, fuzzy
-#| msgid "Medium"
 msgid "Media"
-msgstr "Mediano"
+msgstr "Media"
 
 #: menus/helpers/choices.py:15
 msgid "Botella"
@@ -140,11 +138,11 @@ msgid "Portico"
 msgstr ""
 
 #: menus/helpers/choices.py:60
-msgid "Margarita_2"
+msgid "Portico_2"
 msgstr ""
 
 #: menus/helpers/choices.py:61
-msgid "Portico_2"
+msgid "Margarita_2"
 msgstr ""
 
 #: menus/helpers/choices.py:62
@@ -340,10 +338,8 @@ msgid "Which size would you like to remove?"
 msgstr "Cual tamaño quieres remover?"
 
 #: menus/views.py:231
-#, fuzzy
-#| msgid "Select category"
 msgid "Select an option"
-msgstr "Selecciona categoría"
+msgstr "Selecciona una opción"
 
 #: menus/views.py:263
 msgid "new"
