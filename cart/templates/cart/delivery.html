@@ -37,7 +37,12 @@
             {{form.pickup.errors}}
             <div class="form-group bg-light mt-3">
                 {{form.tip.label}}
-                {{form.tip}}
+                <select id="id_tip" class="form-control" name="tip">
+                    <option value="0">{% trans 'Not good enough'%} $0</option>
+                    {% for value, displayable in form.tip.field.choices %}
+                        <option value="{{value}}" {% if value == 2000 %}selected{% endif %}>{{displayable}}</option>
+                    {% endfor %}
+                </select>
                 {{form.tip.errors}}
             </div>
         </div>
