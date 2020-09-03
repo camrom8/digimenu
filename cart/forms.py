@@ -25,4 +25,4 @@ class DetailsForm(forms.Form):
                                         ('DOMICILIO', _('delivery'))},
                                         label=_('Delivery'),
                                         widget=forms.RadioSelect)
-    tip = forms.ChoiceField(choices=CHOICES_TIP, initial=(2000, '$2000'))
+    tip = forms.ChoiceField(choices=CHOICES_TIP, initial=(2000, '$2000'), label=_('tip'))
