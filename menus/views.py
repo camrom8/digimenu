@@ -142,11 +142,6 @@ class MenuDetails(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         map_url2 = ""
-        if "iPhone" in request.META['HTTP_USER_AGENT']:
-            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id={self.object.subtitle}'
-            map_url2 = f'href="http://maps.apple.com/maps?saddr=Current%20Location&daddr={str(self.object.lat)},{str(self.object.lng)}'
-        else:
-            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id={self.object.subtitle}'
         cart = Cart(request)
         for item in cart:
             if item['product'].price.item.menu != self.get_object():
@@ -157,11 +152,11 @@ class MenuDetails(DetailView):
                 break
         context = self.get_context_data(object=self.object)
         map_url2 = ""
-        if "iPhone" in request.META['HTTP_USER_AGENT'] or "iPad" in request.META['HTTP_USER_AGENT'] :
-            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
+        if "iPhone" in request.META['HTTP_USER_AGENT'] or "iPad" in request.META['HTTP_USER_AGENT']:
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id={self.object.subtitle}'
             map_url2 = f'href="http://maps.apple.com/maps?saddr=Current%20Location&daddr={str(self.object.lat)},{str(self.object.lng)}'
         else:
-            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id=ChIJMT91T74FP44RRL88gS9dxUA'
+            map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id={self.object.subtitle}'
 
         context['map_url'] = map_url
         if map_url2:
