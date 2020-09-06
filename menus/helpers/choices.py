@@ -45,6 +45,8 @@ XLARGE6 = "menus/details9.html"
 STANDARD = "menus/details10.html"
 STANDARD2 = "menus/details11.html"
 STANDARD3 = "menus/details12.html"
+PORTO1 = "menus/portoAlto1.html"
+PORTO2 = "menus/portoAlto2.html"
 
 TEMPLATES = [
     (SLIDES, _('Small')),
@@ -60,4 +62,6 @@ TEMPLATES = [
     (STANDARD, _('Portico_2')),
     (STANDARD2, _('Margarita_2')),
     (STANDARD3, _('Cielo_bistro')),
+    (PORTO1, _('Porto 1')),
+    (PORTO2, _('Porto 2')),
 ]
