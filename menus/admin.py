@@ -20,17 +20,17 @@ class AddsOnAdmin(admin.ModelAdmin):
 class PriceAdmin(admin.ModelAdmin):
     list_display = ('item', 'size', 'price_str', 'price', 'choice', 'half')
     list_editable = ('price_str', 'price', 'choice', 'half')
-
+    search_fields = ['item__name']
 
 @admin.register(models.Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'menu', 'photo')
-
+    search_fields = ['name']
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'menu', 'position')
-
+    search_fields = ['name']
 
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):

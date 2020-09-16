@@ -38,7 +38,7 @@ TABSb = "menus/details2b.html"
 FULL = "menus/details3.html"
 XLARGE = "menus/details4.html"
 XLARGE2 = "menus/details5.html"
-XLARGE3 = "menus/details6.html"
+CHACHOS = "menus/losChachos.html"
 XLARGE4 = "menus/details7.html"
 XLARGE5 = "menus/details8.html"
 XLARGE6 = "menus/details9.html"
@@ -55,7 +55,7 @@ TEMPLATES = [
     (FULL, _('large')),
     (XLARGE, _('X-large')),
     (XLARGE2, _('X-large 2')),
-    (XLARGE3, _('Los_chachos')),
+    (CHACHOS, _('Los_chachos')),
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
     (XLARGE6, _('Portico')),

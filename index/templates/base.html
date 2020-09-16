@@ -14,8 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <!--    JQUERY-->
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
     <!--    POPPER-->
@@ -140,15 +139,15 @@
         {% endblock %}
     </div>
     <div class="cart fixed-bottom py-1 bg-primary cart-bar">
-        <div class="d-flex flex-row-reverse px-1 px-md-3">
+        <div class="d-flex flex-row-reverse px-1 px-sm-1 px-md-3">
             {% if cart|length > 0 %}
-                <div class="px-1">
+                <div class="px-0 px-sm-1">
                     <button type="button" class="btn btn-block btn-success px-2 px-sm-3" onClick="getOrder()">
-                         <i class="fab fa-whatsapp fa-lg"></i><span class="d-sm-inline"><strong>{%trans 'Send order'%}</strong></span>
+                         <h5 class="mb-0"><i class="fab fa-whatsapp fa-lg"></i><span class="d-sm-inline"><strong> {%trans 'Send order'%}</strong></span></h5>
                     </button>
                 </div>
             {% endif %}
-            <div class="px-1 text-right">
+            <div class="pl-0 pr-1 px-sm-1 text-right">
                 <button type="button" class="btn btn-block btn-light float-right px-4" onClick="getOrder()">
                     {% if cart|length > 0 %}
                     <span class="fas fa-utensils"></span>

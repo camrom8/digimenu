@@ -103,7 +103,7 @@ class Price(models.Model):
     half = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['price']
+        ordering = ['item']
 
     def __str__(self):
         return f'{self.item.menu}: {self.item}, {self.size}'

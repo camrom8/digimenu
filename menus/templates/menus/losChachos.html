@@ -8,8 +8,9 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
@@ -35,14 +36,14 @@
     }
 
     .card-header > button{
-        font-family: 'Niconne';
+        font-family: 'Yellowtail', cursive;
         font-size: 2.5rem !important;
-        color: black !important;
+        color: white !important;
     }
 
     .input-group-prepend > button, .input-group-append > button{
         border: solid 1px #000000;
-        background-image: linear-gradient(#000000, #000000);
+        background-image: linear-gradient(#300000, #860000);
         color: #e0cd80;
         border: solid 1px #e0cd80; //changes
     }
@@ -53,19 +54,19 @@
 
 
     .addButton > button{
-            background-image: linear-gradient(#000000, #000000);
+            background-image: linear-gradient(#300000, #860000);
             color: #e0cd80;
     }
     .addButton > button:hover{
-            background-image: linear-gradient(#000000, #000000);
+            background-image: linear-gradient(#300000, #300000);
             color: white;
     }
 
     .card-header{
-        background-image: linear-gradient(#EAE2A9, #e0cd80);
+        background-image: linear-gradient(#d2a300,#f4b81a);
     }
     .card-header:hover{
-        background-image: linear-gradient(#e0cd80, #e0cd80);
+        opacity: 0.9;
     }
 
     .card-body{
@@ -73,9 +74,9 @@
     }
 
     .dish{
-        font-family: 'aleo', serif;
-        color: #00000;
+        font-family: 'Rosario', sans-serif;
     }
+
     .ingredients{
         color: black;
     }
@@ -92,12 +93,15 @@
     }
 
     .info {
-        background-color: black;
-        color: #e0c580;
+        background-color: #440000;
+        color: white;
         font-weight: 700;
     }
     .info > p > a {
         color:white !important;
+    }
+    .pair{
+        background-image: linear-gradient(#300000, #860000);
     }
 </style>
 {% endblock %}
@@ -111,11 +115,11 @@
     </div>
     <div class="px-1 rounded info">
         <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573138283813"> 313-828-3813 (llamar)</a></p>
-        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Carrera 7 #30b-139, Soacha</a></p>
-        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> CC. Gran Plaza (ver en google maps)</a></p>
+        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573112338977"> 311-233-8977 (llamar)</a></p>
+        <p><i class="fa fa-phone-square ">&nbsp;</i> <a href="tel:+5787705139"> 770-5139 (llamar)</a></p>
+        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}"> Cra 11 # 19-01, Sogamoso (ver en google maps)</a></p>
         {% if map_url2 %}
-            <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
+            <p class="my-0"><a href="{{map_url2}}">(ver en apple maps)</a></p>
         {% endif %}
     </div>
 </div>
@@ -123,7 +127,7 @@
     <div class="accordion col-12 col-md-7 px-1 px-sm-2 px-md-3" id="accordionMenu">
         {% for category, item in items.items %}
             <div class="card">
-                <div class="card-header p-1" id="heading{{forloop.counter}}">
+                <div class="card-header p-1 {% if forloop.counter|divisibleby:2 %}pair{% endif %}" id="heading{{forloop.counter}} ">
                     <button class="btn btn-link btn-block text-center px-1" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
                         {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
@@ -132,48 +136,6 @@
                       <div class="card-body px-2 pt-2 pr-md-3 pb-1">
                         {% for item in item %}
                             {% with prices=item.prices.all %}
-                                {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
-                                    <div class="row my-1 p-1 border-bottom dish">
-                                       <div class="col-5 col-md-5">
-                                           <img src="{{item.photo.url}}" class="img-fluid rounded">
-                                       </div>
-                                       <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-start mb-2">
-                                               <h4><strong>{{item.name}}</strong></h4>
-                                           </div>
-                                           <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center px-1 text-left">
-                                                    {% if prices|length > 1%}
-                                                    <h5><small>Desde </small>{{prices.0.price_str}}</h5>
-                                                    {% else %}
-                                                    <h4>{{prices.0.price_str}}</h4>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="px-1 addRemoveButtons">
-                                                    <div class="itemQty input-group input-group-xs px-1 px-lg-2">
-                                                        <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-1 px-sm-2 px-md-3" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
-                                                        </div>
-                                                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px; min-width:16px; font-size:1.2rem;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-xs px-1 px-sm-2 px-md-3" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="addButton px-1" style="display:none;">
-                                                       <button class="btn btn-block px-1" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%}Ver tamaños{% else %}<strong>Agregar </strong> <i class="fas fa-plus"></i>{% endif %}</button>
-                                                    </div>
-                                                </div>
-                                           </div>
-                                           <div class="col-12 ingredients d-none d-sm-block mt-2 pl-0 pr-2">
-                                            {{item.ingredients}}
-                                            </div>
-                                       </div>
-                                           <div class="col-12 px-3 text-left ingredients d-block d-sm-none ">
-                                            {{item.ingredients}}
-                                            </div>
-                                        </div>
-                                {% else %}
                                     <div class="row my-1 p-1 border-bottom dish">
                                        <div class="col-5 col-md-5">
                                             <h5><strong>{{item.name}}</strong></h5>
@@ -207,8 +169,7 @@
                                            <div class="col-12 px-3 text-left ingredients">
                                             {{item.ingredients}}
                                            </div>
-                                   </div>
-                                {% endif %}
+                                    </div>
                             {% endwith %}
                         {% endfor %}
                       </div>
