@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load static %}
+<div class="row m-3">
+    {% if 'category_create' in  request.path %}<h4>Crear Categoria</h4>{% else %}<h4>Editar Categoria</h4>{% endif %}
+    <div class="col-12">
+        <form method="post" id="formCat" action="{% if 'category_create' in  request.path %}{% url 'menu:category-create'%}
+        {% else %}{% url 'menu:category-update' id %}{% endif %}">{% csrf_token %}
+            {{form}}
+        </form>
+    </div>
+    <div class="col-12 pt-3">
+        <button class="btn btn-block btn-primary" onclick="{% if 'category_create' in  request.path %}createCategory('post')
+        {% else %}editCategory({{id}}, 'post'){% endif %}"> {% trans 'Save' %} </button>
+    </div>
+</div>

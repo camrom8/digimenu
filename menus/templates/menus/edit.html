@@ -28,12 +28,8 @@
         color: #000;
     }
 
-    hr {
-        background-color: red !important; //changes
-    }
-
     .card-header > button{
-        font-size: 2rem !important;
+        font-size: 1rem !important;
         color: #fff !important;
     }
 
@@ -41,22 +37,14 @@
         border: solid 1px #613924;
     }
 
-
-    .addButton > button{
-    }
-
-    .card-header{
-    }
-
-
     .dish > span{
         position: relative;
         top: -5px !important;
     }
     .dropBut {
-        font-size:14px;
-        right:32px;
-        top:-5px;
+        font-size: 14px;
+        right: 28px;
+        top: -15px;
         position: relative;
     }
 </style>
@@ -76,102 +64,16 @@
     </div>
 </div>
 <hr>
-<div class="row">
-    <div class="accordion col-12 col-md-7" id="accordionMenu">
-                 <div class="card-header bg-success">
-                    <a class="btn btn-link btn-block text-center text-uppercase" href="#">
-                        AGREGAR CATEGORIA NUEVA <span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
-                    </a>
-                </div>
-        {% for category, item in items.items %}
-            <div class="card">
-                <div class="card-header bg-primary px-1" id="heading{{forloop.counter}}">
-                    <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
-                        {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                    </button>
-                </div>
-                <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
-                      <div class="card-body px-2 pt-2  pb-1">
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content" id="modalBody1">
+        ...
+    </div>
+  </div>
+</div>
 
-                        <div class="col-12 px-1  bg-success">
-                            <a class="btn btn-link btn-block text-center text-uppercase" href="#">
-                            AGREGAR PRODUCTO NUEVO<span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
-                            </a>
-                        </div>
-                        {% for item in item %}
-                            {% with prices=item.prices.all %}
-                                   <div class="row my-1 p-1 border-bottom dish">
-                                       <div class="col-5 col-md-5">
-                                           <img src="{{item.photo.url}}" class="img-fluid rounded">
-                                       </div>
-                                       <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-start mb-2">
-                                               <h4><strong>{{item.name}}</strong></h4>
-                                           </div>
-                                           <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center px-1 text-left">
-                                                    {% if prices|length > 1%}
-                                                    <h5><small>Desde </small>{{prices.0.price_str}}</h5>
-                                                    {% else %}
-                                                    <h4>{{prices.0.price_str}}</h4>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="px-1 addRemoveButtons">
-                                                    <div class="itemQty input-group input-group-xs px-1 px-lg-2">
-                                                        <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
-                                                        </div>
-                                                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px; font-size:1.2rem;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="addButton px-1" style="display:none;">
-                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%}Ver tamaños{% else %}<strong>Agregar </strong> <i class="fas fa-plus"></i>{% endif %}</button>
-                                                    </div>
-                                                </div>
-                                           </div>
-                                           <div class="col-12 ingredients d-none d-sm-block mt-2 pl-0 pr-2">
-                                            {{item.ingredients}}
-                                            </div>
-                                       </div>
-                                           <div class="col-12 px-3 text-left ingredients d-block d-sm-none ">
-                                            {{item.ingredients}}
-                                            </div>
-                                            <div class="col-6 p-2">
-                                                <a class="btn btn-link btn-block text-center text-uppercase bg-secondary" href="{% url 'menu:item-update' item.id %}">
-                                                Editar<span class="float-right"><i class="fas fa-edit" aria-hidden="true"></i></span>
-                                                </a>
-                                            </div>
-                                            <div class="col-6 p-2">
-                                                <a class="btn btn-link btn-block text-center text-uppercase  bg-danger" href="#">
-                                                Eliminar<span class="float-right"><i class="fas fa-times-circle" aria-hidden="true"></i></span>
-                                                </a>
-                                            </div>
-                                   </div>
-                            {% endwith %}
-                        {% endfor %}
-                      </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row mx-3 mx-md-0 px-1 col-md-5 d-none d-md-block text-center shadow">
-        {% for items in items.values %}
-            {% if forloop.counter <= 3 %}
-                {% for item in items %}
-                    {% if forloop.counter == 1 %}
-                    {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
-                    <div class="col-12 mx-0 col-md-12 my-1 px-0 ">
-                        <img src="{{item.photo.url}}" class="img-fluid rounded">
-                    </div>
-                    {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
+<div id="menuEditable">
+{% include "chunks/edit_menu.html" %}
 </div>
 {% endblock %}
 
@@ -179,8 +81,8 @@
 <script>
     $(".collapse").each(function (){
         $(this).on('shown.bs.collapse', function () {
-            let title = $(this).prev().find("button").find("span").last();
-            let icon = $(this).prev().find("button").find("i");
+            let title = $(this).prev().find(".btn-block").find("span").last();
+            let icon = $(this).prev().find(".btn-block").last().find("i");
             icon.removeClass("fa-caret-down");
             icon.addClass("fa-caret-up");
             title.html("<small>cerrar</small>");
@@ -189,49 +91,139 @@
             }, 'slow');
         })
         $(this).on('show.bs.collapse', function () {
-            let title = $(this).prev().find("button").find("span").last();
-            let icon = $(this).prev().find("button").find("i");
+            let title = $(this).prev().find(".btn-block").find("span").last();
+            let icon = $(this).prev().find(".btn-block").last().find("i");
             icon.removeClass("fa-caret-down");
             icon.addClass("fa-caret-up");
             title.html("<small>cerrar</small>");
         })
          $(this).on('hide.bs.collapse', function () {
-            let title = $(this).prev().find("button").find("span").last();
-            let icon = $(this).prev().find("button").find("i");
+            let title = $(this).prev().find(".btn-block").find("span").last();
+            let icon = $(this).prev().find(".btn-block").last().find("i");
             icon.removeClass("fa-caret-up");
             icon.addClass("fa-caret-down")
             title.html("<small>&nbsp;abrir&nbsp;</small>");
         })
     })
-    /*
-    $(".btn-link").click( function () {
-        let title = $(this).find("span").last();
-        let icon = $(this).find("i");
-        if (icon.hasClass("fa-caret-down")) {
-            icon.removeClass("fa-caret-down");
-            icon.addClass("fa-caret-up");
-            title.html("<small>cerrar</small>");
-        } else {
-            icon.removeClass("fa-caret-up");
-            icon.addClass("fa-caret-down")
-            title.html("<small>abrir</small>");
-        }
-    });
-    */
-    function checkQty (){
-        $(".addRemoveButtons :input[type=number]").each( function () {
-            if ($(this).val() < 1){
-               $(this).parent().next().show();
-               $(this).parent().hide();
-               $(this).parent().parent().parent().find('span').hide();
-            } else {
-               $(this).parent().next().hide();
-               $(this).parent().show();
-               $(this).parent().parent().parent().find('span').show();
 
-            }
-        });
+    function createCategory(method){
+        let url = "{% url 'menu:category-create' %}";
+        if(method == 'get'){
+            $.ajax({
+                method: method,
+                url: url,
+                success: function(data){
+                    let div = document.getElementById('modalBody1');
+                    div.innerHTML = data;
+                    $('#modal1').modal('show');
+                }
+            });
+        } else{
+            let menuId = {{menu.id}};
+            let menuOwner = {{menu.owner.id}};
+            let form = $("#formCat").serialize() + "&menu_id=" + menuId + "&menu_owner=" + menuOwner;
+            console.log(form);
+            $.ajax({
+                method: method,
+                url: url,
+                data: form,
+                success: function(data){
+                console.log(data);
+                    if(data.includes("menu-content")){
+                        $('#modal1').modal('hide');
+                        confirmationMsg('Categoria creada exitosamente');
+                        let div = document.getElementById('menuEditable');
+                        div.innerHTML = data;
+                    } else {
+                        let div = document.getElementById('modalBody1');
+                        div.innerHTML = data;
+                    }
+                }
+            });
+        }
     }
-    checkQty();
+    function editCategory(id, method){
+        let url = "{% url 'menu:category-update' 123 %}".replace(/123/, id);
+        if(method == 'get'){
+            $.ajax({
+                method: method,
+                url: url,
+                success: function(data){
+                    let div = document.getElementById('modalBody1');
+                    div.innerHTML = data;
+                    $('#modal1').modal('show');
+                }
+            });
+        } else{
+            let menuId = {{menu.id}};
+            let form = $("#formCat").serialize() + "&menu_id=" + menuId;
+            $.ajax({
+                method: method,
+                url: url,
+                data: form,
+                success: function(data){
+                    if(data.id){
+                        $(data.id).hide().html(data.name).fadeIn('fast');
+                        $('#modal1').modal('hide')
+                        confirmationMsg('Categoria actualizada exitosamente');
+                    } else if (data.includes("menu-content")) {
+                        $('#modal1').modal('hide')
+                        confirmationMsg('Categoria actualizada exitosamente');
+                        let div = document.getElementById('menuEditable');
+                        div.innerHTML = data;
+                    } else{
+                        let div = document.getElementById('modalBody1');
+                        div.innerHTML = data;
+                    }
+                }
+            });
+        }
+    }
+    function deleteCategory(id){
+        let menuId = {{menu.id}};
+        let url = "{% url 'menu:category-delete' 123 %}".replace(/123/, id);
+        Swal.fire({
+          title: 'Eliminar Categoria?',
+          text: "todos los productos que esten en la ctegoria seran eliminados permanentemente",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#192242',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, borrar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: 'post',
+                    data:{menu_id:menuId},
+                    url: url,
+                    success: function(data){
+                        if( data.id){
+                            confirmationMsg('Categoria eliminada exitosamente');
+                            $(data.id).remove()
+                        } else{
+                            errorMsg(data.msg);
+                        }
+                    }
+                });
+            }
+        })
+    }
+    function confirmationMsg(title){
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: title,
+          showConfirmButton: false,
+          timer: 2000
+        })
+    }
+    function errorMsg(title){
+        Swal.fire({
+          icon: 'error',
+          title: title,
+          showConfirmButton: true,
+        })
+    }
 </script>
 {% endblock %}

@@ -40,6 +40,19 @@ class Menu(models.Model):
         super(Menu, self).save(*args, **kwargs)
 
 
+class MenuAnalytic(models.Model):
+    """Database model for menu analytics"""
+    menu = models.ForeignKey('Menu',
+                             on_delete=models.CASCADE,
+                             verbose_name=_('menu'),
+                             related_name='analytics'
+                             )
+    visit = models.PositiveIntegerField(_('visits'), default=0)
+
+    def __str__(self):
+        return f'Analytics for {self.menu}'
+
+
 class Item(models.Model):
     """Database model for items"""
     menu = models.ForeignKey('Menu',
@@ -54,7 +67,7 @@ class Item(models.Model):
                                  )
     name = models.CharField(_('name'), max_length=30)
     ingredients = models.CharField(_('ingredients'), max_length=511, blank=True)
-    description = models.CharField(_('description'), max_length=255, null=True, blank=True)
+    notes = models.CharField(_('notes'), max_length=255, null=True, blank=True)
     photo = models.ImageField(_('photo'), default="images/default/no_photo.png")
     upload_code = models.PositiveIntegerField(_('upload code'), default=0, null=True)
 

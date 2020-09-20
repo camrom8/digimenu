@@ -8,7 +8,7 @@ admin.site.register(models.Menu)
 admin.site.register(models.Establishment)
 admin.site.register(models.ProductInCart)
 admin.site.register(models.Quantity)
-
+admin.site.register(models.MenuAnalytic)
 
 @admin.register(models.AddsOn)
 class AddsOnAdmin(admin.ModelAdmin):

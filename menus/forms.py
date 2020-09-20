@@ -36,15 +36,28 @@ class ItemForm(forms.ModelForm):
         self.fields['menu'].empty_label = gettext('Select menu')
         # self.fields['category'].empty_label = gettext('Select category')
         self.fields['ingredients'].widget.attrs['placeholder'] = gettext('optional')
-        self.fields['description'].widget.attrs['placeholder'] = gettext('optional')
+        self.fields['notes'].widget.attrs['placeholder'] = gettext('optional')
         self.fields['ingredients'].required = False
-        self.fields['description'].required = False
+        self.fields['notes'].required = False
 
     class Meta:
         model = Item
         fields = ['menu', 'category', 'name',
-                  'ingredients', 'description', 'photo',
+                  'ingredients', 'notes', 'photo',
                   ]
+
+#
+# class CategoryEditForm(forms.ModelForm):
+#     """Form for editing category"""
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for field in self.fields:
+#             self.fields[field].widget.attrs['class'] = "form-control"
+#         self.fields['name'].label = _('name')
+#     class Meta:
+#         model = Category
+#         fields = ['name', ]
 
 
 class CategoryForm(forms.ModelForm):
@@ -54,10 +67,11 @@ class CategoryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = "form-control"
+        self.fields['name'].label = _('name')
 
     class Meta:
         model = Category
-        fields = ['name', ]
+        fields = ['name', 'position']
 
 
 class EstablishmentForm(forms.ModelForm):

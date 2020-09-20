@@ -3,18 +3,19 @@ import io
 import time
 import unidecode
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView, UpdateView
+from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView, UpdateView, DeleteView
 
 from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm, \
     SizeUploadForm
-from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity
+from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity, MenuAnalytic
 from django.utils.translation import gettext_lazy as _
 
 
@@ -95,8 +96,8 @@ class ItemUpdate(UpdateView):
             item = form.save()
             prices.instance = item
             prices.save()
-            return super(ItemCreate, self).form_valid(form)
-        return super(ItemCreate, self).form_invalid(form)
+            return super(ItemUpdate, self).form_valid(form)
+        return super(ItemUpdate, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
         """Add price inline form"""
@@ -109,7 +110,7 @@ class ItemUpdate(UpdateView):
         return context
 
     def get_form_kwargs(self):
-        kwargs = super(ItemCreate, self).get_form_kwargs()
+        kwargs = super(ItemUpdate, self).get_form_kwargs()
         kwargs['owner'] = self.request.user
         return kwargs
 
@@ -118,7 +119,66 @@ class CategoryCreate(CreateView):
     """View to create Category"""
     model = Category
     form_class = CategoryForm
-    template_name = "chunks/category_create.html"
+    template_name = "chunks/category_crud.html"
+    success_url = reverse_lazy('menu:edit')
+
+    def post(self, request, *args, **kwargs):
+        self.menu = Menu.objects.get(id=request.POST['menu_id'])
+        self.owner = get_user_model().objects.get(id=request.POST['menu_owner'])
+        return super(CategoryCreate, self).post(self, request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.owner = self.owner
+        self.object.menu = self.menu
+        self.object.save()
+        return redirect(reverse('menu:edit-partial', kwargs={'title_slug': self.menu.title_slug, 'partial': 1}))
+
+
+class CategoryUpdate(UpdateView):
+    """View to create Category"""
+    model = Category
+    form_class = CategoryForm
+    template_name = "chunks/category_crud.html"
+
+    def post(self, request, *args, **kwargs):
+        self.menu = Menu.objects.get(id=request.POST['menu_id'])
+        print(self.menu)
+        return super(CategoryUpdate, self).post(self, request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Add price inline form"""
+        context = super().get_context_data(**kwargs)
+        context['id'] = self.object.id
+        return context
+
+    def form_valid(self, form):
+        position = Category.objects.get(id=self.object.id).position
+        print(position)
+        print(form.cleaned_data['position'])
+        if position != form.cleaned_data['position']:
+            self.object = form.save()
+            return redirect(reverse('menu:edit-partial', kwargs={'title_slug': self.menu.title_slug, 'partial': 1}))
+        self.object = form.save()
+        divId = '#cat' + str(self.object.id)
+        return JsonResponse({'id': divId, 'name': self.object.name})
+
+
+class CategoryDelete(DeleteView):
+    model = Category
+
+    def delete(self, request, *args, **kwargs):
+        menu = Menu.objects.get(id=request.POST['menu_id'])
+        category = self.get_object()
+        cat_id = category.id
+        # cat_name = category.name
+        category.delete()
+        if Category.objects.filter(id=cat_id).exists():
+            return JsonResponse({'msg': 'error. por favor intentelo de nuevo'})
+        else:
+            divId = '.cat-' + str(cat_id)
+            return JsonResponse({'id': divId})
+            # return redirect(reverse('menu:edit-partial', kwargs={'title_slug': menu.title_slug, 'partial': 1}))
 
 
 class EstablishmentCreate(CreateView):
@@ -141,7 +201,6 @@ class MenuDetails(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        map_url2 = ""
         cart = Cart(request)
         for item in cart:
             if item['product'].price.item.menu != self.get_object():
@@ -161,13 +220,12 @@ class MenuDetails(DetailView):
         context['map_url'] = map_url
         if map_url2:
             context['map_url2'] = map_url2
-        return self.render_to_response(context)
+        return super(MenuDetails, self).get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
-        categories_id = self.object.items.values_list('category_id', flat=True).distinct('category')
-        categories = Category.objects.filter(id__in=categories_id)
+        categories = self.object.categories.all()
         context['items'] = {}
         for category in categories:
             context['items'][category.name] = \
@@ -195,17 +253,42 @@ class MenuEditDetails(DetailView):
     slug_url_kwarg = 'title_slug'
     slug_field = 'title_slug'
 
+    def get(self, request, *args, **kwargs):
+        self.partial = self.kwargs.get('partial', None)
+        return super(MenuEditDetails, self).get(self, request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
-        categories_id = self.object.items.values_list('category_id', flat=True).distinct('category')
-        categories = Category.objects.filter(id__in=categories_id)
+        categories = self.object.categories.all()
         context['items'] = {}
         for category in categories:
             context['items'][category.name] = \
-                [item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')]
+                [[item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')],
+                 category.id]
         return context
 
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs.setdefault('content_type', self.content_type)
+        template_name = self.get_template_names()
+        if self.partial:
+            template_name = "chunks/edit_menu.html"
+        return self.response_class(
+            request=self.request,
+            template=template_name,
+            context=context,
+            using=self.template_engine,
+            **response_kwargs
+        )
+
+@csrf_exempt
+def menu_access_count(request):
+    menu_id = int(request.POST['menu_id'])
+    print(menu_id)
+    analitics, _ = MenuAnalytic.objects.get_or_create(menu_id=menu_id)
+    analitics.visit += 1
+    analitics.save()
+    return JsonResponse({'msg': 1})
 
 @csrf_exempt
 def item_prices_get(request, item_id):
@@ -344,14 +427,14 @@ def menu_upload(request):
                     # create item
                     category = Category.objects.get(id=column[2])
                     item, _ = Item.objects.get_or_create(upload_code=column[0], menu=menu, category=category,
-                                                         name=column[3], ingredients=ingredients, description=column[5]
+                                                         name=column[3], ingredients=ingredients, notes=column[5]
                                                          )
                 else:
                     # get item
                     item = Item.objects.get(upload_code=column[0], menu=menu)
                     # update item
                     item.__dict__.update(menu__id=column[1], category=column[2], name=column[3],
-                                         ingredients=ingredients)
+                                         ingredients=ingredients, notes=column[5])
                     item.save()
 
                 item.save()

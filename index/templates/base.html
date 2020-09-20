@@ -165,18 +165,30 @@
         </div>
         {% endwith %}
     </div>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js">
     </script>
     <script>
         // create cookies for each page to show welcome message only once
          $(document).ready(function() {
+             let menuId = {{menu.id}};
+             console.log(menuId)
              if ($.cookie('pop') == null) {
                  $("#modalWelcome").modal('show')
                  let path = window.location.pathname;
                  let date = new Date();
-                 let minutes = 20;
+                 let minutes = 30;
                  date.setTime(date.getTime() + (minutes * 60 * 1000));
-                 $.cookie("pop", "welcome", { path: path, expires: date });
+                 $.cookie("pop", "welcome", { path: path, expires: date, secure: true });
+                 if (menuId){
+                    $.ajax({
+                        type: "post",
+                        url: "{% url 'menu:count' %}",
+                        data: {'menu_id':menuId},
+                        success: function(data) {
+                         console.log("count visit");
+                        }
+                    });
+                 }
              }
          });
 
