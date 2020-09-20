@@ -362,12 +362,12 @@
                     //console.log(data.list + "sizes")
                     //console.log(data.id + "1size")
                     // check if there are different sizes
-                    let inputType = 'radio';
-                    if(Object.keys(data.list).length > 3){
-                       inputType = 'select';
-                    }
 
                     if (data.list) {
+                        let inputType = 'radio';
+                        if(Object.keys(data.list).length > 3){
+                           inputType = 'select';
+                        }
                         (async () => {
                             const { value: item_id } = await Swal.fire({
                                 title: data.msg,
