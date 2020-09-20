@@ -143,7 +143,6 @@ class CategoryUpdate(UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.menu = Menu.objects.get(id=request.POST['menu_id'])
-        print(self.menu)
         return super(CategoryUpdate, self).post(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -154,8 +153,6 @@ class CategoryUpdate(UpdateView):
 
     def form_valid(self, form):
         position = Category.objects.get(id=self.object.id).position
-        print(position)
-        print(form.cleaned_data['position'])
         if position != form.cleaned_data['position']:
             self.object = form.save()
             return redirect(reverse('menu:edit-partial', kwargs={'title_slug': self.menu.title_slug, 'partial': 1}))
@@ -216,11 +213,10 @@ class MenuDetails(DetailView):
             map_url2 = f'href="http://maps.apple.com/maps?saddr=Current%20Location&daddr={str(self.object.lat)},{str(self.object.lng)}'
         else:
             map_url = f'https://www.google.com/maps/search/?api=1&query={str(self.object.lat)},{str(self.object.lng)}&query_place_id={self.object.subtitle}'
-
         context['map_url'] = map_url
         if map_url2:
             context['map_url2'] = map_url2
-        return super(MenuDetails, self).get(self, request, *args, **kwargs)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         """get categories in the context data"""
@@ -284,7 +280,6 @@ class MenuEditDetails(DetailView):
 @csrf_exempt
 def menu_access_count(request):
     menu_id = int(request.POST['menu_id'])
-    print(menu_id)
     analitics, _ = MenuAnalytic.objects.get_or_create(menu_id=menu_id)
     analitics.visit += 1
     analitics.save()
@@ -484,7 +479,6 @@ def add_ons_upload(request):
     template = 'uploads/add_ons.html'
     if request.method == 'POST':
         form = SizeUploadForm(request.POST or None, request.FILES or None)
-        print(form.is_valid())
         if form.is_valid():
             # get form data
             csv_file = form.cleaned_data['csv_file']
