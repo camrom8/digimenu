@@ -4,7 +4,7 @@ from django.utils.translation import gettext
 
 from menus.helpers.functions import to_currency
 
-CHOICES_TIP = [(i, to_currency(i)) for i in range(1000, 20000, 1000)]
+CHOICES_TIP = [(i, to_currency(i)) for i in range(0, 20000, 1000)]
 
 class DetailsForm(forms.Form):
     def __init__(self, *args, **kwargs):
