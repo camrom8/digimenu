@@ -46,19 +46,6 @@ class ItemForm(forms.ModelForm):
                   'ingredients', 'notes', 'photo',
                   ]
 
-#
-# class CategoryEditForm(forms.ModelForm):
-#     """Form for editing category"""
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         for field in self.fields:
-#             self.fields[field].widget.attrs['class'] = "form-control"
-#         self.fields['name'].label = _('name')
-#     class Meta:
-#         model = Category
-#         fields = ['name', ]
-
 
 class CategoryForm(forms.ModelForm):
     """Form for creating and editing category"""
@@ -97,10 +84,7 @@ class PriceForm(forms.ModelForm):
 
     class Meta:
         model = Price
-        widgets = {
-            'price': forms.HiddenInput(),
-        }
-        fields = ['price', 'price_str', 'size', ]
+        fields = ['price', 'price_str', 'size']
 
 
 ItemPriceFormSet = inlineformset_factory(Item,
@@ -108,6 +92,13 @@ ItemPriceFormSet = inlineformset_factory(Item,
                                          form=PriceForm,
                                          extra=1
                                          )
+
+ItemPriceFormSet2 = inlineformset_factory(Item,
+                                          Price,
+                                          form=PriceForm,
+                                          extra=0,
+                                          can_delete=True,
+                                          )
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(-1, 21)]
 
@@ -125,4 +116,3 @@ class MenuUploadForm(forms.Form):
 
 class SizeUploadForm(forms.Form):
     csv_file = forms.FileField(label=_('csv file'))
-

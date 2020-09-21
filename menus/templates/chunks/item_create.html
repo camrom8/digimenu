@@ -56,9 +56,9 @@
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text bg-primary text-light">{{form.description.label}}</span>
+                    <span class="input-group-text bg-primary text-light">{{form.notes.label}}</span>
                 </div>
-                {{form.description}}
+                {{form.notes}}
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -79,6 +79,8 @@
             {{ price.management_form }}
                 {% for form in price %}
                     <div class="row price-row border rounded bg-white p-3 m-1">
+                        {{form.id}}
+                        {{form.DELETE}}
                         <div class="col-12 input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-primary text-light">{{form.size.label}}</span>
@@ -93,11 +95,27 @@
                             {{form.price_str}}
                         </div>
                         <div class="row col-12 buttons">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-block btn-secondary text-primary add-form-row">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
+                             {% if 'item_create' in  request.path %}
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-primary text-white add-form-row">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                 <div class="col-6">
+                                     {% if forloop.last %}
+                                        <button type="button" class="btn btn-block btn-primary text-white add-form-row">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                     {% endif %}
+                                </div>
+                                 <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-outline-danger remove-form-row">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
@@ -133,11 +151,13 @@ $(document).ready(function() {
         let newEl = $(selector).clone(true);
         let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
         console.log(total)
+        newEl.show();
         newEl.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each( function(){
             let name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + (total) + '-');
             console.log(name)
             let id = 'id_' + name;
             $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            $(this).prop('checked', false)
         });
         newEl.find('label').each(function () {
             let forVal = $(this).attr('for');
@@ -152,22 +172,25 @@ $(document).ready(function() {
         let lastRow = $('.price-row:last > .buttons');
 
         // add remove button if it is the 2nd form
-        if (!lastRow.has('.remove-form-row').length)
+        if (!lastRow.has('.remove-form-row').length){
             lastRow.append('<div class="col-6">\
                                 <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
                                 <i class="fas fa-minus"></i></button>\
                             </div>');
-
-        //add remove button to first
+        }
+        if (!lastRow.has('.add-form-row').length)
+            lastRow.find('div:first').append('<button type="button" \
+                                                        class="btn btn-block btn-primary add-form-row">\
+                                                        <i class="fas fa-plus"></i></button>');
+        //adds remove button to first
         let firstRow = $('.price-row:first > .buttons');
         if (!firstRow.has('.remove-form-row').length)
             firstRow.append('<div class="col-6">\
                                 <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
                                 <i class="fas fa-minus"></i></button>\
                             </div>');
-
         let conditionRow = $('.price-row:not(:last)');
-         conditionRow.find('.btn.add-form-row').remove()
+        conditionRow.find('.btn.add-form-row').remove()
 
         return false;
     }
@@ -175,20 +198,32 @@ $(document).ready(function() {
     function deleteForm(prefix, btn) {
         let total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
         if (total >1) {
-            btn.closest('.price-row') .removeClass("price-row").remove()
-            let forms = $('.price-row');
-            for( var i=0, formCount=forms.length; i<formCount; i++) {
-                $(forms.get(i)).find(':input').each( function() {
-                    updateFieldIndex(this, prefix, i);
-                });
-            };
-            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-            let lastRow = $('.price-row:last > .buttons');
-            if ($('#id_' + prefix + '-TOTAL_FORMS').val() === "1") {
-                $('.price-row:last > .buttons > div:last').remove()
+            let forms = "";
+            console.log("id")
+            console.log(btn.closest('.price-row').find("input:first").attr('id').split('-')[1])
+            let id_form = btn.closest('.price-row').find("input:first").attr('id').split('-')[1];
+            if ( id_form < $('#id_' + prefix + '-INITIAL_FORMS').val() ){
+                console.log('original');
+                $("#id_prices-" + id_form + "-DELETE").prop('checked', true)
+                btn.closest('.price-row').hide();
+                forms = $('.price-row:visible');
+            } else{
+                btn.closest('.price-row').removeClass("price-row").remove()
+                forms = $('.price-row');
+                for( var i=0, formCount=forms.length; i<formCount; i++) {
+                    $(forms.get(i)).find(':input').each( function() {
+                        updateFieldIndex(this, prefix, i);
+                    });
+                };
+                $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            }
+            let lastRow = $('.price-row:visible:last > .buttons');
+            console.log($('.price-row:visible').length)
+            if ($('.price-row:visible').length === 1) {
+                $('.price-row:visible:last > .buttons > div:last').remove()
             }
             if (!lastRow.has('.add-form-row').length)
-            $('.price-row:last > .buttons > div:first').append('<button type="button" \
+            lastRow.find('div:first').append('<button type="button" \
                                                         class="btn btn-block btn-primary add-form-row">\
                                                         <i class="fas fa-plus"></i></button>');
         }
@@ -260,6 +295,7 @@ $(document).ready(function() {
       	}, 200);
     }
 
+    $('#id_prices-TOTAL_FORMS').val($('#id_prices-INITIAL_FORMS').val() == 0 ? 1 : $('#id_prices-INITIAL_FORMS').val() )
 });
 </script>
 {% endblock %}

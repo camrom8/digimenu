@@ -163,6 +163,7 @@
                 </button>
             </div>
         </div>
+        <input id="menuId" value="{{menu.id}}" hidden>
         {% endwith %}
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js">
@@ -170,11 +171,10 @@
     <script>
         // create cookies for each page to show welcome message only once
          $(document).ready(function() {
-             let menuId = {{menu.id}};
-             console.log(menuId)
              if ($.cookie('pop') == null) {
                  $("#modalWelcome").modal('show')
                  let path = window.location.pathname;
+                 let menuId = $('#menuId').val();
                  let date = new Date();
                  let minutes = 30;
                  date.setTime(date.getTime() + (minutes * 60 * 1000));

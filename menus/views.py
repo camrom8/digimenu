@@ -1,6 +1,5 @@
 import csv
 import io
-import time
 import unidecode
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -8,13 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.views.generic import CreateView, ListView, TemplateView, DetailView, FormView, UpdateView, DeleteView
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, ListView, TemplateView, DetailView, UpdateView, DeleteView
 
 from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm, \
-    SizeUploadForm
+    SizeUploadForm, ItemPriceFormSet2
 from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity, MenuAnalytic
 from django.utils.translation import gettext_lazy as _
 
@@ -86,16 +84,14 @@ class ItemUpdate(UpdateView):
     model = Item
     form_class = ItemForm
     template_name = "chunks/item_create.html"
-    success_url = reverse_lazy('menu:edit')
+    success_url = reverse_lazy('menu:upload')
 
     def form_valid(self, form):
         """valid the other 2 forms, location and property details"""
         context = self.get_context_data()
-        prices = context['price']
-        if prices.is_valid():
-            item = form.save()
-            prices.instance = item
-            prices.save()
+        prices_form = context['price']
+        if prices_form.is_valid():
+            prices_form.save()
             return super(ItemUpdate, self).form_valid(form)
         return super(ItemUpdate, self).form_invalid(form)
 
@@ -103,9 +99,9 @@ class ItemUpdate(UpdateView):
         """Add price inline form"""
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['price'] = ItemPriceFormSet(self.request.POST)
+            context['price'] = ItemPriceFormSet2(self.request.POST, instance=self.object)
         else:
-            context['price'] = ItemPriceFormSet()
+            context['price'] = ItemPriceFormSet2(instance=self.object)
 
         return context
 
