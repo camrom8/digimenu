@@ -277,7 +277,7 @@ class MenuDetails(DetailView):
                     cart.clear()
                     break
             except KeyError:
-                pass
+                cart.clear()
 
         context = self.get_context_data(object=self.object)
         map_url2 = ""
