@@ -268,12 +268,17 @@ class MenuDetails(DetailView):
         self.object = self.get_object()
         cart = Cart(request)
         for item in cart:
-            if item['product'].price.item.menu != self.get_object():
-                keys = request.session['cart'].keys()
-                for item in ProductInCart.objects.filter(id__in=keys):
-                    item.delete()
-                cart.clear()
-                break
+            try:
+                menu = item['product'].price.item.menu
+                if menu != self.get_object():
+                    keys = request.session['cart'].keys()
+                    for item in ProductInCart.objects.filter(id__in=keys):
+                        item.delete()
+                    cart.clear()
+                    break
+            except KeyError:
+                pass
+
         context = self.get_context_data(object=self.object)
         map_url2 = ""
         if "iPhone" in request.META['HTTP_USER_AGENT'] or "iPad" in request.META['HTTP_USER_AGENT']:
@@ -320,7 +325,6 @@ class MenuEditDetails(DetailView):
     slug_field = 'title_slug'
 
     def get(self, request, *args, **kwargs):
-        print(request.user.is_superuser)
         if request.user != self.get_object().owner and not request.user.is_superuser:
             return redirect(reverse_lazy('account:login'))
         self.partial = self.kwargs.get('partial', None)

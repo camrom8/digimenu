@@ -28,7 +28,8 @@ SIZES = [
     (MEDIANA, _('Mediana')),
     (FAMILIAR, _('Familiar')),
     (SHOT, _('Shot')),
-    (SHOT, _('Media')),
+    (MEDIA, _('Media')),
+    (BOTELLA, _('Botella')),
     (T50CM, _('50cm')),
     (T30CM, _('30cm')),
 ]
