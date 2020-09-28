@@ -11,6 +11,7 @@ admin.site.register(models.Quantity)
 admin.site.register(models.MenuAnalytic)
 admin.site.register(models.MenuAdvertising)
 
+
 @admin.register(models.AddsOn)
 class AddsOnAdmin(admin.ModelAdmin):
     list_display = ('name', 'price_str', 'price')
@@ -23,19 +24,23 @@ class PriceAdmin(admin.ModelAdmin):
     list_editable = ('price_str', 'price', 'choice', 'half')
     search_fields = ['item__name']
 
+
 @admin.register(models.Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'menu', 'photo')
     search_fields = ['name']
+
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'menu', 'position')
     search_fields = ['name']
 
+
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):
         return pprint.pformat(obj.get_decoded()).replace('\n', '<br>\n')
+
     _session_data.allow_tags = True
     list_display = ['session_key', '_session_data', 'expire_date']
     readonly_fields = ['_session_data']
