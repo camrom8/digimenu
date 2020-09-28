@@ -60,8 +60,8 @@ class MenuAdvertising(models.Model):
                              related_name='ads'
                              )
     photo = models.ImageField(_('photo'), default="images/default/no_photo.png")
-    title = models.CharField(_('title'), max_length=30, null=True)
-    description = models.CharField(_('description'), max_length=60, null=True)
+    title = models.CharField(_('title'), max_length=30, null=True, blank=True)
+    description = models.CharField(_('description'), max_length=60, null=True, blank=True)
 
 
 class Item(models.Model):

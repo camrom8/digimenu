@@ -359,6 +359,9 @@ class MenuEditDetails(DetailView):
             **response_kwargs
         )
 
+class AdCreate(CreateView):
+    model = MenuAdvertising
+    form_class = AdForm
 
 class AdUpdate(UpdateView):
     model = MenuAdvertising
