@@ -53,13 +53,11 @@
                    <div class="col-12 px-3 text-left ingredients d-block d-sm-none">
                     {{item.ingredients}}
                     </div>
-                    {%if not item.menu.title_slug == 'cielobistro' %}
-                        {%if not item.category.name  == 'Fuertes' %}
-                            <div class="col-12 my-0 bg-light rounded">
-                                <p class="my-0">con ensalada de la casa y un acompañamiento de su elección</p>
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                {% if item.notes%}
+                   <div class="col-12 px-3 text-left ingredients bg-light text-dark">
+                    {{item.notes}}
+                   </div>
+                {% endif %}
                 </div>
         {% else %}
             {%if item.menu.title_slug == 'cielobistro' %}

@@ -187,8 +187,8 @@
     function deleteCategory(id){
         let url = "{% url 'menu:category-delete' 123 %}".replace(/123/, id);
         Swal.fire({
-          title: 'Eliminar Categoria?',
-          text: "todos los productos que esten en la ctegoria seran eliminados permanentemente",
+          title: 'Eliminar Categoría?',
+          text: "todos los productos que esten en la categoría seran eliminados permanentemente",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#192242',
