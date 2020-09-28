@@ -42,9 +42,9 @@ CHACHOS = "menus/losChachos.html"
 XLARGE4 = "menus/details7.html"
 XLARGE5 = "menus/details8.html"
 XLARGE6 = "menus/details9.html"
-STANDARD = "menus/details10.html"
-STANDARD2 = "menus/details11.html"
-STANDARD3 = "menus/details12.html"
+PORTICO = "menus/portico.html"
+MARGARITA = "menus/margarita.html"
+CIELOBISTRO = "menus/cieloBistro.html"
 PORTO1 = "menus/portoAlto1.html"
 PORTO2 = "menus/portoAlto2.html"
 
@@ -55,13 +55,13 @@ TEMPLATES = [
     (FULL, _('large')),
     (XLARGE, _('X-large')),
     (XLARGE2, _('X-large 2')),
-    (CHACHOS, _('Los_chachos')),
+    (CHACHOS, _('Los Chachos')),
     (XLARGE4, _('Don_pedrito')),
     (XLARGE5, _('Margarita')),
-    (XLARGE6, _('Portico')),
-    (STANDARD, _('Portico_2')),
-    (STANDARD2, _('Margarita_2')),
-    (STANDARD3, _('Cielo_bistro')),
+    (XLARGE6, _('Portico OLD')),
+    (PORTICO, _('Portico')),
+    (MARGARITA, _('Pizza Margarita')),
+    (CIELOBISTRO, _('Cielo Bistro')),
     (PORTO1, _('Porto 1')),
     (PORTO2, _('Porto 2')),
 ]

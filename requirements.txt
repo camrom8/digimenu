@@ -12,3 +12,4 @@ django-rosetta==0.9.4
 django-storages==1.9.1
 boto3==1.11.12
 Unidecode==1.1.1
+django-cleanup==5.1.0

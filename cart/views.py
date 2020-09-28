@@ -1,16 +1,14 @@
 import json
 
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from menus.helpers.functions import whatsapp_url, to_currency
-from menus.models import Item, Price, ProductInCart
+from menus.models import ProductInCart
 from .cart import Cart
-from menus.forms import CartAddProduct
 from django.utils.translation import gettext_lazy as _
-from time import time
 from django.views.generic import View
 
 from .forms import DetailsForm
@@ -34,14 +32,12 @@ def cart_add(request, item_id):
              quantity=quantity,
              )
     return JsonResponse({'qty': quantity})
-    # return JsonResponse({'error': 'there was an error'})
 
 
 @csrf_exempt
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(ProductInCart, id=product_id)
-    # print('here')
     cart.remove(product)
     return JsonResponse({'msg': 'Product Removed', 'id': str(product.price.item.id), })
 
@@ -69,18 +65,18 @@ def cart_detail(request):
             order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "
         if not phone:
             phone = item['product'].price.item.menu.owner.profile.phone
-    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente:%0A" + order[
-                                                                                      :-2] + f" Total: ${cart.get_total_price()}"
-    # print(order)
+    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente:%0A" +\
+                order[:-2] + f" Total: ${cart.get_total_price()}"
     wurl = whatsapp_url(order, str(phone))
-    # print(wurl)
     return render(request, 'cart/detail.html', {'cart': cart, 'wurl': wurl})
 
 
 class DeliveryDetails(View):
     def get(self, request):
         form = DetailsForm()
-        return render(request, 'cart/delivery.html', {'form': form, })
+        cart = Cart(request)
+        total = cart.get_total_price()
+        return render(request, 'cart/delivery.html', {'form': form, 'total': total })
 
     def post(self, request):
         form = DetailsForm(request.POST)
@@ -93,7 +89,7 @@ class DeliveryDetails(View):
             tips = ""
             pickup = form.cleaned_data["pickup"]
             phone = 0
-            tip = int(form.cleaned_data["tip"])
+            tip = int(form.cleaned_data["tip_number"])
             if form.cleaned_data["name"]:
                 name = f'Nombre: {form.cleaned_data["name"]}\n'
             if form.cleaned_data["address"]:

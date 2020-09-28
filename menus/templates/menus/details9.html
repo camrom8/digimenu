@@ -94,120 +94,23 @@
     <div class="accordion col-12 col-md-7" id="accordionMenu">
         {% for category, item in items.items %}
             <div class="card">
-                <div class="card-header px-1" id="heading{{forloop.counter}}">
-                    <button class="btn btn-link btn-block text-center text-uppercase" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                <div class="card-header p-1" id="heading{{id}}">>
+                    <button class="btn btn-link btn-block text-center px-1" type="button" data-toggle="collapse" data-target="#cat{{id}}" aria-expanded="true" aria-controls="cat{{id}}">
                         {{category}} <span class="float-right"><span class="float-right" style="font-size:12px; right:24px; position: relative;"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
-                <div id="collapse{{forloop.counter}}" class="collapse shadow" aria-labelledby="heading{{forloop.counter}}" data-parent="#accordionMenu">
-                      <div class="card-body px-2 pt-2 pr-md-3 pb-1">
-                        {% for item in item %}
-<!--                            {% if forloop.counter == 1 %}-->
-<!--                            {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}-->
-<!--                            <div class="row mx-0 my-1 mb-3 px-1 d-sm-block d-md-none">-->
-<!--                                <img src="{{item.photo.url}}" class="img-fluid rounded">-->
-<!--                            </div>-->
-<!--                            {% endif %}-->
-<!--                            {% endif %}-->
-                            {% with prices=item.prices.all %}
-                                {% if item.photo.url != "/media/images/default/no_photo.png" %}
-                                   <div class="row my-1 p-1 border-bottom dish">
-                                       <div class="col-5 col-md-5">
-                                           <img src="{{item.photo.url}}" class="img-fluid rounded">
-                                       </div>
-                                       <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-start mb-2">
-                                               <h6><strong>{{item.name}}</strong></h6>
-                                           </div>
-                                           <div class="d-flex justify-content-around">
-                                                <div class="d-flex align-items-center px-1 text-left">
-                                                    {% if prices|length > 1%}
-                                                    <h5><small>Desde </small>{{prices.0.price_str}}</h5>
-                                                    {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="px-1 addRemoveButtons">
-                                                    <div class="itemQty input-group input-group-xs px-1 px-lg-2">
-                                                        <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
-                                                        </div>
-                                                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="addButton px-0" style="display:none;">
-                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
-                                                    </div>
-                                                </div>
-                                           </div>
-                                           <div class="col-12 ingredients d-none d-sm-block mt-2 pl-0 pr-2">
-                                            {{item.ingredients}}
-                                            </div>
-                                       </div>
-                                           <div class="col-12 px-3 text-left ingredients d-block d-sm-none ">
-                                            {{item.ingredients}}
-                                            </div>
-                                   </div>
-                                {% else %}
-                                    <div class="row my-1 p-1 border-bottom dish">
-                                       <div class="col-5 col-md-5">
-                                            <h6><strong>{{item.name}}</strong></h6>
-                                       </div>
-                                       <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-around">
-                                                <div class="d-flex align-items-center px-1 text-left">
-                                                    {% if prices|length > 1%}
-                                                    <h5><small>Desde </small>{{prices.0.price_str}}</h5>
-                                                    {% else %}
-                                                    <h5>{{prices.0.price_str}}</h5>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="px-1 addRemoveButtons">
-                                                    <div class="itemQty input-group input-group-xs px-1 px-lg-2">
-                                                        <div class="input-group-prepend">
-                                                            <button class="btn btn-xs px-2 px-sm-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
-                                                        </div>
-                                                            <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
-                                                                   value="{% quantity_in_cart request.session.cart item.id %}" disabled style="max-width:60px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-xs px-2 px-sm-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="addButton px-0" style="display:none;">
-                                                       <button class="btn btn-block px-1 text-white" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
-                                                    </div>
-                                                </div>
-                                           </div>
-                                       </div>
-                                           <div class="col-12 px-3 text-left ingredients">
-                                            {{item.ingredients}}
-                                            </div>
-                                   </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                      </div>
+                <div id="cat{{id}}" class="collapse shadow" aria-labelledby="heading{{id}}" data-parent="#accordionMenu">
+                     <h3>Cargando...</h3>
                 </div>
             </div>
         {% endfor %}
     </div>
-    <div class="row mx-3 mx-md-0 px-1 col-md-5 d-none d-md-block text-center shadow">
-        {% for items in items.values %}
-            {% if forloop.counter <= 3 %}
-                {% for item in items %}
-                    {% if forloop.counter == 1 %}
-                    {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
-                    <div class="col-12 mx-0 col-md-12 my-1 px-0 ">
-                        <img src="{{item.photo.url}}" class="img-fluid rounded">
-                    </div>
-                    {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+    <div class="col-12 col-md-5 align-items-center flex-column shadow">
+    {% for ad in ads %}
+        <div class="text-center">
+            <img src="{{ad.photo.url}}" class="img-fluid rounded" style="max-height:400px;">
+        </div>
+    {% endfor %}
     </div>
 </div>
 {% endblock %}
@@ -226,6 +129,12 @@
             }, 'slow');
         })
         $(this).on('show.bs.collapse', function () {
+            let divId = $(this).attr("id");
+            let id = divId.replace("cat", "");
+            console.log(id);
+            if ($(this).find('.card-body').length < 1){
+                loadItems(parseInt(id));
+            }
             let title = $(this).prev().find("button").find("span").last();
             let icon = $(this).prev().find("button").find("i");
             icon.removeClass("fa-caret-down");
@@ -240,21 +149,22 @@
             title.html("<small>&nbsp;abrir&nbsp;</small>");
         })
     })
-    /*
-    $(".btn-link").click( function () {
-        let title = $(this).find("span").last();
-        let icon = $(this).find("i");
-        if (icon.hasClass("fa-caret-down")) {
-            icon.removeClass("fa-caret-down");
-            icon.addClass("fa-caret-up");
-            title.html("<small>cerrar</small>");
-        } else {
-            icon.removeClass("fa-caret-up");
-            icon.addClass("fa-caret-down")
-            title.html("<small>abrir</small>");
-        }
-    });
-    */
+    function loadItems(id){
+        let items;
+        $.ajax({
+            type: 'get',
+            url: "{% url 'menu:get-items' 123 %}".replace( /123/, id),
+            success: function(data){
+                let div = document.getElementById("cat" + id);
+                div.innerHTML = data;
+                console.log(div);
+                console.log(data);
+                checkQty();
+            }
+        });
+        console.log(items)
+        return items;
+    }
     function checkQty (){
         $(".addRemoveButtons :input[type=number]").each( function () {
             if ($(this).val() < 1){
@@ -269,6 +179,5 @@
             }
         });
     }
-    checkQty();
 </script>
 {% endblock %}

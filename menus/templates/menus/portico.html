@@ -8,12 +8,19 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
         -moz-appearance:textfield;
+    }
+
+    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        background-color: #fff;
+        border: solid 1px #000;
+        font-size: 1.2rem;
+        color: #000;
     }
 
     /* Webkit browsers like Safari and Chrome */
@@ -23,49 +30,38 @@
         margin: 0;
     }
 
-    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
-        background-color: #fff;
-        border: solid 1px #e0cd80; //changes
-        font-size: 2.2rem !important;
-        color: #000;
-    }
-
     hr {
-        background-color: black !important; //changes
+        background-color: #a0705e !important;
     }
 
     .card-header > button{
-        font-family: 'Niconne';
-        font-size: 2.5rem !important;
-        color: black !important;
+        font-family: 'Germania One', cursive;
+        font-size: 2rem !important;
+        color: #3c2316 !important;
     }
 
     .input-group-prepend > button, .input-group-append > button{
-        border: solid 1px #000000;
-        background-image: linear-gradient(#000000, #000000);
-        color: #e0cd80;
-        border: solid 1px #e0cd80; //changes
+        border: solid 1px #613924;
+        //background-color: #be7650;
+        background-image: linear-gradient(#613924, #9e6945);
+        color: white;
     }
-    .input-group-prepend > button:hover, .input-group-append > button:hover{
+    .addButton > button{
+        border: solid 1px #613924;
+        background-image: linear-gradient(#613924, #9e6945);
+        font-family: 'Germania One', cursive;
         color: white;
     }
 
-
-
-    .addButton > button{
-            background-image: linear-gradient(#000000, #000000);
-            color: #e0cd80;
+    .input-group-prepend > button:hover, .input-group-append > button:hover{
+        color: #EAE2A9;
     }
     .addButton > button:hover{
-            background-image: linear-gradient(#000000, #000000);
-            color: white;
+        color: #EAE2A9;
     }
-
     .card-header{
-        background-image: linear-gradient(#EAE2A9, #e0cd80);
-    }
-    .card-header:hover{
-        background-image: linear-gradient(#e0cd80, #e0cd80);
+        background-image: linear-gradient(#EAE2A9, #b3883c);
+        text-transform: uppercase;
     }
 
     .card-body{
@@ -73,53 +69,57 @@
     }
 
     .dish{
-        font-family: 'aleo', serif;
-        color: #00000;
+        font-family: 'Aleo', serif;
+        weight:
+        color: #613924;
     }
     .ingredients{
-        color: black;
+        font-family: 'Aleo', serif;
+        color: #5a5a5a;
     }
     .dish > span{
         position: relative;
         top: -5px !important;
     }
+
     .dropBut {
-        font-size:1.5rem;
-        right:32px;
-        top:-7px;
+        font-size: 1.3rem;
+        right: 30px;
         position: relative;
-        width:50px;
+        top: -7px;
     }
 
-    .info {
-        background-color: black;
-        color: #e0c580;
+   .info {
+        background-image: linear-gradient(#513122, #a37349);
+        color: #ffffff;
         font-weight: 700;
-        font-size: 13px;
     }
     .info > p > a {
         color:white !important;
+    }
+    .main{
+        border-top: 1px solid #513122;
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="d-flex flex-row justify-content-between align-items-center p-1 rounded my-1">
+<div class="d-flex flex-row justify-content-between align-items-center bg-light p-1 rounded my-1">
     <div class="px-1">
-        {% if menu.logo.url %}
-        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="300" width="450">
+        {% if menu.logo.url%}
+            <img src="{{menu.logo.url}}" class="img-fluid rounded" height="300" width="300">
         {% endif%}
     </div>
-    <div class="px-1 rounded info">
+    <div class="p-1 p-sm-2 p-md-3 rounded info">
         <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573213031942"> 321-303-1942 (llamar)</a></p>
-        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> calle 25b # 69-63, Salitre(ver en google maps)</a></p>
+        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573104782643"> 310-478-2643 (llamar)</a></p>
+        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Cra 42 # 21-23 C.C La Querencia (ver en google maps)</a></p>
         {% if map_url2 %}
             <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
         {% endif %}
     </div>
 </div>
-<div class="row border-top pt-2">
+<div class="row main pt-2">
     <div class="accordion col-12 col-md-6 px-1" id="accordionMenu">
         {% for category, id in items.items %}
             <div class="card">

@@ -8,9 +8,8 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Aleo&family=Niconne&display=swap');
     /* For Firefox */
     input[type='number'] {
         -moz-appearance:textfield;
@@ -21,6 +20,21 @@
     input[type=number]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
+    }
+    .card-header{
+        background-image: linear-gradient(#EAE2A9, #e0cd80);
+    }
+    .card-header:hover{
+        background-image: linear-gradient(#e0cd80, #e0cd80);
+    }
+    .card-header > button{
+        font-family: 'Niconne';
+        font-size: 2.5rem !important;
+        color: black !important;
+    }
+
+    .dish{
+        font-family: 'aleo', serif;
     }
 
     .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
@@ -34,48 +48,28 @@
         background-color: black !important; //changes
     }
 
-    .card-header > button{
-        font-family: 'Niconne';
-        font-size: 2.5rem !important;
-        color: black !important;
-    }
-
     .input-group-prepend > button, .input-group-append > button{
         border: solid 1px #000000;
         background-image: linear-gradient(#000000, #000000);
-        color: #e0cd80;
+        color: white;
         border: solid 1px #e0cd80; //changes
     }
     .input-group-prepend > button:hover, .input-group-append > button:hover{
-        color: white;
+        color: #e0cd80;
     }
-
-
-
     .addButton > button{
-            background-image: linear-gradient(#000000, #000000);
-            color: #e0cd80;
-    }
-    .addButton > button:hover{
             background-image: linear-gradient(#000000, #000000);
             color: white;
     }
-
-    .card-header{
-        background-image: linear-gradient(#EAE2A9, #e0cd80);
-    }
-    .card-header:hover{
-        background-image: linear-gradient(#e0cd80, #e0cd80);
+    .addButton > button:hover{
+            background-image: linear-gradient(#000000, #000000);
+            color: #e0cd80;
     }
 
     .card-body{
         background-color: #FFFFFF;
     }
 
-    .dish{
-        font-family: 'aleo', serif;
-        color: #00000;
-    }
     .ingredients{
         color: black;
     }
@@ -95,31 +89,34 @@
         background-color: black;
         color: #e0c580;
         font-weight: 700;
-        font-size: 13px;
     }
     .info > p > a {
         color:white !important;
+    }
+    .carousel-caption{
+        background-color: rgba(192, 192, 192,0.5);
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="d-flex flex-row justify-content-between align-items-center p-1 rounded my-1">
+<div class="d-flex flex-row justify-content-between align-items-center pt-2">
     <div class="px-1">
         {% if menu.logo.url %}
         <img src="{{menu.logo.url}}" class="img-fluid rounded" height="300" width="450">
         {% endif%}
     </div>
     <div class="px-1 rounded info">
-        <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573213031942"> 321-303-1942 (llamar)</a></p>
-        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> calle 25b # 69-63, Salitre(ver en google maps)</a></p>
+        <h6><strong>Contactanos:</strong></h6>
+        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573012583308"> 301-258-3308 (llamar)</a></p>
+        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Calle 16 A # 12-28 Santa Anita (ver en google maps)</a></p>
         {% if map_url2 %}
             <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
         {% endif %}
     </div>
 </div>
-<div class="row border-top pt-2">
+<hr>
+<div class="row">
     <div class="accordion col-12 col-md-6 px-1" id="accordionMenu">
         {% for category, id in items.items %}
             <div class="card">
@@ -142,6 +139,7 @@
         {% include "chunks/carousel_ads.html" %}
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -161,6 +159,7 @@
             let divId = $(this).attr("id");
             let id = divId.replace("cat", "");
             if ($(this).find('.card-body').length < 1){
+                console.log(id)
                 loadItems(parseInt(id));
             }
             let title = $(this).prev().find("button").find("span").last();

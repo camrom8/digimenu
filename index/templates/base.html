@@ -22,6 +22,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <!--    FONT AWESOME-->
     <link href="{% static 'fontawesome-5.13.0/css/all.css' %}" rel='stylesheet'/>
+    <!--    GOOGLE FONTS LOBSTER-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <!--    BASE STYLE-->
     <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
     <!--    BOOTSTRAP-->
@@ -30,9 +32,7 @@
     <script src="{% static 'bootstrap-4.4.1/js/bootstrap.min.js' %}"></script>
     <!--    SWEET ALERT 2-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <!--    GOOGLE FONTS LOBSTER-->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-     <style>
+    <style>
     .welcome {
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -61,13 +61,11 @@
 <!--                </li>-->
 <!--                <li class="nav-item {% if page == 'login' %} active {% endif %}">-->
                     {% if user.is_authenticated %}
-                        <a class="nav-link" href="#">{% trans 'Logout' %}</a>
-                    {% else %}
-                        <a class="nav-link" href="{% url 'account:login' %}">{% trans 'Login' %}</a>
+                        <a class="nav-link" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
                     {% endif %}
 <!--                </li>-->
                 <li class="nav-item mx-1 mt-0 mt-sm-2 mt-md-1">
-                    <a href="https://api.whatsapp.com/send?phone=573162128561&text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20Digimen%C3%BA%20Colombia%20para%20mi%20restaurante,%20ni%20nombre%20es%20"
+                    <a href="https://api.whatsapp.com/send?phone=573112543373&text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20Digimen%C3%BA%20Colombia%20para%20mi%20restaurante,%20ni%20nombre%20es%20"
                        type="button" class="btn px-1 btn-secondary">
                         <strong>{% trans 'Publish a menu' %}</strong>
                     </a>
@@ -227,7 +225,6 @@
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
-                    console.log(data.wupMsg);
                         var win = window.open(data.wupMsg, '_blank');
                         if (win) {
                             //Browser has allowed it to be opened

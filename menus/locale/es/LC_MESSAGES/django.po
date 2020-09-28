@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-03 11:33-0500\n"
-"PO-Revision-Date: 2020-08-27 08:50-0456\n"
+"POT-Creation-Date: 2020-09-28 10:25-0500\n"
+"PO-Revision-Date: 2020-09-28 10:27-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,15 +19,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.4\n"
 
-#: menus/forms.py:36
+#: menus/forms.py:50
+#| msgid "category"
+msgid "Select category"
+msgstr "Seleccione categoría"
+
+#: menus/forms.py:57
 msgid "Select menu"
 msgstr "Selecciona menú"
 
-#: menus/forms.py:38 menus/forms.py:39
+#: menus/forms.py:62 menus/models.py:77
+msgid "category"
+msgstr "categoría"
+
+#: menus/forms.py:65 menus/forms.py:87 menus/models.py:79 menus/models.py:110
+msgid "name"
+msgstr "nombre"
+
+#: menus/forms.py:66
 msgid "optional"
 msgstr "opcional"
 
-#: menus/forms.py:109 menus/forms.py:113
+#: menus/forms.py:67 menus/models.py:26 menus/models.py:64
+msgid "description"
+msgstr "descripción"
+
+#: menus/forms.py:68
+msgid "informacion extra. optional"
+msgstr ""
+
+#: menus/forms.py:69
+msgid "notas"
+msgstr ""
+
+#: menus/forms.py:112
+msgid "size"
+msgstr ""
+
+#: menus/forms.py:113 menus/models.py:124 menus/models.py:149
+msgid "price"
+msgstr "precio"
+
+#: menus/forms.py:148 menus/forms.py:152
 msgid "csv file"
 msgstr ""
 
@@ -40,12 +73,12 @@ msgid "x-Small"
 msgstr "mini"
 
 #: menus/helpers/choices.py:5 menus/helpers/choices.py:22
-#: menus/helpers/choices.py:50
+#: menus/helpers/choices.py:52
 msgid "Small"
 msgstr "Pequeño"
 
 #: menus/helpers/choices.py:6 menus/helpers/choices.py:23
-#: menus/helpers/choices.py:51
+#: menus/helpers/choices.py:53
 msgid "Medium"
 msgstr "Mediano"
 
@@ -105,51 +138,59 @@ msgstr "Extra pequeño"
 msgid "Extra large"
 msgstr "Extra Grande"
 
-#: menus/helpers/choices.py:52
+#: menus/helpers/choices.py:54
 msgid "Medium B"
 msgstr "Mediano b"
 
-#: menus/helpers/choices.py:53
+#: menus/helpers/choices.py:55
 msgid "large"
 msgstr "Grande"
 
-#: menus/helpers/choices.py:54
+#: menus/helpers/choices.py:56
 msgid "X-large"
 msgstr "Super Grande"
 
-#: menus/helpers/choices.py:55
+#: menus/helpers/choices.py:57
 msgid "X-large 2"
 msgstr "Super Grande 2"
 
-#: menus/helpers/choices.py:56
-msgid "Los_chachos"
-msgstr ""
-
-#: menus/helpers/choices.py:57
-msgid "Don_pedrito"
-msgstr ""
-
 #: menus/helpers/choices.py:58
-msgid "Margarita"
+msgid "Los Chachos"
 msgstr ""
 
 #: menus/helpers/choices.py:59
-msgid "Portico"
+msgid "Don_pedrito"
 msgstr ""
 
 #: menus/helpers/choices.py:60
-msgid "Portico_2"
+msgid "Margarita"
 msgstr ""
 
 #: menus/helpers/choices.py:61
-msgid "Margarita_2"
+msgid "Portico OLD"
 msgstr ""
 
 #: menus/helpers/choices.py:62
-msgid "Cielo_bistro"
+msgid "Portico"
 msgstr ""
 
-#: menus/models.py:15 menus/models.py:78
+#: menus/helpers/choices.py:63
+msgid "Pizza Margarita"
+msgstr ""
+
+#: menus/helpers/choices.py:64
+msgid "Cielo Bistro"
+msgstr ""
+
+#: menus/helpers/choices.py:65
+msgid "Porto 1"
+msgstr ""
+
+#: menus/helpers/choices.py:66
+msgid "Porto 2"
+msgstr ""
+
+#: menus/models.py:15 menus/models.py:102
 msgid "owner"
 msgstr "dueño"
 
@@ -157,7 +198,7 @@ msgstr "dueño"
 msgid "establishment"
 msgstr "Establecimiento"
 
-#: menus/models.py:23
+#: menus/models.py:23 menus/models.py:63
 msgid "title"
 msgstr "Título"
 
@@ -165,63 +206,63 @@ msgstr "Título"
 msgid "subtitle"
 msgstr "subtitulo"
 
-#: menus/models.py:26 menus/models.py:57
-msgid "description"
-msgstr "descripción"
-
 #: menus/models.py:27
 msgid "logo"
 msgstr ""
 
-#: menus/models.py:47
+#: menus/models.py:47 menus/models.py:59 menus/models.py:71
 msgid "menu"
 msgstr "menú"
 
-#: menus/models.py:53
-msgid "category"
-msgstr "categoría"
+#: menus/models.py:50
+msgid "visits"
+msgstr ""
 
-#: menus/models.py:55 menus/models.py:86
-msgid "name"
-msgstr "nombre"
-
-#: menus/models.py:56
-msgid "ingredients"
-msgstr "ingredientes"
-
-#: menus/models.py:58
+#: menus/models.py:62 menus/models.py:82
 msgid "photo"
 msgstr "foto"
 
-#: menus/models.py:59
+#: menus/models.py:80
+msgid "ingredients"
+msgstr "ingredientes"
+
+#: menus/models.py:81
+msgid "notes"
+msgstr ""
+
+#: menus/models.py:83
 msgid "upload code"
 msgstr ""
 
-#: menus/models.py:67
+#: menus/models.py:91
 msgid "type"
 msgstr "tipo"
 
-#: menus/models.py:83 menus/templates/menus/create.html:7
-#: menus/templates/menus/details10.html:7
-#: menus/templates/menus/details11.html:7
-#: menus/templates/menus/details12.html:7 menus/templates/menus/details4.html:7
+#: menus/models.py:107 menus/templates/menus/cieloBistro.html:7
+#: menus/templates/menus/create.html:7 menus/templates/menus/details4.html:7
 #: menus/templates/menus/details5.html:7 menus/templates/menus/details6.html:7
 #: menus/templates/menus/details7.html:7 menus/templates/menus/details8.html:7
 #: menus/templates/menus/details9.html:7 menus/templates/menus/edit.html:7
+#: menus/templates/menus/losChachos.html:7
+#: menus/templates/menus/margarita.html:7 menus/templates/menus/portico.html:7
+#: menus/templates/menus/portoAlto1.html:7
+#: menus/templates/menus/portoAlto2.html:7
 msgid "Menu"
 msgstr "Menú"
 
-#: menus/models.py:87
+#: menus/models.py:111
 msgid "position"
 msgstr "posición"
 
-#: menus/models.py:99 menus/models.py:124
+#: menus/models.py:123 menus/models.py:148
 msgid "price_num"
 msgstr ""
 
-#: menus/models.py:100 menus/models.py:125
-msgid "price"
-msgstr "precio"
+#: menus/templates/chunks/ad_crud.html:11
+#: menus/templates/chunks/category_create.html:18
+#: menus/templates/chunks/category_crud.html:13
+msgid "Save"
+msgstr ""
 
 #: menus/templates/chunks/adds_on.html:3
 msgid "Additions"
@@ -244,6 +285,7 @@ msgid "Item"
 msgstr "Producto"
 
 #: menus/templates/chunks/item_create.html:19
+#: menus/templates/chunks/item_crud.html:15
 msgid "New product"
 msgstr "Producto nuevo"
 
@@ -252,17 +294,25 @@ msgid "add new menu"
 msgstr "agregar nuevo menú"
 
 #: menus/templates/chunks/item_create.html:69
+#: menus/templates/chunks/item_crud.html:59
 msgid "choose photo"
 msgstr "escoge foto"
 
 #: menus/templates/chunks/item_create.html:77
+#: menus/templates/chunks/item_crud.html:67
 msgid "Sizes"
 msgstr "Tamaños"
 
-#: menus/templates/chunks/item_create.html:108
+#: menus/templates/chunks/item_create.html:126
+#: menus/templates/chunks/item_crud.html:124
 #: menus/templates/menus/create.html:48
 msgid "SAVE"
 msgstr "GUARDAR"
+
+#: menus/templates/chunks/item_crud.html:17
+#| msgid "New product"
+msgid "Edit product"
+msgstr "Editar producto"
 
 #: menus/templates/chunks/selection.html:3
 msgid "Please Select One"
@@ -306,16 +356,14 @@ msgid "Upload"
 msgstr "Subir"
 
 #: menus/templates/uploads/add_ons.html:16
-#, fuzzy
 #| msgid "Menu Upload"
 msgid "Add Ons Upload"
-msgstr "Subir Menu"
+msgstr "Subir adicionales"
 
 #: menus/templates/uploads/add_ons.html:26
-#, fuzzy
 #| msgid "UPLOAD MENU"
 msgid "UPLOAD ADD ONS"
-msgstr "SUBIR MENU"
+msgstr "SUBIR ADICIONALES"
 
 #: menus/templates/uploads/menu.html:16
 msgid "Menu Upload"
@@ -333,15 +381,15 @@ msgstr "Subir tamaños"
 msgid "UPLOAD SIZES"
 msgstr "SUBIR TAMAñOS"
 
-#: menus/views.py:228
+#: menus/views.py:406
 msgid "Which size would you like to remove?"
 msgstr "Cual tamaño quieres remover?"
 
-#: menus/views.py:231
+#: menus/views.py:409
 msgid "Select an option"
 msgstr "Selecciona una opción"
 
-#: menus/views.py:263
+#: menus/views.py:441
 msgid "new"
 msgstr "nueva"
 
@@ -353,8 +401,7 @@ msgstr "nueva"
 
 #~ msgid ""
 #~ "You can duplicate a combination already on your order or create a new one"
-#~ msgstr ""
-#~ "Puedes duplicar una selección que agregaste antes, o crear una nueva"
+#~ msgstr "Puedes duplicar una selección que agregaste antes, o crear una nueva"
 
 #, fuzzy
 #~ msgid "X-large 3"

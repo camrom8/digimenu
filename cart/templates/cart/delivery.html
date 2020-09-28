@@ -35,14 +35,23 @@
                 {% endfor %}
             </div>
             {{form.pickup.errors}}
-            <div class="form-group bg-light mt-3">
-                {{form.tip.label}}
-                <select id="id_tip" class="form-control" name="tip">
-                    {% for value, displayable in form.tip.field.choices %}
-                        <option value="{{value}}" {% if value == 2000 %}selected{% endif %}>{{displayable}}</option>
-                    {% endfor %}
-                </select>
-                {{form.tip.errors}}
+            <div class="d-flex justify-content-between form-group bg-light mt-3">
+
+                <div class="col-7">
+                    {{form.tip_percent.label}}
+<!--                <select id="id_tip" class="form-control" name="tip">-->
+<!--                    {% for value, displayable in form.tip_percent.field.choices %}-->
+<!--                        <option value="{{value}}" {% if value == 2000 %}selected{% endif %}>{{displayable}}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+                    {{form.tip_percent}}
+                </div>
+                {{form.tip_percent.errors}}
+                <div class=" col-5 d-flex align-self-end">
+                    {{form.tip_number}}
+                    {{form.tip}}
+                    {{form.tip.errors}}
+                </div>
             </div>
         </div>
     </div>
@@ -52,5 +61,6 @@
             <h5>{%trans 'Send' %} <i class="fab fa-whatsapp"></i></h5>
         </a>
     </div>
+        <input value="{{total}}" type="number" id="totalOrder" hidden>
 </div>
 </div>

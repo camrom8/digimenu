@@ -10,9 +10,5 @@ register = template.Library()
 @register.simple_tag
 def quantity_in_cart(cart, item_id):
     """returns the total amount of products"""
-    total = 0
-    for item in cart:
-        product = cart[item]['product']
-        if product.price.item.id == item_id:
-            total += cart[item]['quantity']
+    total = cart.pop(str(item_id), 0)
     return total

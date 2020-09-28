@@ -1,0 +1,40 @@
+{% with prices=item.prices.all %}
+    {% if not edit %}
+    <div class="row my-1 p-1 border-bottom dish" id="div-item{{item.id}}">
+    {% endif %}
+       <div class="col-5 col-md-5 item-content">
+           <img src="{{item.photo.url}}" class="img-fluid rounded">
+       </div>
+        <div class="col-7 col-md-7 col-lg-7 text-left px-1">
+           <div class="d-flex justify-content-start mb-2">
+               <h4><strong>{{item.name}}</strong></h4>
+           </div>
+           <div class="d-flex flex-wrap">
+               {% for price in prices %}
+                <div class="d-flex align-items-center px-3 m-1 text-left badge badge-pill badge-info">
+                    {{price.size}}:
+                    {{price.price_str}}
+                </div>
+               {% endfor %}
+           </div>
+           <div class="col-12 ingredients mt-2 pl-0 pr-2">
+            {{item.ingredients}}
+            </div>
+        </div>
+         <div class="col-12 px-3 ingredients mt-2 pl-0 pr-2 bg-light">
+            {{item.notes|default_if_none:"Espacio para notas"}}
+            </div>
+        <div class="col-6 p-2">
+            <a class="btn btn-link btn-block text-center text-uppercase bg-secondary" onclick="editItem({{item.id}}, {{list.1}}, 'get')">
+            Editar<span class="float-right"><i class="fas fa-edit" aria-hidden="true"></i></span>
+            </a>
+        </div>
+        <div class="col-6 p-2">
+            <a class="btn btn-link btn-block text-center text-uppercase  bg-danger" onclick="deleteItem({{item.id}})">
+            Eliminar<span class="float-right"><i class="fas fa-times-circle" aria-hidden="true"></i></span>
+            </a>
+        </div>
+    {% if not edit %}
+    </div>
+    {% endif %}
+{% endwith %}

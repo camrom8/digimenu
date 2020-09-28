@@ -1,0 +1,126 @@
+
+{% load i18n %}
+{% load static %}
+<style>
+    .text-light{
+        text-transform: capitalize;
+    }
+</style>
+<form  method="post" id="formItem" enctype=multipart/form-data>{% csrf_token %}
+    <div class="row mx-0 px-0 m-md-2">
+        <div class="col-12 col-lg-6 px-0 px-md-3">
+            <div class="my-3 px-3 bg-light border rounded">
+            <div class="row m-1">
+                {% if 'item_create' in  request.path %}
+                    <p class="lead">{% trans 'New product' %}</p>
+                {% else %}
+                    <p class="lead">{% trans 'Edit product' %}</p>
+                {% endif %}
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text bg-primary text-light">{{form.menu.label}}</span>
+              </div>
+                {{form.menu}}
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text bg-primary text-light">{{form.category.label}}</span>
+              </div>
+                {{form.category}}
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.name.label}}</span>
+                </div>
+                {{form.name}}
+                {{form.name.errors}}
+            </div>
+            <div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.ingredients.label}}</span>
+                </div>
+                {{form.ingredients}}
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-light">{{form.notes.label}}</span>
+                </div>
+                {{form.notes}}
+            </div>
+            <div class="input-group mb-3" style="display:none;">
+              <div class="input-group-prepend">
+                <span class="input-group-text bg-primary text-light" id="inputGroupFileAddon01">{{form.photo.label}}</span>
+              </div>
+              <div class="custom-file">
+                    {{form.photo}}
+                <label class="custom-file-label" for="id_photo">{% trans 'choose photo' %}</label>
+              </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 px-0 px-md-3">
+            <div class="my-3 bg-light px-1 px-md-3 border rounded" id="idPrices">
+                <div class="row px-4">
+                    <p class="lead">{% trans 'Sizes' %}</p>
+                </div>
+            {{ price.management_form }}
+                {% for form in price %}
+                    <div class="row price-row border rounded bg-white p-2 p-md-3 m-1">
+                        {{form.id}}
+                        <div style="display:none;">
+                            {{form.DELETE}}
+                        </div>
+                        <div class="col-12 input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-light">{{form.size.label}}</span>
+                            </div>
+                            {{form.size}}
+                            {{form.size.errors}}
+                        </div>
+                        <div class="col-12 input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text bg-primary text-light">{{form.price_str.label}}</span>
+                          </div>
+                             {{form.price}}
+                             {{form.price_str}}
+                             {{form.price_str.errors}}
+                        </div>
+                        <div class="col-12 d-flex justify-content-between buttons">
+                             {% if 'item_create' in  request.path %}
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-primary text-white add-form-row">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                 <div class="col-6">
+                                     {% if forloop.last %}
+                                        <button type="button" class="btn btn-block btn-primary text-white add-form-row">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                     {% endif %}
+                                 </div>
+                                 <div class="col-6">
+                                    <button type="button" class="btn btn-block btn-outline-danger remove-form-row">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                 </div>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-12 my-2">
+    <div class="col-4 offset-4">
+        <button class="btn btn-block btn-primary"
+                onclick="{% if 'item_create' in  request.path %}createItem({{cat_id}}, 'post')
+                {% else %}editItem({{item_id}}, {{cat_id}}, 'post'){% endif %}">{% trans 'SAVE' %}</button>
+    </div>
+</div>

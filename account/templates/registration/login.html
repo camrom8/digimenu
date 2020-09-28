@@ -10,19 +10,33 @@
 {% block styles %}
 {% endblock %}
 {% block body %}
-<h1>Log-in</h1>
+<h3>Entrar</h3>
 {% if form.errors %}
 <p>
-{% trans "your username and password didn't match." %}
+{% trans "your username and password didn't match" %}
 {% trans 'Please try again.' %}
 </p>
 {% endif %}
 <div class="login-form">
     <form action="{% url 'account:login' %}" method="post">
-        {{ form }}
+         <div class="col-12 input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text bg-primary text-light">{% trans 'User' %}</span>
+            </div>
+            {{form.username}}
+        </div>
+        <div class="col-12 input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text bg-primary text-light">{{form.password.label}}</span>
+          </div>
+             {{form.password}}
+             {{form.password.errors}}
+        </div>
         {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
+        <div class="col-12 input-group mb-3">
+        <input type="hidden" name="next" class="form-class" value="{{ next }}" />
         <p><input type="submit" value="Log-in"></p>
+        </div>
     </form>
 </div>
 {% endblock %}

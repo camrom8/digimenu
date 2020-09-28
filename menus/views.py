@@ -12,8 +12,9 @@ from django.views.generic import CreateView, ListView, TemplateView, DetailView,
 
 from cart.cart import Cart
 from menus.forms import MenuForm, CategoryForm, EstablishmentForm, ItemForm, ItemPriceFormSet, MenuUploadForm, \
-    SizeUploadForm, ItemPriceFormSet2
-from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity, MenuAnalytic
+    SizeUploadForm, ItemPriceFormSet2, AdForm
+from menus.models import Menu, Item, Category, Establishment, Price, AddsOn, ProductInCart, Quantity, MenuAnalytic, \
+    MenuAdvertising
 from django.utils.translation import gettext_lazy as _
 
 
@@ -49,8 +50,30 @@ class ItemCreate(CreateView):
     """View to create Item"""
     model = Item
     form_class = ItemForm
-    template_name = "chunks/item_create.html"
+    template_name = "chunks/item_crud.html"
     success_url = reverse_lazy('menu:item-create')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.category = Category.objects.get(id=request.GET['category_id'])
+        except:
+            self.category = ""
+        try:
+            self.menu = Menu.objects.get(id=request.GET['menu_id'])
+        except:
+            self.menu = ""
+        return super(ItemCreate, self).get(self, request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            self.category = Category.objects.get(id=request.POST['category_id'])
+        except:
+            self.category = ""
+        try:
+            self.menu = Menu.objects.get(id=request.POST['menu_id'])
+        except:
+            self.menu = ""
+        return super(ItemCreate, self).post(self, request, *args, **kwargs)
 
     def form_valid(self, form):
         """valid the other 2 forms, location and property details"""
@@ -60,7 +83,9 @@ class ItemCreate(CreateView):
             item = form.save()
             prices.instance = item
             prices.save()
-            return super(ItemCreate, self).form_valid(form)
+            return render(self.request, 'chunks/item_display.html', {'item': item,
+                                                                     'list': [0, item.category.id],
+                                                                     'edit': False})
         return super(ItemCreate, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -68,14 +93,18 @@ class ItemCreate(CreateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['price'] = ItemPriceFormSet(self.request.POST)
+            context['cat_id'] = self.category.id
         else:
             context['price'] = ItemPriceFormSet()
+            context['cat_id'] = self.category.id
 
         return context
 
     def get_form_kwargs(self):
         kwargs = super(ItemCreate, self).get_form_kwargs()
-        kwargs['owner'] = self.request.user
+        kwargs['owner'] = self.menu.owner
+        kwargs['menu'] = self.menu
+        kwargs['category'] = self.category
         return kwargs
 
 
@@ -83,16 +112,41 @@ class ItemUpdate(UpdateView):
     """View to create Item"""
     model = Item
     form_class = ItemForm
-    template_name = "chunks/item_create.html"
+    template_name = "chunks/item_crud.html"
     success_url = reverse_lazy('menu:upload')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.category = Category.objects.get(id=request.GET['category_id'])
+        except:
+            self.category = ""
+        try:
+            self.menu = Menu.objects.get(id=request.GET['menu_id'])
+        except:
+            self.menu = ""
+        return super(ItemUpdate, self).get(self, request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            self.category = Category.objects.get(id=request.POST['category_id'])
+        except:
+            self.category = ""
+        try:
+            self.menu = Menu.objects.get(id=request.POST['menu_id'])
+        except:
+            self.menu = ""
+        return super(ItemUpdate, self).post(self, request, *args, **kwargs)
 
     def form_valid(self, form):
         """valid the other 2 forms, location and property details"""
         context = self.get_context_data()
         prices_form = context['price']
         if prices_form.is_valid():
+            item = form.save()
             prices_form.save()
-            return super(ItemUpdate, self).form_valid(form)
+            return render(self.request, 'chunks/item_display.html', {'item': item,
+                                                                     'list': [0, item.category.id],
+                                                                     'edit': True})
         return super(ItemUpdate, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -100,15 +154,35 @@ class ItemUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['price'] = ItemPriceFormSet2(self.request.POST, instance=self.object)
+            context['cat_id'] = self.category.id
+            context['item_id'] = self.object.id
         else:
             context['price'] = ItemPriceFormSet2(instance=self.object)
+            context['cat_id'] = self.category.id
+            context['item_id'] = self.object.id
 
         return context
 
     def get_form_kwargs(self):
         kwargs = super(ItemUpdate, self).get_form_kwargs()
-        kwargs['owner'] = self.request.user
+        kwargs['owner'] = self.menu.owner
+        kwargs['menu'] = self.menu
+        kwargs['category'] = self.category
         return kwargs
+
+
+class ItemDelete(DeleteView):
+    model = Item
+
+    def delete(self, request, *args, **kwargs):
+        item = self.get_object()
+        item_id = item.id
+        item.delete()
+        if Category.objects.filter(id=item_id).exists():
+            return JsonResponse({'msg': 'error. por favor intentelo de nuevo'})
+        else:
+            divId = '#div-item' + str(item_id)
+            return JsonResponse({'id': divId})
 
 
 class CategoryCreate(CreateView):
@@ -125,7 +199,7 @@ class CategoryCreate(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.owner = self.owner
+        self.object.owner = self.menu.owner
         self.object.menu = self.menu
         self.object.save()
         return redirect(reverse('menu:edit-partial', kwargs={'title_slug': self.menu.title_slug, 'partial': 1}))
@@ -142,7 +216,7 @@ class CategoryUpdate(UpdateView):
         return super(CategoryUpdate, self).post(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        """Add price inline form"""
+        """pass id to template"""
         context = super().get_context_data(**kwargs)
         context['id'] = self.object.id
         return context
@@ -161,7 +235,6 @@ class CategoryDelete(DeleteView):
     model = Category
 
     def delete(self, request, *args, **kwargs):
-        menu = Menu.objects.get(id=request.POST['menu_id'])
         category = self.get_object()
         cat_id = category.id
         # cat_name = category.name
@@ -171,7 +244,6 @@ class CategoryDelete(DeleteView):
         else:
             divId = '.cat-' + str(cat_id)
             return JsonResponse({'id': divId})
-            # return redirect(reverse('menu:edit-partial', kwargs={'title_slug': menu.title_slug, 'partial': 1}))
 
 
 class EstablishmentCreate(CreateView):
@@ -218,10 +290,12 @@ class MenuDetails(DetailView):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
         categories = self.object.categories.all()
+        ads = self.object.ads.all()
+        context['ads'] = ads
         context['items'] = {}
         for category in categories:
-            context['items'][category.name] = \
-                [item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')]
+            context['items'][category.name] = str(category.id)
+            # [item for item in self.object.items.filter(category=category).order_by('upload_code', 'name')]
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -246,6 +320,9 @@ class MenuEditDetails(DetailView):
     slug_field = 'title_slug'
 
     def get(self, request, *args, **kwargs):
+        print(request.user.is_superuser)
+        if request.user != self.get_object().owner and not request.user.is_superuser:
+            return redirect(reverse_lazy('account:login'))
         self.partial = self.kwargs.get('partial', None)
         return super(MenuEditDetails, self).get(self, request, *args, **kwargs)
 
@@ -253,6 +330,8 @@ class MenuEditDetails(DetailView):
         """get categories in the context data"""
         context = super().get_context_data(**kwargs)
         categories = self.object.categories.all()
+        ads = self.object.ads.all()
+        context['ads'] = ads
         context['items'] = {}
         for category in categories:
             context['items'][category.name] = \
@@ -273,6 +352,36 @@ class MenuEditDetails(DetailView):
             **response_kwargs
         )
 
+
+class AdUpdate(UpdateView):
+    model = MenuAdvertising
+    form_class = AdForm
+    template_name = "chunks/ad_crud.html"
+
+    def get_context_data(self, **kwargs):
+        """pass id to template"""
+        context = super().get_context_data(**kwargs)
+        context['id'] = self.object.id
+        return context
+
+    def form_valid(self, form):
+        """valid the other 2 forms, location and property details"""
+        ad = form.save()
+        ads = self.model.objects.filter(menu=ad.menu)
+        return render(self.request, 'chunks/carousel_ads.html', {'ads': ads})
+
+
+@csrf_exempt
+def get_category_items(request, cat_id):
+    """render list of items for a category"""
+    items = Item.objects.filter(category_id=cat_id)
+    cart = Cart(request)
+    itemsQty = {}
+    for item in cart:
+        itemsQty[str(item['product'].price.item.id)] = item['quantity']
+    return render(request, "chunks/items_in_cat.html", {'items': items, 'itemsQty': itemsQty})
+
+
 @csrf_exempt
 def menu_access_count(request):
     menu_id = int(request.POST['menu_id'])
@@ -280,6 +389,7 @@ def menu_access_count(request):
     analitics.visit += 1
     analitics.save()
     return JsonResponse({'msg': 1})
+
 
 @csrf_exempt
 def item_prices_get(request, item_id):
@@ -430,6 +540,8 @@ def menu_upload(request):
 
                 item.save()
             return HttpResponseRedirect(reverse('menu:upload-size'))
+    if not request.user.is_superuser:
+        return redirect(reverse_lazy('account:login'))
     form = MenuUploadForm()
     return render(request, template, {'form': form})
 
@@ -466,6 +578,8 @@ def size_upload(request):
                     size.save()
                 item.save()
             return HttpResponseRedirect(reverse('menu:details', kwargs={'title_slug': item.menu.title_slug}))
+    if not request.user.is_superuser:
+        return redirect(reverse_lazy('account:login'))
     form = MenuUploadForm()
     return render(request, template, {'form': form})
 
@@ -498,5 +612,7 @@ def add_ons_upload(request):
                     add_on.product.add(product_id)
                 add_on.save()
             return HttpResponse("Add ons added! all Done")
+    if not request.user.is_superuser:
+        return redirect(reverse_lazy('account:login'))
     form = MenuUploadForm()
     return render(request, template, {'form': form})

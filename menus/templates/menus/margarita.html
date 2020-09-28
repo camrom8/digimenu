@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block styles %}
-<link href="https://fonts.googleapis.com/css2?family=Niconne&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Neuton&display=swap" rel="stylesheet">
 <style>
     /* For Firefox */
     input[type='number'] {
@@ -25,56 +25,52 @@
 
     .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
         background-color: #fff;
-        border: solid 1px #e0cd80; //changes
+        border: solid 1px #c90300; //changes
         font-size: 2.2rem !important;
         color: #000;
     }
 
     hr {
-        background-color: black !important; //changes
+        background-color: red !important; //changes
     }
 
     .card-header > button{
-        font-family: 'Niconne';
-        font-size: 2.5rem !important;
-        color: black !important;
+        font-family: 'Satisfy';
+        font-size: 1.8rem !important;
+        color: #fff !important;
     }
 
     .input-group-prepend > button, .input-group-append > button{
-        border: solid 1px #000000;
-        background-image: linear-gradient(#000000, #000000);
-        color: #e0cd80;
-        border: solid 1px #e0cd80; //changes
-    }
-    .input-group-prepend > button:hover, .input-group-append > button:hover{
+        border: solid 1px #613924;
+        background-image: linear-gradient(#808080, #5a5a5a);
         color: white;
     }
 
+    .input-group-prepend > button:hover, .input-group-append > button:hover{
+        color: #c90300;
+    }
 
 
     .addButton > button{
-            background-image: linear-gradient(#000000, #000000);
-            color: #e0cd80;
+        background-image: linear-gradient(#808080, #5a5a5a);
+        color: white;
     }
+
     .addButton > button:hover{
-            background-image: linear-gradient(#000000, #000000);
-            color: white;
+        color: #c90300;
     }
 
     .card-header{
-        background-image: linear-gradient(#EAE2A9, #e0cd80);
-    }
-    .card-header:hover{
-        background-image: linear-gradient(#e0cd80, #e0cd80);
+        background-image: linear-gradient(#c90300, #960200);
     }
 
     .card-body{
-        background-color: #FFFFFF;
+        background-color: #fbffc6;
     }
 
     .dish{
-        font-family: 'aleo', serif;
-        color: #00000;
+        font-family: 'Neuton', serif;
+        color: #c00000;
     }
     .ingredients{
         color: black;
@@ -84,16 +80,14 @@
         top: -5px !important;
     }
     .dropBut {
-        font-size:1.5rem;
-        right:32px;
+        font-size:17px;
+        right:25px;
         top:-7px;
         position: relative;
-        width:50px;
     }
-
     .info {
-        background-color: black;
-        color: #e0c580;
+        background-color: #9b0200;
+        color: white;
         font-weight: 700;
         font-size: 13px;
     }
@@ -112,15 +106,18 @@
     </div>
     <div class="px-1 rounded info">
         <h6>Contactanos:</h6>
-        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573213031942"> 321-303-1942 (llamar)</a></p>
-        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> calle 25b # 69-63, Salitre(ver en google maps)</a></p>
+        <p><i class="fa fa-phone-square mt-2"></i> <a href="tel:+573228402889 "> 322-840-2889 (llamar)</a></p>
+        <p><i class="fa fa-phone-square"></i> <a href="tel:+573214036587 "> 321-403-6587 (llamar)</a></p>
+        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Calle 25 # 42-48 local 20</a></p>
+        <p class="my-1"><a href="{{map_url}}" target="_blank"> C.C La Querencia (ver en google maps)</a></p>
         {% if map_url2 %}
             <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
         {% endif %}
     </div>
 </div>
-<div class="row border-top pt-2">
-    <div class="accordion col-12 col-md-6 px-1" id="accordionMenu">
+<hr>
+<div class="row">
+    <div class="accordion col-12 col-md-6 px-1 px-sm-1" id="accordionMenu">
         {% for category, id in items.items %}
             <div class="card">
                 <div class="card-header p-1" id="heading{{id}}">

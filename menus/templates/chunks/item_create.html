@@ -135,8 +135,6 @@
 <script type='text/javascript'>
 $(document).ready(function() {
     function updateFieldIndex(el, prefix, index) {
-        console.log('index')
-        console.log(index)
         let id_regex = new RegExp('(' + prefix + '-\\d+)');
         let replacement = prefix + '-' + index
 
@@ -150,11 +148,9 @@ $(document).ready(function() {
     function addMore(selector, prefix) {
         let newEl = $(selector).clone(true);
         let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
-        console.log(total)
         newEl.show();
         newEl.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each( function(){
             let name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + (total) + '-');
-            console.log(name)
             let id = 'id_' + name;
             $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
             $(this).prop('checked', false)
@@ -199,11 +195,8 @@ $(document).ready(function() {
         let total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
         if (total >1) {
             let forms = "";
-            console.log("id")
-            console.log(btn.closest('.price-row').find("input:first").attr('id').split('-')[1])
             let id_form = btn.closest('.price-row').find("input:first").attr('id').split('-')[1];
             if ( id_form < $('#id_' + prefix + '-INITIAL_FORMS').val() ){
-                console.log('original');
                 $("#id_prices-" + id_form + "-DELETE").prop('checked', true)
                 btn.closest('.price-row').hide();
                 forms = $('.price-row:visible');
@@ -218,7 +211,6 @@ $(document).ready(function() {
                 $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
             }
             let lastRow = $('.price-row:visible:last > .buttons');
-            console.log($('.price-row:visible').length)
             if ($('.price-row:visible').length === 1) {
                 $('.price-row:visible:last > .buttons > div:last').remove()
             }

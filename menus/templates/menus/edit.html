@@ -44,7 +44,7 @@
     .dropBut {
         font-size: 14px;
         right: 28px;
-        top: -15px;
+        top: -10px;
         position: relative;
     }
 </style>
@@ -59,14 +59,21 @@
     </div>
     <div class="bg-light px-2 text-primary rounded">
         <h3>Editar Menu</h3>
-        <h4 class="my-1">Aqui podras ver, agregar, editar y eliminar productos y categorias.</h4>
-        <p class="my-0 pl-3">Direcion, telefono, estilos y colores no son editables y necesitas contactar al administrador</p>
+        <h4 class="my-1">Aqui podras ver, agregar, editar y eliminar categorías, productos y precios.</h4>
+        <p class="my-0 pl-3">Dirección, teléfono, estilos y colores no son editables y necesitas contactar al administrador</p>
     </div>
 </div>
 <hr>
-<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modalCat" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" id="modalBody1">
+        ...
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modalItem" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="modalBody2">
         ...
     </div>
   </div>
@@ -122,13 +129,11 @@
             let menuId = {{menu.id}};
             let menuOwner = {{menu.owner.id}};
             let form = $("#formCat").serialize() + "&menu_id=" + menuId + "&menu_owner=" + menuOwner;
-            console.log(form);
             $.ajax({
                 method: method,
                 url: url,
                 data: form,
                 success: function(data){
-                console.log(data);
                     if(data.includes("menu-content")){
                         $('#modal1').modal('hide');
                         confirmationMsg('Categoria creada exitosamente');
@@ -180,7 +185,6 @@
         }
     }
     function deleteCategory(id){
-        let menuId = {{menu.id}};
         let url = "{% url 'menu:category-delete' 123 %}".replace(/123/, id);
         Swal.fire({
           title: 'Eliminar Categoria?',
@@ -195,7 +199,6 @@
             if (result.isConfirmed) {
                 $.ajax({
                     method: 'post',
-                    data:{menu_id:menuId},
                     url: url,
                     success: function(data){
                         if( data.id){
@@ -208,6 +211,165 @@
                 });
             }
         })
+    }
+    function createItem(id, method){
+        let menuId = {{menu.id}};
+        let catId = id;
+        let url = "{% url 'menu:item-create' %}";
+        if(method == 'get'){
+            $.ajax({
+                method: method,
+                data:{'menu_id':menuId, 'category_id':catId},
+                url: url,
+                success: function(data){
+                    let div = document.getElementById('modalBody1');
+                    div.innerHTML = data;
+                    bindInputsItem();
+                    $('#modal1').modal('show');
+                }
+            });
+        } else{
+            let form = $("#formItem").serialize() + "&menu_id=" + menuId + "&category_id=" + catId;
+
+            let msg = "";
+            $(".input-price").each(function(){
+                if($(this).val() == ""){
+                    msg = "Por favor agregar precio";
+                    return false;
+                };
+            });
+            if (msg != ""){
+                errorMsg(msg);
+                return false;
+            }
+            $.ajax({
+                method: method,
+                url: url,
+                data: form,
+                success: function(data){
+                    if(data.includes("item-content")){
+                        $('#modal1').modal('hide');
+                        confirmationMsg('Producto creado exitosamente');
+                        let div = document.getElementById('cat-body' + catId);
+                        div.innerHTML += data;
+                    } else {
+                        let div = document.getElementById('modalBody1');
+                        div.innerHTML = data;
+                        bindInputsItem();
+                        addButtonsLast();
+                        addButtonsNotLast();
+                    }
+                }
+            });
+        }
+    }
+
+    function editItem(id, catId, method){
+        let menuId = {{menu.id}};
+        let url = "{% url 'menu:item-update' 123 %}".replace( /123/, id);
+        if(method == 'get'){
+            $.ajax({
+                method: method,
+                data:{'menu_id':menuId, 'category_id':catId},
+                url: url,
+                success: function(data){
+                    let div = document.getElementById('modalBody1');
+                    div.innerHTML = data;
+                    bindInputsItem();
+                    $('#modal1').modal('show');
+                }
+            });
+        } else{
+            let form = $("#formItem").serialize() + "&menu_id=" + menuId + "&category_id=" + catId;
+            $.ajax({
+                method: method,
+                url: url,
+                data: form,
+                success: function(data){
+                    if(data.includes("item-content")){
+                        $('#modal1').modal('hide');
+                        confirmationMsg('Producto editado exitosamente');
+                        let div = document.getElementById('div-item' + id);
+                        div.innerHTML = data;
+                    } else {
+                        let div = document.getElementById('modalBody1');
+                        div.innerHTML = data;
+                        bindInputsItem();
+                        addButtonsLast();
+                        addButtonsNotLast();
+                        // get number of forms right
+                    }
+                }
+            });
+        }
+    }
+    function deleteItem(id){
+        let url = "{% url 'menu:item-delete' 123 %}".replace(/123/, id);
+        Swal.fire({
+          title: 'Eliminar producto?',
+          text: "El producto sera eliminado permanentemente",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#192242',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, borrar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: 'post',
+                    url: url,
+                    success: function(data){
+                        if(data.id){
+                            confirmationMsg('Producto eliminado exitosamente');
+                            $(data.id).remove()
+                        } else{
+                            errorMsg(data.msg);
+                        }
+                    }
+                });
+            }
+        })
+    }
+    function editAd(id, method){
+        let url = "{% url 'menu:ad-update' 123 %}".replace(/123/, id);
+        if(method == 'get'){
+            $.ajax({
+                method: method,
+                url: url,
+                success: function(data){
+                    let div = document.getElementById('modalBody1');
+                    div.innerHTML = data;
+                    $('#modal1').modal('show');
+                }
+            });
+        } else{
+            let preform = $("#formAd")[0];
+            console.log(preform)
+            let form =  new FormData(preform);
+            //form.append('photo': file);
+            console.log(form)
+            $.ajax({
+                method: method,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                url: url,
+                data: form,
+                success: function(data){
+                    console.log(data);
+                    if(data.includes("carouselAds")){
+                        $("#divAd").hide().html(data).fadeIn('fast');
+                        $('#modal1').modal('hide')
+                        confirmationMsg('Publicidad actualizada exitosamente');
+                    } else{
+                        let div = document.getElementById('modalBody1');
+                        div.innerHTML = data;
+                    }
+                }
+            });
+          //}
+        }
     }
     function confirmationMsg(title){
         Swal.fire({
@@ -225,5 +387,178 @@
           showConfirmButton: true,
         })
     }
+
+    function updateFieldIndex(el, prefix, index) {
+        let id_regex = new RegExp('(' + prefix + '-\\d+)');
+        let replacement = prefix + '-' + index
+
+        if ($(el).attr("for")){
+            $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        }
+        if(el.id) el.id = el.id.replace(id_regex, replacement);
+        if(el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function addMore(selector, prefix) {
+        let newEl = $(selector).clone(true);
+        let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        newEl.show();
+        newEl.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each( function(){
+            let name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + (total) + '-');
+            let id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            $(this).prop('checked', false)
+        });
+        newEl.find('label').each(function () {
+            let forVal = $(this).attr('for');
+            if (forVal) {
+                forVal = forVal.replace('-' + (total-1) + '-', '-' + total + '-');
+                $(this).attr({"for": forVal});
+            };
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newEl);
+        let lastRow = $('.price-row:last > .buttons');
+
+        // add buttons to last
+        addButtonsLast();
+        // add minus button to all except last
+        addButtonsNotLast();
+        return false;
+    }
+    function addButtonsLast(){
+        let lastRow = $('.price-row:last > .buttons');
+        if (!lastRow.has('.remove-form-row').length){
+            lastRow.append('<div class="col-6">\
+                            <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
+                            <i class="fas fa-minus"></i></button>\
+                        </div>');
+        }
+        if (!lastRow.has('.add-form-row').length){
+            lastRow.find('div:first').append('<button type="button" \
+                                            class="btn btn-block btn-primary add-form-row">\
+                                            <i class="fas fa-plus"></i></button>');
+        }
+    }
+    function addButtonsNotLast(){
+        let allSizesNotLast = $('.price-row:not(:last) > .buttons');
+        allSizesNotLast.each( function () {
+            if ($(this).has('.remove-form-row').length < 1){
+                $(this).append('<div class="col-6">\
+                            <button type="button" class="btn btn-block btn-outline-danger remove-form-row">\
+                            <i class="fas fa-minus"></i></button>\
+                        </div>');
+            }
+        });
+        if ($('.price-row').length > 1){
+            allSizesNotLast.find('.btn.add-form-row').remove();
+        }
+    }
+
+    function deleteForm(prefix, btn) {
+        let total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (total >1) {
+            let forms = "";
+            let id_form = btn.closest('.price-row').find("input:first").attr('id').split('-')[1];
+            if ( id_form < $('#id_' + prefix + '-INITIAL_FORMS').val() ){
+                $("#id_prices-" + id_form + "-DELETE").prop('checked', true)
+                btn.closest('.price-row').hide();
+                forms = $('.price-row:visible');
+            } else{
+                btn.closest('.price-row').removeClass("price-row").remove()
+                forms = $('.price-row');
+                for( var i=0, formCount=forms.length; i<formCount; i++) {
+                    $(forms.get(i)).find(':input').each( function() {
+                        updateFieldIndex(this, prefix, i);
+                    });
+                };
+                $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            }
+            let lastRow = $('.price-row:visible:last > .buttons');
+            if ($('.price-row:visible').length === 1) {
+                $('.price-row:visible:last > .buttons > div:last').remove()
+            }
+            if (!lastRow.has('.add-form-row').length)
+            lastRow.find('div:first').append('<button type="button" \
+                                                        class="btn btn-block btn-primary add-form-row">\
+                                                        <i class="fas fa-plus"></i></button>');
+        }
+    }
+    $(document).on('click', '.add-form-row', function(e){
+        e.preventDefault();
+        addMore('.price-row:last', 'prices');
+        return false;
+    });
+    $(document).on('click', '.remove-form-row', function(e){
+        e.preventDefault();
+        deleteForm('prices', $(this));
+        return false;
+    });
+    $(document).on('change', '#id_photo', function(e) {
+        let fileName = e.target.files[0].name;
+         $('label[for="'+$('#id_photo').attr('id')+ '"]').text(fileName)
+    });
+
+    function initalForms(){
+        $('#id_prices-TOTAL_FORMS').val($('#id_prices-INITIAL_FORMS').val() == 0 ? 1 : $('#id_prices-INITIAL_FORMS').val());
+    }
+
+    // Add events for currency conversion
+    function bindInputsItem(){
+        $("#idPrices").find(':input[type=text]').each( function () {
+            $(this).on( 'blur', onBlur);
+            $(this).on( 'focus', onFocus);
+            $(this).on( 'mouseover', onMouseOver);
+            $(this).on( 'mouseout', onMouseOut);
+        });
+        //get the right number of total forms
+
+    }
+
+	// string to currency conversion functions
+    var currency = 'USD';
+    function localStringToNumber( s ){
+        return Number(String(s).replace(/[^0-9.-]+/g,""));
+    }
+
+    function onMouseOver(e){
+      $(this).attr("pattern", "[0-9]*");
+    }
+
+    function onMouseOut(e){
+      if(!$(this).is(":focus")) this.removeAttribute("pattern");
+    }
+
+    function onFocus(e){
+      var intFormat= e.target.value;
+      $(this).attr("pattern", "[0-9]*");
+      var value = intFormat.replace(/[.]/g,',');
+      e.target.value = value ? localStringToNumber(value) : '';
+      $(this).prev().val(value);
+    }
+
+    var timeout = null
+    function onBlur(e){
+      	this.removeAttribute("pattern");
+      	var value = e.target.value;
+        $(this).prev().val(value);
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+			this.value = value;
+            const options = {
+				maximumFractionDigits : 0,
+				minimumFractionDigits : 0,
+				currency              : currency,
+				style                 : "currency",
+				currencyDisplay       : "symbol",
+			}
+            var usformat = value ? localStringToNumber(value).toLocaleString(undefined, options): '';
+            val = usformat.replace(/[,]/g,'.');
+            e.target.value = val.replace(/[US]/g,'');
+            this.value = e.target.value;
+      	}, 200);
+    }
+
 </script>
 {% endblock %}

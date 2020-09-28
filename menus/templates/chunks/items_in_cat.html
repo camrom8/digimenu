@@ -1,0 +1,116 @@
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+<div class="card-body px-2 pt-2 pr-md-3 pb-1">
+{% for item in items %}
+    {% with prices=item.prices.all %}
+        {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
+            {%if item.menu.title_slug == 'cielobistro' %}
+                {%if item.category.name == 'Paellas' %}
+                  <div class="d-flex justify-content-center">
+                        <div class="col-12 m-2 px-3 text-center rounded info">
+                          <p class="my-0">solo sobre pedidos</p>
+                      </div>
+                  </div>
+                {% endif %}
+            {% endif %}
+            <div class="row my-1 p-1 border-bottom dish">
+               <div class="col-5 col-md-5">
+                   <img src="{{item.photo.url}}" class="img-fluid rounded">
+               </div>
+               <div class="col-7 col-md-7 col-lg-7 text-left px-1">
+                   <div class="d-flex justify-content-start mb-2">
+                       <h4><strong>{{item.name}}</strong></h4>
+                   </div>
+                   <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center px-1 text-left">
+                            {% if prices|length > 1%}
+                            <h5><small>Desde </small>{{prices.0.price_str}}</h5>
+                            {% else %}
+                            <h4>{{prices.0.price_str}}</h4>
+                            {% endif %}
+                        </div>
+                        <div class="px-1 addRemoveButtons">
+                            <div class="itemQty input-group input-group-xs px-1 px-lg-2">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-xs px-1 px-sm-2 px-md-3" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                </div>
+                                    <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
+                                           value="{% quantity_in_cart itemsQty item.id %}" disabled style="max-width:60px; min-width:16px; font-size:1.2rem;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-xs px-1 px-sm-2 px-md-3" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="addButton px-1" style="display:none;">
+                               <button class="btn btn-block px-1" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%}Ver tamaños{% else %}<strong>Agregar </strong> <i class="fas fa-plus"></i>{% endif %}</button>
+                            </div>
+                        </div>
+                   </div>
+                   <div class="col-12 ingredients d-none d-sm-block mt-2 pl-0 pr-2">
+                    {{item.ingredients}}
+                    </div>
+               </div>
+                   <div class="col-12 px-3 text-left ingredients d-block d-sm-none">
+                    {{item.ingredients}}
+                    </div>
+                    {%if not item.menu.title_slug == 'cielobistro' %}
+                        {%if not item.category.name  == 'Fuertes' %}
+                            <div class="col-12 my-0 bg-light rounded">
+                                <p class="my-0">con ensalada de la casa y un acompañamiento de su elección</p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+        {% else %}
+            {%if item.menu.title_slug == 'cielobistro' %}
+                {%if item.category.name == 'Paellas' %}
+                  <div class="d-flex justify-content-center">
+                        <div class="col-12 m-2 px-3 text-center rounded info">
+                          <p class="my-0">solo sobre pedidos</p>
+                      </div>
+                  </div>
+                {% endif %}
+            {% endif %}
+            <div class="row my-1 p-1 border-bottom dish">
+               <div class="col-5 col-md-5">
+                    <h5><strong>{{item.name}}</strong></h5>
+               </div>
+               <div class="col-7 col-md-7 col-lg-7 text-left px-1">
+                   <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center px-1 text-left">
+                            {% if prices|length > 1%}
+                            <h5><small>Desde </small>{{prices.0.price_str}}</h5>
+                            {% else %}
+                            <h4>{{prices.0.price_str}}</h4>
+                            {% endif %}
+                        </div>
+                        <div class="px-1 addRemoveButtons">
+                            <div class="itemQty input-group input-group-xs px-1 px-lg-2">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-xs px-1 px-sm-2 px-md-3 text-white" type="button" onclick="toCart({{item.id}},-1, 0)"><i class="fas fa-minus"></i></button>
+                                </div>
+                                    <input type="number" id="product_{{item.id}}" class="form-control text-center px-1 pb-2" name="quantity"
+                                           value="{% quantity_in_cart itemsQty item.id %}" disabled style="max-width:60px; min-width:16px; font-size:1.2rem;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-xs px-1 px-sm-2 px-md-3  text-white" type="button" onclick="toCart({{item.id}}, 1, 0)"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="addButton px-1" style="display:none;">
+                               <button class="btn btn-block px-1" type="button" onclick="toCart({{item.id}}, 1, 0)">{% if prices|length > 1%} Ver tamaños {% else %}<strong> Agregar</strong> <i class="fas fa-plus"></i>{% endif %}</button>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+               <div class="col-12 px-3 text-left ingredients">
+                {{item.ingredients}}
+               </div>
+                {% if item.notes%}
+                   <div class="col-12 px-3 text-left ingredients bg-light text-dark">
+                    {{item.notes}}
+                   </div>
+                {% endif %}
+           </div>
+        {% endif %}
+    {% endwith %}
+{% endfor %}
+</div>

@@ -53,6 +53,17 @@ class MenuAnalytic(models.Model):
         return f'Analytics for {self.menu}'
 
 
+class MenuAdvertising(models.Model):
+    menu = models.ForeignKey('Menu',
+                             on_delete=models.CASCADE,
+                             verbose_name=_('menu'),
+                             related_name='ads'
+                             )
+    photo = models.ImageField(_('photo'), default="images/default/no_photo.png")
+    title = models.CharField(_('title'), max_length=30, null=True)
+    description = models.CharField(_('description'), max_length=60, null=True)
+
+
 class Item(models.Model):
     """Database model for items"""
     menu = models.ForeignKey('Menu',

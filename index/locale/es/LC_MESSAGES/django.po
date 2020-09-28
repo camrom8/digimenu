@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-03 11:33-0500\n"
-"PO-Revision-Date: 2020-08-17 16:26-0456\n"
+"POT-Creation-Date: 2020-09-28 10:25-0500\n"
+"PO-Revision-Date: 2020-09-28 10:28-0456\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,82 +27,83 @@ msgstr ""
 msgid "Phone number is too long. It must be between 7-10 digits"
 msgstr ""
 
-#: index/templates/base.html:57 index/templates/index/home.html:7
+#: index/templates/base.html:60 index/templates/index/home.html:7
 #: index/templates/index/index.html:7
 msgid "Home"
 msgstr "Inicio"
 
-#: index/templates/base.html:61
+#: index/templates/base.html:64
 msgid "Logout"
 msgstr "Salir"
 
-#: index/templates/base.html:63
+#: index/templates/base.html:66
 msgid "Login"
 msgstr "Entrar"
 
-#: index/templates/base.html:69
+#: index/templates/base.html:72
 msgid "Publish a menu"
 msgstr "Publicar un menu"
 
-#: index/templates/base.html:94
+#: index/templates/base.html:97
 msgid "Your Order"
 msgstr "Tu Pedido"
 
-#: index/templates/base.html:118
+#: index/templates/base.html:121
 msgid "¡Hi! Welcome to Digimenú"
 msgstr "¡Hola! Bienvenid@ a Digimenú"
 
-#: index/templates/base.html:126
+#: index/templates/base.html:129
 msgid "Making your food ordering experience easier at"
-msgstr "Esperamos facilitar tu experiencia de compra digital en el restaurante"
+msgstr ""
+"Esperamos facilitar tu experiencia de compra digital en el restaurante"
 
-#: index/templates/base.html:128
+#: index/templates/base.html:131
 msgid "We hope making your food ordering experience easier"
 msgstr "Esperamos facilitar tu experiencia de compra digital"
 
-#: index/templates/base.html:144
+#: index/templates/base.html:147
 msgid "Send order"
 msgstr "Enviar pedido"
 
-#: index/templates/base.html:152
+#: index/templates/base.html:155
 msgid "Order"
 msgstr "Pedido"
 
-#: index/templates/base.html:154
+#: index/templates/base.html:157
 msgid "Product"
 msgstr "Producto"
 
-#: index/templates/base.html:159
+#: index/templates/base.html:161
 msgid "Empty"
 msgstr "Vacío"
 
-#: index/templates/base.html:200 index/templates/base.html:229
+#: index/templates/base.html:214 index/templates/base.html:242
 msgid "Delivery"
-msgstr ""
+msgstr "Entrega"
 
-#: index/templates/base.html:360 index/templates/base.html:390
-#: index/templates/base.html:447
+#: index/templates/base.html:378 index/templates/base.html:408
+#: index/templates/base.html:465
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: index/templates/base.html:366
+#: index/templates/base.html:384
 msgid "Select a size"
 msgstr "Selecciona un tamaño"
 
-#: index/templates/base.html:382 index/templates/base.html:434
+#: index/templates/base.html:400 index/templates/base.html:452
 msgid ""
 "You can duplicate a combination already on your order or create a new one"
 msgstr "Puedes duplicar una selección que ya agregaste o crear una nueva"
 
-#: index/templates/base.html:384 index/templates/base.html:435
+#: index/templates/base.html:402 index/templates/base.html:453
 msgid "Ingredients and Add-ons"
 msgstr "Ingredientes y Adicionales"
 
-#: index/templates/base.html:437
+#: index/templates/base.html:455
 msgid "You have more than 1 product with different ingredients"
 msgstr "Has agregado el mismo producto con diferentes ingredients"
 
-#: index/templates/base.html:438
+#: index/templates/base.html:456
 msgid "Select product to remove"
 msgstr "Selecciona el producto a remover"
 

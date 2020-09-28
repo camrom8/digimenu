@@ -9,6 +9,7 @@ admin.site.register(models.Establishment)
 admin.site.register(models.ProductInCart)
 admin.site.register(models.Quantity)
 admin.site.register(models.MenuAnalytic)
+admin.site.register(models.MenuAdvertising)
 
 @admin.register(models.AddsOn)
 class AddsOnAdmin(admin.ModelAdmin):
@@ -35,7 +36,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):
         return pprint.pformat(obj.get_decoded()).replace('\n', '<br>\n')
-
     _session_data.allow_tags = True
     list_display = ['session_key', '_session_data', 'expire_date']
     readonly_fields = ['_session_data']

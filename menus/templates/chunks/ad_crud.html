@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load static %}
+<div class="row m-3">
+    <h4>Editar publicidad</h4>
+    <div class="col-12">
+        <form method="post" id="formAd" enctype="multipart/form-data">
+            {{form}}
+        </form>
+    </div>
+    <div class="col-12 pt-3">
+        <button class="btn btn-block btn-primary" onclick="editAd({{id}}, 'post')"> {% trans 'Save' %} </button>
+    </div>
+</div>

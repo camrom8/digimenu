@@ -1,90 +1,37 @@
 {% load i18n %}
 {% load static %}
 <div class="row menu-content">
-    <div class="accordion col-12 col-md-7" id="accordionMenu">
+    <div class="accordion col-12 col-md-6" id="accordionMenu">
                  <div class="card-header btn-success">
                     <button class="btn btn-link btn-block text-center text-uppercase" onclick="createCategory('get')">
-                        AGREGAR CATEGORIA NUEVA <span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
+                        AGREGAR CATEGORÍA NUEVA<span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
                     </button>
                 </div>
-        {% for category, item in items.items %}
-            <div class="card cat-{{item.1}}">
+        {% for category, list in items.items %}
+            <div class="card cat-{{list.1}}">
                 <div class="card-header bg-dark px-1">
-                    <span class="btn btn-sm bg-secondary float-left mx-1" onclick="editCategory({{item.1}}, 'get')">Editar</span>
-                    <span class="btn btn-sm bg-danger float-left mx-1 text-white" onclick="deleteCategory({{item.1}})">Eliminar</span>
-                    <span class="btn text-white btn-block text-center text text-uppercase float-center" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
-                        <a id="cat{{item.1}}">{{category}}</a> <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    <span class="btn btn-sm bg-secondary float-left mx-1" onclick="editCategory({{list.1}}, 'get')">Editar</span>
+                    <span class="btn btn-sm bg-danger float-left mx-1 text-white" onclick="deleteCategory({{list.1}})">Eliminar</span>
+                    <span class="btn text-white btn-block text-center text text-uppercase float-center" data-toggle="collapse" data-target="#collapse{{list.1}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                        <a id="cat{{list.1}}">{{category}}</a> <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </span>
                 </div>
-                <div id="collapse{{forloop.counter}}" class="collapse shadow" data-parent="#accordionMenu">
-                      <div class="card-body px-2 pt-2  pb-1">
+                <div id="collapse{{list.1}}" class="collapse shadow" data-parent="#accordionMenu">
+                      <div class="card-body px-2 pt-2  pb-1" id="cat-body{{list.1}}">
                         <div class="col-12 px-1  btn-success">
-                            <a class="btn btn-link btn-block text-center text-uppercase" href="#">
-                            AGREGAR PRODUCTO NUEVO<span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
-                            </a>
+                            <button class="btn btn-link btn-block text-center text-uppercase text-white" onclick="createItem({{list.1}}, 'get')">
+                            AGREGAR PRODUCTO A ESTA CATEGORÍA<span class="float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
+                            </button>
                         </div>
-                        {% for item in item.0 %}
-                            {% with prices=item.prices.all %}
-                                   <div class="row my-1 p-1 border-bottom dish">
-                                       <div class="col-5 col-md-5">
-                                           <img src="{{item.photo.url}}" class="img-fluid rounded">
-                                       </div>
-                                       <div class="col-7 col-md-7 col-lg-7 text-left px-1">
-                                           <div class="d-flex justify-content-start mb-2">
-                                               <h4><strong>{{item.name}}</strong></h4>
-                                           </div>
-                                           <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center px-1 text-left">
-                                                    {% if prices|length > 1%}
-                                                    <h5><small>Desde </small>{{prices.0.price_str}}</h5>
-                                                    {% else %}
-                                                    <h4>{{prices.0.price_str}}</h4>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="px-1 addRemoveButtons">
-                                                    <div class="addButton px-1">
-                                                       <button class="btn btn-block bg-secondary px-1 text-dark" type="button">{% if prices|length > 1%}Editar precios{% else %}Editar precio{% endif %}</button>
-                                                    </div>
-                                                </div>
-                                           </div>
-                                           <div class="col-12 ingredients d-none d-sm-block mt-2 pl-0 pr-2">
-                                            {{item.ingredients}}
-                                            </div>
-                                       </div>
-                                        <div class="col-12 px-3 text-left ingredients d-block d-sm-none ">
-                                        {{item.ingredients}}
-                                        </div>
-                                        <div class="col-6 p-2">
-                                            <a class="btn btn-link btn-block text-center text-uppercase bg-secondary" href="{% url 'menu:item-update' item.id %}">
-                                            Editar<span class="float-right"><i class="fas fa-edit" aria-hidden="true"></i></span>
-                                            </a>
-                                        </div>
-                                        <div class="col-6 p-2">
-                                            <a class="btn btn-link btn-block text-center text-uppercase  bg-danger" href="#">
-                                            Eliminar<span class="float-right"><i class="fas fa-times-circle" aria-hidden="true"></i></span>
-                                            </a>
-                                        </div>
-                                   </div>
-                            {% endwith %}
+                        {% for item in list.0 %}
+                          {% include 'chunks/item_display.html' %}
                         {% endfor %}
                       </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-    <div class="row mx-3 mx-md-0 px-1 col-md-5 d-none d-md-block text-center shadow">
-        {% for items in items.values %}
-            {% if forloop.counter <= 3 %}
-                {% for item in items %}
-                    {% if forloop.counter == 1 %}
-                    {% if item.photo.url != "https://digimenu-bucket.s3.amazonaws.com/media/images/default/no_photo.png" %}
-                    <div class="col-12 mx-0 col-md-12 my-1 px-0 ">
-                        <img src="{{item.photo.url}}" class="img-fluid rounded">
-                    </div>
-                    {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+    <div class="col-12 col-md-6 px-1" id="divAd">
+        {% include "chunks/carousel_ads.html" %}
     </div>
 </div>
