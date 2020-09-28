@@ -267,6 +267,7 @@ class MenuDetails(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         cart = Cart(request)
+        print(cart)
         for item in cart:
             try:
                 menu = item['product'].price.item.menu
@@ -277,8 +278,10 @@ class MenuDetails(DetailView):
                     cart.clear()
                     break
             except KeyError:
-                cart.clear()
-
+                try:
+                    cart.clear()
+                except KeyError:
+                    pass
         context = self.get_context_data(object=self.object)
         map_url2 = ""
         if "iPhone" in request.META['HTTP_USER_AGENT'] or "iPad" in request.META['HTTP_USER_AGENT']:
