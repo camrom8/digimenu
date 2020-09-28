@@ -23,7 +23,7 @@ urlpatterns = [
     path('ad_update/<int:pk>', views.AdUpdate.as_view(), name='ad-update'),
     path('count_visit/', views.menu_access_count, name='count'),
     path('establishment_create/', views.EstablishmentCreate.as_view(), name='establishment-create'),
-    path('<slug:title_slug>/edit/', views.MenuEditDetails.as_view(), name='edit'),
+    path('<slug:title_slug>/editar/', views.MenuEditDetails.as_view(), name='edit'),
     path('<slug:title_slug>/edit/<int:partial>', views.MenuEditDetails.as_view(), name='edit-partial'),
     path('<slug:title_slug>/', views.MenuDetails.as_view(), name='details'),
 ]

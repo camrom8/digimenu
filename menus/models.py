@@ -63,6 +63,8 @@ class MenuAdvertising(models.Model):
     title = models.CharField(_('title'), max_length=30, null=True, blank=True)
     description = models.CharField(_('description'), max_length=60, null=True, blank=True)
 
+    def __str__(self):
+        return f'Ad for {self.menu}'
 
 class Item(models.Model):
     """Database model for items"""

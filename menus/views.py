@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView, DetailView, UpdateView, DeleteView
 
@@ -320,6 +321,7 @@ class MenuDetails(DetailView):
         )
 
 
+@method_decorator(login_required, name='dispatch')
 class MenuEditDetails(DetailView):
     """View Menu with items"""
     model = Menu
@@ -329,7 +331,7 @@ class MenuEditDetails(DetailView):
 
     def get(self, request, *args, **kwargs):
         if request.user != self.get_object().owner and not request.user.is_superuser:
-            return redirect(reverse_lazy('account:login'))
+            return redirect('menu:details', title_slug=self.get_object().title_slug)
         self.partial = self.kwargs.get('partial', None)
         return super(MenuEditDetails, self).get(self, request, *args, **kwargs)
 
@@ -359,9 +361,6 @@ class MenuEditDetails(DetailView):
             **response_kwargs
         )
 
-class AdCreate(CreateView):
-    model = MenuAdvertising
-    form_class = AdForm
 
 class AdUpdate(UpdateView):
     model = MenuAdvertising
