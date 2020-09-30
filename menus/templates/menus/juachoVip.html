@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load menu_tags %}
+{% block title %}
+{% trans 'Menu' %}
+{% endblock %}
+
+{% block styles %}
+<link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aleo:wght@400&display=swap" rel="stylesheet">
+<style>
+    /* For Firefox */
+    input[type='number'] {
+        -moz-appearance:textfield;
+    }
+
+    .itemQty > .form-control:disabled, itemQty > .form-control[readonly]{
+        background-color: #fff;
+        border: solid 1px #000;
+        font-size: 1.2rem;
+        color: #000;
+    }
+
+    /* Webkit browsers like Safari and Chrome */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    hr {
+        background-color: #a0705e !important;
+    }
+
+    .card-header > button{
+        font-family: 'Germania One', cursive;
+        font-size: 2rem !important;
+        color: #3c2316 !important;
+    }
+
+    .input-group-prepend > button, .input-group-append > button{
+        border: solid 1px #613924;
+        //background-color: #be7650;
+        background-image: linear-gradient(#613924, #9e6945);
+        color: white;
+    }
+    .addButton > button{
+        border: solid 1px #613924;
+        background-image: linear-gradient(#613924, #9e6945);
+        font-family: 'Germania One', cursive;
+        color: white;
+    }
+
+    .input-group-prepend > button:hover, .input-group-append > button:hover{
+        color: #EAE2A9;
+    }
+    .addButton > button:hover{
+        color: #EAE2A9;
+    }
+    .card-header{
+        background-image: linear-gradient(#EAE2A9, #b3883c);
+        text-transform: uppercase;
+    }
+
+    .card-body{
+        background-color: #FFFFFF;
+    }
+
+    .dish{
+        font-family: 'Aleo', serif;
+        weight:
+        color: #613924;
+    }
+    .ingredients{
+        font-family: 'Aleo', serif;
+        color: #5a5a5a;
+    }
+    .dish > span{
+        position: relative;
+        top: -5px !important;
+    }
+
+    .dropBut {
+        font-size: 1.3rem;
+        right: 30px;
+        position: relative;
+        top: -7px;
+    }
+
+   .info {
+        background-image: linear-gradient(#513122, #a37349);
+        color: #ffffff;
+        font-weight: 700;
+    }
+    .info > p > a {
+        color:white !important;
+    }
+    .main{
+        border-top: 1px solid #513122;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-row justify-content-between align-items-center bg-light p-1 rounded my-1">
+    <div class="px-1">
+        {% if menu.logo.url%}
+            <img src="{{menu.logo.url}}" class="img-fluid rounded" height="300" width="300">
+        {% endif%}
+    </div>
+    <div class="p-1 p-sm-2 p-md-3 rounded info">
+        <h6>Contactanos:</h6>
+        <p><i class="fa fa-phone-square mt-2">&nbsp;</i> <a href="tel:+573222461091"> 322-246-1091 (llamar)</a></p>
+        <p class="mt-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}" target="_blank"> Carrera 7 # 22-11</a></p>
+        <p class="mb-1"><a href="{{map_url}}" target="_blank"> piso 2, Soacha (ver en google maps)</a></p>
+        {% if map_url2 %}
+            <p class="my-0"><a href="{{map_url2}}" target="_blank">(ver en apple maps)</a></p>
+        {% endif %}
+    </div>
+</div>
+<div class="row main pt-2">
+    <div class="accordion col-12 col-md-6 px-1" id="accordionMenu">
+        {% for category, id in items.items %}
+            <div class="card">
+                <div class="card-header p-1" id="heading{{id}}">
+                    <button class="btn btn-link btn-block text-center px-1" type="button" data-toggle="collapse" data-target="#cat{{id}}" aria-expanded="true" aria-controls="cat{{id}}">
+                        {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div id="cat{{id}}" class="collapse shadow" aria-labelledby="heading{{id}}" data-parent="#accordionMenu">
+                    <div class="text-center my-2">
+                      <div class="spinner-grow text-secondary" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-12 col-md-6 px-1" id="divAd">
+        {% include "chunks/carousel_ads.html" %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(".collapse").each(function (){
+        $(this).on('shown.bs.collapse', function () {
+            let title = $(this).prev().find("button").find("span").last();
+            let icon = $(this).prev().find("button").find("i");
+            icon.removeClass("fa-caret-down");
+            icon.addClass("fa-caret-up");
+            title.html("<small>cerrar</small>");
+            $('html,body').animate({
+                scrollTop: $(this).offset().top-80
+            }, 'slow');
+        })
+        $(this).on('show.bs.collapse', function () {
+            let divId = $(this).attr("id");
+            let id = divId.replace("cat", "");
+            if ($(this).find('.card-body').length < 1){
+                loadItems(parseInt(id));
+            }
+            let title = $(this).prev().find("button").find("span").last();
+            let icon = $(this).prev().find("button").find("i");
+            icon.removeClass("fa-caret-down");
+            icon.addClass("fa-caret-up");
+            title.html("<small>cerrar</small>");
+        })
+         $(this).on('hide.bs.collapse', function () {
+            let title = $(this).prev().find("button").find("span").last();
+            let icon = $(this).prev().find("button").find("i");
+            icon.removeClass("fa-caret-up");
+            icon.addClass("fa-caret-down")
+            title.html("<small>&nbsp;abrir&nbsp;</small>");
+        })
+    })
+    $('.carousel').carousel({
+      interval: 2000
+    })
+    function loadItems(id){
+        let items;
+        $.ajax({
+            type: 'get',
+            url: "{% url 'menu:get-items' 123 %}".replace( /123/, id),
+            success: function(data){
+                let div = document.getElementById("cat" + id);
+                div.innerHTML = data;
+                checkQty();
+            }
+        });
+        return items;
+    }
+    function checkQty (){
+        $(".addRemoveButtons :input[type=number]").each( function () {
+            if ($(this).val() < 1){
+               $(this).parent().next().show();
+               $(this).parent().hide();
+               $(this).parent().parent().parent().find('span').hide();
+            } else {
+               $(this).parent().next().hide();
+               $(this).parent().show();
+               $(this).parent().parent().parent().find('span').show();
+
+            }
+        });
+    }
+        $(document).on('change', '#id_tip_percent', function(e){
+        bindInputsItem()
+        let total = $("#totalOrder").val();
+        tip = total / 10000 * $("#id_tip_percent").val();
+        tip_rounded = tip.toFixed(0);
+        tip_fix = tip_rounded * 100
+        $("#id_tip").val(tip_fix);
+        $("#id_tip").trigger('blur');
+    })
+
+    // Add events for currency conversion
+    function bindInputsItem(){
+         $("#id_tip").on( 'blur', onBlur);
+         $("#id_tip").on( 'focus', onFocus);
+         $("#id_tip").on( 'mouseover', onMouseOver);
+         $("#id_tip").on( 'mouseout', onMouseOut);
+    }
+
+	// string to currency conversion functions
+    var currency = 'USD';
+    function localStringToNumber( s ){
+        return Number(String(s).replace(/[^0-9.-]+/g,""));
+    }
+
+    function onMouseOver(e){
+      $(this).attr("pattern", "[0-9]*");
+    }
+
+    function onMouseOut(e){
+      if(!$(this).is(":focus")) this.removeAttribute("pattern");
+    }
+
+    function onFocus(e){
+      var intFormat= e.target.value;
+      $(this).attr("pattern", "[0-9]*");
+      var value = intFormat.replace(/[.]/g,',');
+      e.target.value = value ? localStringToNumber(value) : '';
+      $(this).prev().val(value);
+    }
+
+    var timeout = null
+    function onBlur(e){
+      	this.removeAttribute("pattern");
+      	var value = e.target.value;
+      	$(this).prev().val(value);
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+			this.value = value;
+            const options = {
+				maximumFractionDigits : 0,
+				minimumFractionDigits : 0,
+				currency              : currency,
+				style                 : "currency",
+				currencyDisplay       : "symbol",
+			}
+            var usformat = value ? localStringToNumber(value).toLocaleString(undefined, options): '';
+            val = usformat.replace(/[,]/g,'.');
+            e.target.value = val.replace(/[US]/g,'');
+            this.value = e.target.value;
+      	}, 200);
+    }
+</script>
+{% endblock %}

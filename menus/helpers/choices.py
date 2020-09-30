@@ -1,4 +1,4 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext_lazy as _
 
 NONE = _('Unique')
 EXTRA_SMALL = _('x-Small')
@@ -40,14 +40,12 @@ FULL = "menus/details3.html"
 XLARGE = "menus/details4.html"
 XLARGE2 = "menus/details5.html"
 CHACHOS = "menus/losChachos.html"
-XLARGE4 = "menus/details7.html"
-XLARGE5 = "menus/details8.html"
-XLARGE6 = "menus/details9.html"
 PORTICO = "menus/portico.html"
 MARGARITA = "menus/margarita.html"
 CIELOBISTRO = "menus/cieloBistro.html"
 PORTO1 = "menus/portoAlto1.html"
 PORTO2 = "menus/portoAlto2.html"
+JUANCHO = "menus/juanchoVip.html"
 
 TEMPLATES = [
     (SLIDES, _('Small')),
@@ -65,4 +63,5 @@ TEMPLATES = [
     (CIELOBISTRO, _('Cielo Bistro')),
     (PORTO1, _('Porto 1')),
     (PORTO2, _('Porto 2')),
+    (JUANCHO, _('Juancho VIP')),
 ]
