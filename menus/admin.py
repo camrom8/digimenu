@@ -27,7 +27,7 @@ class PriceAdmin(admin.ModelAdmin):
 
 @admin.register(models.Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'menu', 'photo')
+    list_display = ('name', 'category', 'menu', 'photo', 'upload_code')
     search_fields = ['name']
 
 
