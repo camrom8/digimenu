@@ -27,6 +27,6 @@ class DetailsForm(forms.Form):
                                         ('DOMICILIO', _('delivery'))},
                                label=_('Delivery'),
                                widget=forms.RadioSelect)
-    tip = forms.CharField(max_length=7)
-    tip_percent = forms.ChoiceField(choices=CHOICES_TIP_PERCENT, label=_('tip'))
+    tip = forms.CharField(max_length=7, required=False, initial="$0")
+    tip_percent = forms.ChoiceField(choices=CHOICES_TIP_PERCENT, label=_('tip'), required=False)
     tip_number = forms.CharField(max_length=7, widget=forms.HiddenInput)
