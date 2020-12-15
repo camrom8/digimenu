@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+{% load base_tags %}
+{% load cart_tags %}
+{% load static %}
+{% load i18n %}
+{% load sass_tags %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!--    JQUERY-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+    <!--    POPPER-->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <!--    FONT AWESOME-->
+    <link href="{% static 'fontawesome-5.13.0/css/all.css' %}" rel='stylesheet'/>
+    <!--    GOOGLE FONTS LOBSTER-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <!--    BASE STYLE-->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+    <!--    BOOTSTRAP-->
+    <link href="{% sass_src 'scss/base.scss' %}" rel="stylesheet" type="text/css" />
+    <!--    BOOTSTRAP JS (LOAD AT END IMPORTANT)-->
+    <script src="{% static 'bootstrap-4.4.1/js/bootstrap.min.js' %}"></script>
+    <!--    SWEET ALERT 2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+    .welcome {
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 90% 90%;
+    }
+    .cart-bar {
+      background-color: rgba(21, 30, 63, 0.9) !important;
+    }
+    </style>
+    {% block styles %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark py-0" style="background: black;">
+        <div class="position-absolute d-flex w-100 justify-content-center text-white">
+            <h2>Don Licor</h2>
+        </div>
+        <a class="navbar-brand py-0" href="#">
+            <img src="{% static 'images/test/logo_donlicor.jpg'%}" width="80" height="80" alt="">
+        </a>
+        <button class="navbar-toggler mb-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-grow-1 text-right" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+<!--                <li class="nav-item {% if page == 'home' %} active {% endif %}">-->
+<!--                    <a class="nav-link" href="#">{% trans 'Home' %}</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item {% if page == 'login' %} active {% endif %}">-->
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
+                    {% endif %}
+<!--                </li>-->
+                <li class="nav-item mx-1 mt-0 mt-sm-2 mt-md-1">
+                    <a href="https://api.whatsapp.com/send?phone=3162128561&text=Hola%20Don%20Licor!%20Me%20gustaria%20hacer%20un%20pedido"
+                       type="button" class="btn px-1 btn-success">
+                        <strong>Contactar por Whatsapp</strong>
+                    </a>
+                </li>
+<!--                <li>-->
+<!--                    <div class="btn-group-vertical btn-group-sm p-1 p-md-0 " role="group" aria-label="Basic example">-->
+<!--                        {% get_current_language as LANGUAGE_CODE %}-->
+<!--                        {% get_available_languages as LANGUAGES %}-->
+<!--                        {% get_language_info_list for LANGUAGES as languages %}-->
+<!--                        {% for language in languages %}-->
+<!--                            <a  href="/{{ language.code }}/{% remove_url_prefix request.path %}" type="button" class=" py-0 px-1 btn btn-sm-->
+<!--                             {% if language.code == LANGUAGE_CODE  %}btn-primary{%else%} btn-secondary {% endif %}"-->
+<!--                                title="{{language.name_local|title}}">-->
+<!--                                {{language.code|lower}}-->
+<!--                            </a>-->
+<!--                        {% endfor %}-->
+<!--                    </div>-->
+<!--                </li>-->
+            </ul>
+        </div>
+    </nav>
+    <!-- Modal -->
+    <div class="modal fade px-0" id="modalOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-secondary">
+            <h3 class="modal-title text-primary font-weight-bold" id="modalOrderTitle">{% trans 'Your Order'%}</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-0" id="modalBody">
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modalAddsOn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="addsOnBody">
+            ...
+        </div>
+      </div>
+    </div>
+    <div class="modal fade px-0" id="modalWelcome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-light text-primary welcome">
+            <h3 class="modal-title font-weight-bold" id="modalWelcomeTitle">
+                <span class="align-middle"><img src="{% static 'images/default/logo_only.png' %}" width="40"></span>
+                {% trans '¡Hi! Welcome to Digimenú' %} Colombia
+            </h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-3 text-white bg-primary" id="modalBody2">
+              {% if menu.title %}
+              {% trans 'Making your food ordering experience easier at' %}: <strong>{{menu.title}}</strong>
+              {% else %}
+              {% trans 'We hope making your food ordering experience easier' %}
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+        {% with total_items=cart|length %}
+    <div class="container-lg">
+        {% block body %}
+        {% endblock %}
+    </div>
+    <div class="cart fixed-bottom py-1 bg-primary cart-bar">
+        <div class="d-flex flex-row-reverse px-1 px-sm-1 px-md-3">
+            {% if cart|length > 0 %}
+                <div class="px-0 px-sm-1">
+                    <button type="button" class="btn btn-block btn-success px-2 px-sm-3" onClick="getOrder()">
+                         <h5 class="mb-0"><i class="fab fa-whatsapp fa-lg"></i><span class="d-sm-inline"><strong> {%trans 'Send order'%}</strong></span></h5>
+                    </button>
+                </div>
+            {% endif %}
+            <div class="pl-0 pr-1 px-sm-1 text-right">
+                <button type="button" class="btn btn-block btn-light float-right px-4" onClick="getOrder()">
+                    {% if cart|length > 0 %}
+                    <span class="fas fa-utensils"></span>
+                    <span class="d-none d-md-inline"><strong>{% trans 'Order' %}:</strong></span>
+                    <a>
+                        <span class="d-none d-md-inline">{{ total_items }} {% trans 'Product'%}{{ total_items|pluralize }},</span>
+                        <span class="d-sm-inline d-md-none">Total: </span>{% to_currency cart.get_total_price %}
+                    </a>
+                    {% else %}
+                    <span class="fas fa-utensils"></span><span> {% trans 'Empty' %}</span>
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+        <input id="menuId" value="{{menu.id}}" hidden>
+        {% endwith %}
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js">
+    </script>
+    <script>
+        // create cookies for each page to show welcome message only once
+         $(document).ready(function() {
+             if ($.cookie('pop') == null) {
+                 //$("#modalWelcome").modal('show')
+                 let path = window.location.pathname;
+                 let menuId = $('#menuId').val();
+                 let date = new Date();
+                 let minutes = 30;
+                 date.setTime(date.getTime() + (minutes * 60 * 1000));
+                 $.cookie("pop", "welcome", { path: path, expires: date, secure: true });
+                 if (menuId){
+                    $.ajax({
+                        type: "post",
+                        url: "{% url 'menu:count' %}",
+                        data: {'menu_id':menuId},
+                        success: function(data) {
+                         console.log("count visit");
+                        }
+                    });
+                 }
+             }
+         });
+
+        function getOrder() {
+            $('#modalOrder').modal('show');
+            $.ajax({
+                type: "get",
+                url: "{% url 'cart:cart_detail' %}",
+                success: function(data) {
+                    let div = document.getElementById('modalBody');
+                    div.innerHTML = data;
+                }
+            });
+        };
+        function getDeliveryForm() {
+            $('#modalOrder').modal('show');
+            $.ajax({
+                type: "get",
+                url: "{% url 'cart:cart_delivery' %}",
+                success: function(data) {
+                    let div = document.getElementById('modalBody');
+                    let modalTitle = document.getElementById('modalOrderTitle');
+                    let title = "{% trans 'Delivery' %}";
+                    modalTitle.innerText = title;
+                    div.innerHTML = data;
+                    $("input[type=radio]").hide();
+                }
+            });
+        };
+        function sendOrderByWhatsapp() {
+            let form = $('#deliveryForm').serialize();
+            console.log(form);
+            $.ajax({
+                type: "post",
+                url: "{% url 'cart:cart_delivery' %}",
+                data: form, // serializes the form's elements.
+                success: function(data) {
+                    if (data.wupMsg){
+                        var win = window.open(data.wupMsg, '_blank');
+                        if (win) {
+                            //Browser has allowed it to be opened
+                            win.focus();
+                        } else {
+                            //Browser has blocked it
+                            alert('Please allow popups for this website');
+                        }
+                    } else {
+                        console.log(data)
+                        let div = document.getElementById('modalBody');
+                        let modalTitle = document.getElementById('modalOrderTitle');
+                        let title = "{% trans 'Delivery' %}";
+                        modalTitle.innerText = title;
+                        div.innerHTML = data;
+                        $("input[type=radio]").hide();
+                    }
+                }
+            });
+        };
+        var csrftoken = Cookies.get('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        function changeQty(command, id){
+            let qtyInput = $("#qty"+id);
+            let value = parseInt(qtyInput.val()) + command;
+            if ( value < 0 )
+                return true;
+            qtyInput.val(value);
+            let priceNum = $("#priceNum"+id);
+            let priceU = parseInt(priceNum.text());
+            let total = priceU * value
+            $("#price"+id).text(convertToCurrency(total));
+            getTotalAddsOn()
+        }
+        function getTotalAddsOn(){
+            let addsTotal = 0;
+              $('#addsOnForm').find('.totals').each(function(){
+                addsTotal += localStringToNumber($(this).text());
+              });
+              let base = localStringToNumber($("#priceBase").text())
+              grandTotal = addsTotal+ base;
+              $("#grandTotal").val(grandTotal);
+            $("#total").text(convertToCurrency(grandTotal))
+        }
+        function localStringToNumber( s ){
+            let val = s.replace(/[.]/g,',');
+            return Number(String(val).replace(/[^0-9.-]+/g,""));
+        }
+        function convertToCurrency(number){
+            const options = {
+                    maximumFractionDigits : 0,
+                    minimumFractionDigits : 0,
+                    currency              : "USD",
+                    style                 : "currency",
+                    currencyDisplay       : "symbol",
+            }
+            let usformat = number.toLocaleString(undefined, options);
+            let val = usformat.replace(/[,]/g,'.');
+            let currency = val.replace(/[US]/g,'');
+            return currency
+        }
+        function sendAddsOn () {
+            let url = "{% url 'menu:order' 123 %}".replace(/123/, $("#itemToAdd").text());
+            let form = $("#addsOnForm").serialize()
+            $.ajax({
+                type: "post",
+                url: url,
+                data: form,
+                success: function(data) {
+                    inputId = '#product_'+data.price_id;
+                    updateQuantity(data.item_id, 1, inputId)
+                }
+            });
+            $('#modalAddsOn').modal('hide');
+        }
+        function toCart(id, command, itemId=0) {
+        let timerInterval
+        Swal.fire({
+          timer: 700,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        })
+            let inputId = '#product_'+id;
+            //console.log($(inputId).val())
+            let qty_update = parseInt(command);
+            // when quantity is zero
+            if ($(inputId).val() === "0" && qty_update=== -1)
+                    return true;
+
+            // when product in cart id is given (order confirmation)
+            if (itemId > 0){
+                updateQuantity(itemId, qty_update, inputId)
+                return true;
+            }
+
+            let url = "{% url 'menu:price' 123 %}".replace(/123/, id);
+
+            //get all sizes of the product in the db
+            //or in the order and if it is more than one, show modal to choose.
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {'command': command},
+                success: function(data) {
+                    if (data.list == -1) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: data.msg,
+                          text: data.text,
+                        })
+                        return true;
+                    }
+                    //console.log("got sizes:")
+                    //console.log(data.list + "sizes")
+                    //console.log(data.id + "1size")
+                    // check if there are different sizes
+
+                    if (data.list) {
+                        let inputType = 'radio';
+                        if(Object.keys(data.list).length > 3){
+                           inputType = 'select';
+                        }
+                        (async () => {
+                            const { value: item_id } = await Swal.fire({
+                                title: data.msg,
+                                input: inputType,
+                                inputOptions: data.list,
+                                showCancelButton: true,
+                                confirmButtonColor: '#151e3f',
+                                cancelButtonColor: '#ffc929',
+                                cancelButtonText: '{% trans "Cancel" %}',
+                                inputValidator: (value) => {
+                                    return new Promise((resolve) => {
+                                    if (value) {
+                                        resolve()
+                                    } else {
+                                        resolve("{% trans 'Select a size' %}")
+                                    }
+                                })
+                              }
+                            })
+                            if (item_id) {
+                                //console.log("selected size" + item_id)
+                                sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, item_id);
+                                $.ajax({
+                                    type: "post",
+                                    url: sameItemsUrl,
+                                    data: {'command': command},
+                                    success: function(data) {
+                                       // console.log(data.id + ": only one found")
+                                        if (!data.id) {
+                                            (async () => {
+                                                let texty = "{% trans 'You can duplicate a combination already on your order or create a new one' %}"
+                                                const { value: selected } = await Swal.fire({
+                                                    title: "{% trans 'Ingredients and Add-ons' %}",
+                                                    html: texty.concat(data),
+                                                    focusConfirm: false,
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#151e3f',
+                                                    cancelButtonColor: '#ffc929',
+                                                    cancelButtonText: "{% trans 'Cancel' %}",
+                                                    preConfirm: () => {
+                                                        let e = document.getElementById("productOptions");
+                                                        let selected = e.options[e.selectedIndex].value;
+                                                        return selected
+                                                    }
+                                                })
+                                                if (selected) {
+                                                    //console.log('many found and selected' + selected)
+                                                    if (selected != "0")
+                                                        updateQuantity(selected, qty_update, inputId)
+                                                    else
+                                                        showAddOns(item_id)
+                                                }
+                                            })()
+                                        }else {
+                                            if ( qty_update === -1 || data.product_in_cart) {
+                                                //console.log("subtract product or product in cart does not have adds on" + data.id)
+                                                updateQuantity(data.id, qty_update, inputId)
+                                            }else{
+                                                //console.log("product has add-ons send to display them" + data.id)
+                                                showAddOns(data.id)
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        })()
+                    }else {
+                        //console.log("only 1 size")
+                        //console.log("check if there are items of same size in cart")
+                        //check if there are items of same size in cart
+                        sameItemsUrl = "{% url 'menu:same-item' 123 %}".replace(/123/, data.id);
+                        $.ajax({
+                            type: "post",
+                            url: sameItemsUrl,
+                            data: {'command': command},
+                            success: function(data) {
+                                //console.log(data.id + " just this")
+                                if (!data.id) {
+                                     (async () => {
+                                        let texty = ""
+                                        let titly = ""
+                                        if ( qty_update != -1){
+                                            texty = "{% trans 'You can duplicate a combination already on your order or create a new one' %}"
+                                            titly = "{% trans 'Ingredients and Add-ons' %}"
+                                        }else{
+                                            texty = "{% trans 'You have more than 1 product with different ingredients' %}"
+                                            titly = "{% trans 'Select product to remove' %}"
+                                        }
+                                        const { value: selected } = await Swal.fire({
+                                            title: titly,
+                                            html: texty.concat(data),
+                                            focusConfirm: false,
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#151e3f',
+                                            cancelButtonColor: '#ffc929',
+                                            cancelButtonText: '{% trans "Cancel" %}',
+                                            preConfirm: () => {
+                                                let item_id = document.getElementById("itemId");
+                                                let e = document.getElementById("productOptions");
+                                                let option = e.options[e.selectedIndex].value;
+                                                return [option, item_id.value]
+                                            }
+                                        })
+                                        if (selected) {
+                                            //console.log('many found and selected' + selected[0])
+                                            if (selected[0] != "0")
+                                                updateQuantity(selected[0], qty_update, inputId)
+                                            else
+                                                showAddOns(selected[1])
+                                        }
+                                    })()
+                                }else {
+                                    if ( qty_update === -1 || data.product_in_cart) {
+                                        //console.log("subtract product or product in cart does not have adds on" + data.id)
+                                        updateQuantity(data.id, qty_update, inputId)
+                                    }else{
+                                        //console.log("product has add-ons send to display them" + data.id)
+                                        showAddOns(data.id)
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        };
+     	function showAddOns(item_id){
+            AddsOnUrl = "{% url 'menu:adds-on' 123 %}".replace(/123/, item_id);
+                $.ajax({
+                    type: "get",
+                    url: AddsOnUrl,
+                    success: function(data) {
+                        let div = document.getElementById('addsOnBody');
+                        div.innerHTML = data;
+                        if ( data.indexOf("addOnDiv") === -1 ) {
+                            sendAddsOn();
+                        } else {
+                            $('#modalAddsOn').modal('show');
+                        }
+                    }
+                });
+        }
+        $('#modalOrder').on('shown.bs.modal', function (e) {
+          $('#modalOrder').animate({ scrollTop: $('#modalOrder .modal-dialog').height() }, 500);
+        })
+
+        function updateQuantity(itemId, qty, inputId){
+            let url2 = "{% url 'cart:cart_add' 123 %}".replace(/123/, itemId);
+            $.ajax({
+                type: "post",
+                url: url2,
+                data: {'quantity': qty},
+                success: function(data) {
+                    $(inputId).val( parseInt( $(inputId).val() ) + data.qty)
+                    $('.cart').load(document.URL +  ' .cart');
+                    try {
+                      checkQty();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                    if( $('#modalOrder').hasClass('show')){
+                        getOrder()
+                    }
+                }
+            });
+        }
+        function removeItem(id){
+            let url_base = "{% url 'cart:cart_remove' 1 %}";
+            let url = url_base.replace(1,id);
+            $.ajax({
+                type: "get",
+                url: url,
+                success: function(data) {
+                    let inputId = '#product_'+data.id;
+                    $(inputId).val(0)
+                    $('.cart').load(document.URL +  ' .cart');
+                    if( $('#modalOrder').hasClass('show')){
+                        getOrder()
+                    }
+                }
+            });
+        }
+        function getTotalCost(price, basePrice) {
+            let idProd = $('input[name="selection"]:checked').val();
+            let newTotal = $('#cost'+idProd).text()
+            $('#total').text(newTotal);
+            if (price > basePrice){
+                $('#grandTotalHalf').val(price);
+            }else{
+                $('#grandTotalHalf').val(basePrice);
+            }
+        }
+
+        $("input[type=radio]").hide(); // hide property types
+        $('[data-toggle="buttons"] .btn').on('click', function () {
+            // toggle button style
+            $(this).toggleClass('btn-outline-primary btn-primary');
+            // toggle checkbox
+            let chk = $(this).find('[type=radio]');
+            let chk_current = chk.prop('checked');
+            chk.prop('checked',!chk_current);
+	    });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+        <div class="row mx-3 mt-3 mb-5">
+<!--            <div class="col-md-5 bg-gradient-dark text-white px-4 pt-2">-->
+<!--                <h4>Digimenú Colombia</h4>-->
+<!--                <h6>correo electrónico: digimenucolombia@gmail.com</h6>-->
+<!--                <h6>Teléfono: 316 212 8561 / 311 254 3373</h6>-->
+<!--            </div>-->
+<!--            <div class="col-md-7 text-center bg-gradient-primary text-white lead px-4 pt-2">-->
+<!--                <h6><i class="fab fa-facebook-square"></i> Facebook: @DigimenuColombia</h6>-->
+<!--                <h6> <i class="fab fa-linkedin-in"></i> Instagram: @digimenu_colombia</h6>-->
+<!--            </div>-->
+        </div>
+</body>
+</html>
