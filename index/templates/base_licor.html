@@ -152,14 +152,14 @@
     <div class="cart fixed-bottom py-2" style="background-color: #000;">
         <div class="d-flex flex-row-reverse px-1 px-sm-1 px-md-3">
             {% if cart|length > 0 %}
-                <div class="px-0 px-sm-1">
+                <div class="w-50 px-0 px-sm-1">
                     <button type="button" class="btn btn-block btn-success px-2 px-sm-3" onClick="getOrder()">
-                         <h5 class="mb-0"><span class="d-sm-inline"><strong>Verificar y Enviar </strong><i class="fab fa-whatsapp"></i></span></h5>
+                         <h5 class="mb-0"><span class="d-sm-inline"><strong>Ver Pedido</strong></span></h5>
                     </button>
                 </div>
             {% endif %}
-            <div class="pl-0 pr-1 px-sm-1 text-right">
-                <button type="button" class="btn btn-block btn-light float-right px-4" onClick="getOrder()">
+            <div class="w-50 pl-0 pr-1 px-sm-1 text-right">
+                <button type="button" class="btn btn-block btn-light float-right" onClick="getOrder()">
                     {% if cart|length > 0 %}
                     <span class="fas fa-glass-cheers"></span>
                     <span class="d-none d-md-inline"><strong>{% trans 'Order' %}:</strong></span>
@@ -583,16 +583,18 @@
 
     {% block scripts %}
     {% endblock %}
-        <div class="row mx-3 mt-3 mb-5">
+        <div class="row mx-1 mt-3 mb-5">
 <!--            <div class="col-md-5 bg-gradient-dark text-white px-4 pt-2">-->
 <!--                <h4>Digimenú Colombia</h4>-->
 <!--                <h6>correo electrónico: digimenucolombia@gmail.com</h6>-->
 <!--                <h6>Teléfono: 316 212 8561 / 311 254 3373</h6>-->
 <!--            </div>-->
-<!--            <div class="col-md-7 text-center bg-gradient-primary text-white lead px-4 pt-2">-->
-<!--                <h6><i class="fab fa-facebook-square"></i> Facebook: @DigimenuColombia</h6>-->
-<!--                <h6> <i class="fab fa-linkedin-in"></i> Instagram: @digimenu_colombia</h6>-->
-<!--            </div>-->
+            <div class="col-md-7 text-center bg-gradient-dark text-white lead px-4 pt-2">
+                <a href="https://www.facebook.com/donlicorsoga" style="color:white !important">
+                <h6><i class="fab fa-facebook-square"></i> Facebook: @donlicorsoga</h6></a>
+                <a href="https://www.instagram.com/donlicorsoga" style="color:white !important">
+                <h6> <i class="fab fa-linkedin-in"></i> Instagram: @donlicorsoga</h6></a>
+            </div>
         </div>
 </body>
 </html>
