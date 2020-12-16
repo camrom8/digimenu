@@ -1,0 +1,96 @@
+{% load i18n %}
+{% load static %}
+{% load cart_tags %}
+<div class="table-responsive px-0 px-md-3">
+  <table class="table table-striped shadow rounded" id="theTable">
+    <thead>
+      <tr class="text-center text-white px-0" style="background-color: black;">
+        <th colspan="2">{% trans 'Product'%}</th>
+        <th class="px-0 d-none d-sm-table-cell">{% trans 'Price' %} (u)</th>
+        <th class="px-1">{% trans 'Quantity'%}</th>
+        <th class="px-0">{% trans 'Price'%}</th>
+        <th class="pl-0 pr-1">{% trans 'Remove'%}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+        {% with add_ons=product.add_on.all %}
+          <tr class="text-center">
+            <td colspan="2" class="px-1 pb-1">
+                {{ product.price.item.name }}
+                {% for add in add_ons%}
+                    {% if forloop.first %}
+                        <small> + {{add}}</small>
+                    {% else %}
+                        {% if forloop.last %}
+                             <small>{% trans 'and' %} {{add}}.</small>
+                        {% else %}
+                         <small>{{add}}</small>,
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                                {% if product.price.size != "Unique" %}
+                    (<small><strong>{% trans product.price.size %}</strong></small>)
+                {% endif %}
+            </td>
+            <td class="num d-none d-sm-block px-1 pb-1">
+                <p class="my-1">{{ item.price_str }}</p>
+            </td>
+            <td class="px-1 pb-1">
+
+             <div class="d-flex justify-content-between px-1 px-sm-1 px-lg-2">
+                <div>
+                    <button class="btn btn-sm rounded-circle text-dark" style="background-color:#DCB217;" type="button"
+                            onclick="toCart({{product.price.item.id}},-1, {{product.id}})"><i class="fas fa-minus"></i></button>
+                </div>
+               <div class="text-center px-2 mt-1 text-dark">
+                   <h5><strong>{{ item.quantity }}</strong></h5>
+               </div>
+                <div>
+                    <button class="btn btn-sm rounded-circle text-dark" style="background-color:#DCB217;" type="button"
+                            onclick="toCart({{product.price.item.id}}, 1, {{product.id}})"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            </td>
+            <td class="num px-1 pb-1"><p class="my-1">{% to_currency item.total_price %}</p></td>
+            <td class="px-1 pb-1"><a onclick="removeItem({{product.id}})" class="btn btn-sm rounded-circle text-danger py-0"><i class="fas fa-times-circle fa-2x"></i></a></td>
+
+
+          </tr>
+        {% endwith %}
+        {% endwith %}
+
+      {% empty %}
+      <h4>
+        {% trans 'Your order is empty. Please add products' %}
+          </h4>
+      {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+<div class="row  text-center bg-light mx-0 mx-md-3 px-1 px-md-5 m-0" style="color:black">
+    {% if cart.get_total_price > 50000 %}
+      <div class="col-2 lead">Envio</div>
+      <div class="col-10 text-right lead">GRATIS</div>
+    {% else %}
+      <div class="col-2"><small>Envio</small></div>
+      <div class="col-10 text-right"><small>$3.000</small></div>
+    {% endif %}
+</div>
+<div class="row lead text-center text-white mx-0 mx-md-3 px-1 px-md-5 mb-2" style="background-color:black">
+  <div class="col-2">Total</div>
+  <div class="col-10 text-right">{% to_currency cart.get_total_price %}</div>
+</div>
+<div class="text-right">
+    {% if cart|length > 0 %}
+    <button type="button" class="btn btn-success float-right mx-3" onclick="getDeliveryForm()">
+        {%trans 'Confirm and Send'%} <i class="fab fa-whatsapp"></i>
+    </button>
+    {% else %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{%trans 'Close'%}</button>
+      </div>
+    {% endif %}
+</div>

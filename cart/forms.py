@@ -11,9 +11,9 @@ CHOICES_TIP_PERCENT = [(i, str(i) + "%") for i in range(0, 25, 5)]
 class DetailsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['placeholder'] = _('optional field')
-        self.fields['address'].widget.attrs['placeholder'] = _('optional field')
-        self.fields['comments'].widget.attrs['placeholder'] = _('optional field')
+        self.fields['name'].widget.attrs['placeholder'] = _('opcional')
+        self.fields['address'].widget.attrs['placeholder'] = _('*requerida')
+        self.fields['comments'].widget.attrs['placeholder'] = _('opcional')
         self.fields['name'].widget.attrs['class'] = "form-control"
         self.fields['address'].widget.attrs['class'] = "form-control"
         self.fields['comments'].widget.attrs['class'] = "form-control"
@@ -21,7 +21,7 @@ class DetailsForm(forms.Form):
         self.fields['tip_percent'].widget.attrs['class'] = "form-control"
 
     name = forms.CharField(max_length=40, required=False, label=_('name'))
-    address = forms.CharField(max_length=90, required=False, label=_('address or table'), )
+    address = forms.CharField(max_length=90, required=True, label=_('address or table'), )
     comments = forms.CharField(max_length=90, required=False, label=_('comments'))
     pickup = forms.ChoiceField(choices={('RECOGE', _('Restaurant')),
                                         ('DOMICILIO', _('delivery'))},

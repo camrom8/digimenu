@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load static %}
+{% load cart_tags %}
+<div class="row mx-3">
+    <div class="col-12">
+<form id="deliveryForm"  method="post">{% csrf_token %}
+    <div class="row">
+        <div class="col-12 col-md-7">
+            {{form.non_field_errors}}
+            <div class="form-group">
+                Nombre
+                {{form.name}}
+                {{form.name.errors}}
+            </div>
+            <div class="form-group">
+                Dirección
+                {{form.address}}
+                {{form.address.errors}}
+            </div>
+            <div class="form-group">
+                Comentarios o indicaciónes
+                {{form.comments}}
+                {{form.comments.errors}}
+            </div>
+            <div class="form-group d-none">
+                {{form.pickup}}
+            </div>
+            <div class="d-flex justify-content-between form-group bg-light mt-3">
+
+                <div class="col-7">
+                    <p>Propina</p>
+<!--                <select id="id_tip" class="form-control" name="tip">-->
+<!--                    {% for value, displayable in form.tip_percent.field.choices %}-->
+<!--                        <option value="{{value}}" {% if value == 2000 %}selected{% endif %}>{{displayable}}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+                    {{form.tip_percent}}
+                </div>
+                {{form.tip_percent.errors}}
+                <div class=" col-5 d-flex align-self-end">
+                    {{form.tip_number}}
+                    {{form.tip}}
+                    {{form.tip.errors}}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    <div class="col-12 mt-3">
+        <a type="button" class="btn btn-block btn-success text-white" onclick="sendOrderByWhatsapp()">
+            <h5>{%trans 'Send' %} pedido <i class="fab fa-whatsapp"></i></h5>
+        </a>
+    </div>
+        <input value="{{total}}" type="number" id="totalOrder" hidden>
+</div>
+</div>

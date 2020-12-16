@@ -42,10 +42,10 @@
 
     .card-header > button{
         font-size: 2rem !important;
-        color: white;
+        color: #DCB217;
     }
     .card-header > button:hover{
-       color: #DCB217;
+       color: white;
     }
 
     .input-group-prepend > button, .input-group-append > button{
@@ -87,56 +87,44 @@
     }
     .dropBut {
         font-size:1.2rem;
-        right:37px;
-        top:-5px;
+        right:40px;
+        top:-10px;
         position: relative;
-        width:50px;
+        width:60px;
     }
 
     .info {
-        background-color: #000;
-        color: white;
+        color: black;
         font-weight: 700;
     }
     .info > h5 > a {
-        color:white !important;
+        color: black;
+        letter-spacing: 2px;
         font-weight: 700;
     }
     .pair{
         background-image: linear-gradient(#c5a52e, #FFD024);
         color: #c5a52e !important;
     }
-    .pair > button{
+
+    /*
+    pair > button{
         color: white !important;
     }
     .pair > button:hover{
        color: black !important;
     }
+    */
     .btn-call:hover{
         opacity: 0.5;
     }
 </style>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-185678398-1">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-185678398-1');
-</script>
 {% endblock %}
 
 {% block body %}
 <div class="container-md px-0">
 <div class="d-flex flex-row justify-content-around align-items-center p-0 rounded my-1">
-<!--    <div class="px-1">-->
-<!--        {% if menu.logo.url %}-->
-<!--        <img src="{{menu.logo.url}}" class="img-fluid rounded" height="400px" width="400px">-->
-<!--        {% endif%}-->
-<!--    </div>-->
-    <div class="px-3 pt-3 pb-1 rounded info col-12 col-md-7">
+    <div class="px-3 pt-3 pb-1 rounded info col-12 col-md-7 bg-light">
         <h4>Contáctanos</h4>
         <h5><i class="fa fa-phone-square">&nbsp;</i> <a href="tel:+573205371079">320-537-1079</a></h5>
         <div class="d-flex flex-row justify-content-around m-2">
@@ -156,31 +144,19 @@
             <li>Domingo a Jueves: 4pm-12pm</li>
             <li>Viernes y Sabados: 24 HORAS</li>
         </ul>
-<!--        <div class="py-1">-->
-<!--            <a href="https://api.whatsapp.com/send?phone=3162128561&text=Hola%20Don%20Licor!%20Me%20gustaria%20hacer%20un%20pedido"-->
-<!--                   class="text-white">-->
-<!--            <button class="btn-sm border rounded btn-block bg-success py-2">-->
-<!--                <i class="fab fa-whatsapp">&nbsp;</i>Whatsapp-->
-<!--            </button>-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        <p><i class="fa fa-phone-square ">&nbsp;</i> <a href="tel:+5787705139"> 770-5139 (llamar)</a></p>-->
-<!--        <p class="my-1"><i class="fa fa-map-marker">&nbsp;</i><a href="{{map_url}}"> Cra 11 # 19-01, Sogamoso (ver en google maps)</a></p>-->
-<!--        {% if map_url2 %}-->
-<!--            <p class="my-0"><a href="{{map_url2}}">(ver en apple maps)</a></p>-->
-<!--        {% endif %}-->
     </div>
 </div>
 <div class="row border-top pt-1">
     <div class="accordion col-12 col-md-6 px-1" id="accordionMenu">
         {% for category, id in items.items %}
             <div class="card">
-                <div class="card-header p-1 {% if forloop.counter|divisibleby:2 %}pair{% endif %}" id="heading{{id}}">
+<!--                {% if forloop.counter|divisibleby:2 %}pair{% endif %}-->
+                <div class="card-header p-1" id="heading{{id}}">
                     <button class="btn btn-link btn-block text-center px-1" type="button" data-toggle="collapse" data-target="#cat{{id}}" aria-expanded="true" aria-controls="cat{{id}}">
                         {{category}} <span class="float-right"><span class="float-right dropBut"><small>&nbsp;abrir&nbsp;</small></span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
                     </button>
                 </div>
-                <div id="cat{{id}}" class="collapse shadow" aria-labelledby="heading{{id}}" data-parent="#accordionMenu">
+                <div id="cat{{id}}" class="collapse shadow" aria-labelledby="heading{{id}}">
                     <div class="text-center my-2">
                       <div class="spinner-grow text-secondary" role="status">
                         <span class="sr-only">Loading...</span>
@@ -206,9 +182,11 @@
             icon.removeClass("fa-caret-down");
             icon.addClass("fa-caret-up");
             title.html("<small>cerrar</small>");
+            /*
             $('html,body').animate({
                 scrollTop: $(this).offset().top-80
             }, 'slow');
+            */
         })
         $(this).on('show.bs.collapse', function () {
             let divId = $(this).attr("id");
@@ -324,5 +302,8 @@
             this.value = e.target.value;
       	}, 200);
     }
+    $(document).ready( function () {
+        $(".btn-link").trigger('click');
+    });
 </script>
 {% endblock %}

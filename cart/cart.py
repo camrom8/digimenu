@@ -72,7 +72,10 @@ Initialize the cart.
             prod_in_cart.delete()
 
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        value = sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        if value < 50000:
+            value += 3000
+        return value
 
     def clear(self):
         # remove cart from session

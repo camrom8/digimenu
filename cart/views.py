@@ -39,7 +39,8 @@ def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(ProductInCart, id=product_id)
     cart.remove(product)
-    return JsonResponse({'msg': 'Product Removed', 'id': str(product.price.item.id), })
+    return JsonResponse(
+        {'msg': 'Product Removed', 'id': str(product.price.item.id), })
 
 
 @csrf_exempt
@@ -65,8 +66,8 @@ def cart_detail(request):
             order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "
         if not phone:
             phone = item['product'].price.item.menu.owner.profile.phone
-    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente:%0A" +\
-                order[:-2] + f" Total: ${cart.get_total_price()}"
+    order = "¡Hola! He hecho mi pedido por Digimenú Colombia y es el siguiente:%0A" + \
+            order[:-2] + f" Total: ${cart.get_total_price()}"
     wurl = whatsapp_url(order, str(phone))
     return render(request, 'cart/detail.html', {'cart': cart, 'wurl': wurl})
 
@@ -76,7 +77,8 @@ class DeliveryDetails(View):
         form = DetailsForm()
         cart = Cart(request)
         total = cart.get_total_price()
-        return render(request, 'cart/delivery.html', {'form': form, 'total': total })
+        return render(request, 'cart/delivery.html',
+                      {'form': form, 'total': total})
 
     def post(self, request):
         form = DetailsForm(request.POST)
@@ -110,7 +112,8 @@ class DeliveryDetails(View):
                 add_ons_str = add_ons_str[:-2]
                 size = _(item['size'])
                 size_short = size[:4]
-                if size_short in ['Only', 'Solo', 'Uniq', 'solo', 'uniq', 'Only']:
+                if size_short in ['Only', 'Solo', 'Uniq', 'solo', 'uniq',
+                                  'Only']:
                     order += f"{item['quantity']}x{product_name} {add_ons_str}: ${item['total_price']},\n"
                 elif add_ons_str:
                     order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']},\n"
@@ -123,6 +126,92 @@ class DeliveryDetails(View):
             total = f"Total: {to_currency(cart.get_total_price() + tip)}\n"
             details = name + address + comments + tips + pickup + "\n" + total
             wurl = whatsapp_url(order + details, str(phone))
-            return HttpResponse(json.dumps({'wupMsg': wurl}), content_type='application/json')
+            return HttpResponse(json.dumps({'wupMsg': wurl}),
+                                content_type='application/json')
         else:
             return render(request, 'cart/delivery.html', {'form': form})
+
+
+@csrf_exempt
+def cart_detail_liqour(request):
+    cart = Cart(request)
+    order = ""
+    phone = 0
+    for item in cart:
+        try:
+            product_name = item['product'].price.item.name
+        except:
+            return render(request, 'cart/detail_liq.html', {'cart': cart})
+        add_ons_str = ""
+        add_ons = item['product'].add_on.values_list('name', flat=True)
+        for add_on in add_ons:
+            add_ons_str += add_on + ", "
+        add_ons_str = add_ons_str[:-2]
+        size = _(item['size'])
+        size_short = size[:4]
+        if size_short in ['Only', 'Solo', 'Uniq', 'solo', 'uniq', 'Only']:
+            order += f"{item['quantity']}x{product_name} {add_ons_str}: ${item['total_price']},%0A"
+        else:
+            order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']}, "
+        if not phone:
+            phone = item['product'].price.item.menu.owner.profile.phone
+    return render(request, 'cart/detail_liq.html', {'cart': cart, })
+
+
+class DeliveryDetailsLiqour(View):
+    def get(self, request):
+        form = DetailsForm(initial={'pickup': 'DOMICILIO'})
+        cart = Cart(request)
+        total = cart.get_total_price()
+        return render(request, 'cart/delivery_liq.html',
+                      {'form': form, 'total': total})
+
+    def post(self, request):
+        form = DetailsForm(request.POST)
+        if form.is_valid():
+            cart = Cart(request)
+            order = ""
+            name = ""
+            address = ""
+            comments = ""
+            tips = ""
+            phone = 0
+            tip = int(form.cleaned_data["tip_number"])
+            if form.cleaned_data["name"]:
+                name = f'Nombre: {form.cleaned_data["name"]}\n'
+            if form.cleaned_data["address"]:
+                address = f'Dirección: {form.cleaned_data["address"]}\n'
+            if form.cleaned_data["comments"]:
+                comments = f'comentarios: {form.cleaned_data["comments"]}\n'
+            if tip:
+                tips = f'propina: {to_currency(tip)}\n'
+            for item in cart:
+                try:
+                    product_name = item['product'].price.item.name
+                except:
+                    return render(request, 'cart/detail.html', {'cart': cart})
+                add_ons_str = ""
+                add_ons = item['product'].add_on.values_list('name', flat=True)
+                for add_on in add_ons:
+                    add_ons_str += add_on + ", "
+                add_ons_str = add_ons_str[:-2]
+                size = _(item['size'])
+                size_short = size[:4]
+                if size_short in ['Only', 'Solo', 'Uniq', 'solo', 'uniq',
+                                  'Only']:
+                    order += f"{item['quantity']}x{product_name} {add_ons_str}: ${item['total_price']},\n"
+                elif add_ons_str:
+                    order += f"{item['quantity']}x{product_name}({size_short})-{add_ons_str}: ${item['total_price']},\n"
+                else:
+                    order += f"{item['quantity']}x{product_name}({size_short}): ${item['total_price']},\n "
+                if not phone:
+                    phone = item['product'].price.item.menu.owner.profile.phone
+            order = "¡Hola Don Licor! mi pedido es el siguiente:\n" + \
+                    order[:-2] + "\n"
+            total = f"Total: {to_currency(cart.get_total_price() + tip)}\n"
+            details = name + address + comments + tips + "\n" + total
+            wurl = whatsapp_url(order + details, str(phone))
+            return HttpResponse(json.dumps({'wupMsg': wurl}),
+                                content_type='application/json')
+        else:
+            return render(request, 'cart/delivery_liq.html', {'form': form})

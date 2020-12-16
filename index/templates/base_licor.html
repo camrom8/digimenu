@@ -44,14 +44,26 @@
     </style>
     {% block styles %}
     {% endblock %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185678398-1">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-185678398-1');
+    </script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark py-0" style="background: black;">
-        <div class="position-absolute d-flex w-100 justify-content-center text-white">
+    <div class="position-relative offset-3 col-6">
+        <div class="position-absolute d-flex w-100 justify-content-center text-white" style="margin-top:15px; z-index:40;">
             <h2>Don Licor</h2>
         </div>
+    </div>
+    <nav class="navbar navbar-expand-sm navbar-dark py-0" style="background: black;">
         <a class="navbar-brand py-0" href="#">
-            <img src="{% static 'images/test/logo_donlicor.jpg'%}" width="80" height="80" alt="">
+            <img src="{% static 'images/test/logo_donlicor.jpg'%}" width="70" height="70" alt="">
         </a>
         <button class="navbar-toggler mb-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,8 +106,8 @@
     <div class="modal fade px-0" id="modalOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-          <div class="modal-header bg-secondary">
-            <h3 class="modal-title text-primary font-weight-bold" id="modalOrderTitle">{% trans 'Your Order'%}</h3>
+          <div class="modal-header" style="background-color:#DCB217;">
+            <h3 class="modal-title text-black font-weight-bold" id="modalOrderTitle">{% trans 'Your Order'%}</h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -197,7 +209,7 @@
             $('#modalOrder').modal('show');
             $.ajax({
                 type: "get",
-                url: "{% url 'cart:cart_detail' %}",
+                url: "{% url 'cart:cart_detail_liq' %}",
                 success: function(data) {
                     let div = document.getElementById('modalBody');
                     div.innerHTML = data;
@@ -208,7 +220,7 @@
             $('#modalOrder').modal('show');
             $.ajax({
                 type: "get",
-                url: "{% url 'cart:cart_delivery' %}",
+                url: "{% url 'cart:cart_delivery_liq' %}",
                 success: function(data) {
                     let div = document.getElementById('modalBody');
                     let modalTitle = document.getElementById('modalOrderTitle');
@@ -224,7 +236,7 @@
             console.log(form);
             $.ajax({
                 type: "post",
-                url: "{% url 'cart:cart_delivery' %}",
+                url: "{% url 'cart:cart_delivery_liq' %}",
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
