@@ -237,14 +237,16 @@
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
-                        var win = window.open(data.wupMsg, '_blank');
+                        var win = window.open(data.wupMsg);
+                        /*
                         if (win) {
                             //Browser has allowed it to be opened
                             win.focus();
                         } else {
                             //Browser has blocked it
-                            alert('Please allow popups for this website');
+                            alert('Por favor permitir ventanas emergentes en tu dispositivo ');
                         }
+                        */
                     } else {
                         console.log(data)
                         let div = document.getElementById('modalBody');
