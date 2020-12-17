@@ -228,7 +228,6 @@
                 }
             });
         };
-        var windowReference = window.open()
         function sendOrderByWhatsapp() {
             let form = $('#deliveryForm').serialize();
             console.log(form);
@@ -238,7 +237,7 @@
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
-                        windowReference.location = data.wupMsg;
+                        var win = window.location(data.wupMsg);
                         /*
                         if (win) {
                             //Browser has allowed it to be opened
