@@ -237,14 +237,14 @@
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
-                        var win = document.location.href(data.wupMsg);
+                        var win = window.open(data.wupMsg);
                         /*
                         if (win) {
                             //Browser has allowed it to be opened
                             win.focus();
                         } else {
                             //Browser has blocked it
-                            alert('Por favor permitir ventanas emergentes en tu dispositivo');
+                            alert('Por favor desbloquea las ventanas emergentes en tu dispositivo');
                         }
                         */
                     } else {
