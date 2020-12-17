@@ -7,7 +7,7 @@ def whatsapp_url(order, phone):
     # Whatsapp message with property information
     message = order
     message_parsed = urllib.parse.quote(message)
-    url = "https://wa.me/57{}?text={}".format(phone, message_parsed)
+    url = "https://api.whatsapp.com/send?phone=57{}?text={}".format(phone, message_parsed)
     return url
 
 
