@@ -38,6 +38,9 @@
       background-attachment: fixed;
       background-size: 90% 90%;
     }
+    .errorlist > li {
+        color: red !important;
+    }
     </style>
     {% block styles %}
     {% endblock %}
@@ -78,7 +81,7 @@
 <!--                </li>-->
                 <li class="nav-item mx-1 mt-0 mt-sm-2 mt-md-1">
                     <a href="https://api.whatsapp.com/send?phone=3162128561&text=Hola%20Don%20Licor!%20Me%20gustaria%20hacer%20un%20pedido"
-                       type="button" class="btn px-1 btn-success">
+                       type="button" class="btn px-1 bg-success">
                         <strong>Contactar por Whatsapp</strong>
                     </a>
                 </li>
@@ -122,6 +125,15 @@
         </div>
       </div>
     </div>
+    <div class="modal fade whatsappModal"  tabindex="-1" role="dialog" aria-labelledby="whatsappModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body bg-dark text-center">
+          <a id="whatsappBut" href="" class="btn btn-sm bg-success text-white">Ir a WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="modal fade px-0" id="modalWelcome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -153,8 +165,8 @@
         <div class="d-flex flex-row-reverse px-1 px-sm-1 px-md-3">
             {% if cart|length > 0 %}
                 <div class="w-50 px-0 px-sm-1">
-                    <button type="button" class="btn btn-block btn-success px-2 px-sm-3" onClick="getOrder()">
-                         <h5 class="mb-0"><span class="d-sm-inline"><strong>Ver Pedido</strong></span></h5>
+                    <button type="button" class="btn btn-block bg-success px-2 px-sm-3" onClick="getOrder()">
+                         <h5 class="mb-0"><span class="d-sm-inline text-white"><strong>Ver Pedido</strong></span></h5>
                     </button>
                 </div>
             {% endif %}
@@ -230,25 +242,22 @@
         };
         function sendOrderByWhatsapp() {
             let form = $('#deliveryForm').serialize();
-            console.log(form);
             $.ajax({
                 type: "post",
                 url: "{% url 'cart:cart_delivery_liq' %}",
                 data: form, // serializes the form's elements.
                 success: function(data) {
                     if (data.wupMsg){
+                        $('#whatsappBut').attr('href', data.wupMsg);
                         var win = window.open(data.wupMsg);
-                        /*
                         if (win) {
                             //Browser has allowed it to be opened
                             win.focus();
                         } else {
                             //Browser has blocked it
-                            alert('Por favor desbloquea las ventanas emergentes en tu dispositivo');
+                            $('.whatsappModal').modal('show');
                         }
-                        */
                     } else {
-                        console.log(data)
                         let div = document.getElementById('modalBody');
                         let modalTitle = document.getElementById('modalOrderTitle');
                         let title = "{% trans 'Delivery' %}";
