@@ -47,6 +47,7 @@ PORTO1 = "menus/portoAlto1.html"
 PORTO2 = "menus/portoAlto2.html"
 JUANCHO = "menus/juanchoVip.html"
 DONLICOR = "menus/donLicor.html"
+APETITET = "menus/apetitet.html"
 
 TEMPLATES = [
     (SLIDES, _('Small')),
@@ -63,4 +64,5 @@ TEMPLATES = [
     (PORTO2, _('Porto 2')),
     (JUANCHO, _('Juancho VIP')),
     (DONLICOR, _('Don Licor')),
+    (APETITET, _('Apertitet')),
 ]
